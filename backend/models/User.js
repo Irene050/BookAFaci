@@ -18,8 +18,22 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['admin', 'ppa', 'internal', 'external'],
+    enum: ['ppa', 'internal', 'external', 'admin'], // main user types
     default: 'internal'
+  },
+  subRole: {
+    type: String,
+    enum: [
+      'student',
+      'faculty',
+      'organization',
+      'event planner',
+      'alumni',
+      
+    ],
+    required: function () {
+      return this.role === 'internal' || this.role === 'external';
+    }
   },
   department: {
     type: String
