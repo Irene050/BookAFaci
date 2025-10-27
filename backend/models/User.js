@@ -14,12 +14,26 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    select:false  
   },
   role: {
     type: String,
-    enum: ['admin', 'ppa', 'internal', 'external'],
+    enum: ['ppa', 'internal', 'external', 'admin'],
     default: 'internal'
+  },
+  subRole: {
+    type: String,
+    enum: [
+      'student',
+      'faculty',
+      'organization',
+      'alumni',
+      
+    ],
+    required: function () {
+      return this.role === 'internal' || this.role === 'external';
+    }
   },
   department: {
     type: String
