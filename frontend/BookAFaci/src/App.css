@@ -1,42 +1,159 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* App.css - clean + fully fixed */
+
+/* Background and font */
+body {
+  background: linear-gradient(to bottom right, #63a4ff, #83eaf1);
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+/* Main container */
+.container {
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* App title (BookAFaci) */
+.title {
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: white; /* ✅ BookAFaci text color white */
+  font-size: 28px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* White card box */
+.form-box {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  width: 360px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Section title inside the form */
+.form-box h3 {
+  margin-bottom: 0.5rem;
+  color: #0b2a4a;
 }
 
-.card {
-  padding: 2em;
+.form-box p {
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 1rem;
 }
 
-.read-the-docs {
-  color: #888;
+/* Labels */
+label {
+  display: block;
+  text-align: left;
+  font-weight: 600;
+  color: #000;
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+
+/* Inputs and select fields */
+input,
+select {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white; /* ✅ input boxes are white */
+  color: #333;
+  font-size: 14px;
+}
+
+/* Placeholder text */
+input::placeholder,
+select::placeholder {
+  color: #999;
+  opacity: 1;
+}
+
+/* Radio group alignment */
+.radio-group {
+  text-align: left;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column; /* vertical layout */
+  gap: 8px;
+}
+
+.radio-group label {
+  display: inline-flex;
+  align-items: center; /* ✅ center text beside circle */
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.radio-group input[type="radio"] {
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  accent-color: #2c5aa0; /* blue color circle */
+  cursor: pointer;
+}
+
+/* Sign Up button (make visible) */
+.btn {
+  width: 100%;
+  background: #2c5aa0; /* ✅ visible blue button */
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.btn:hover {
+  background: #204a84;
+}
+
+/* Google Sign-Up button */
+.google-btn {
+  margin-top: 1rem;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.google-btn img {
+  width: 18px;
+}
+
+/* Footer text */
+.footer-text {
+  margin-top: 1rem;
+  font-size: 13px;
+}
+
+.footer-text a {
+  color: #2c5aa0;
+  text-decoration: none;
+}
+
+.footer-text a:hover {
+  text-decoration: underline;
 }
