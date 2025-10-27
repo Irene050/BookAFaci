@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['ppa', 'internal', 'external', 'admin'], // main user types
+    enum: ['ppa', 'internal', 'external', 'admin'],
     default: 'internal'
   },
   subRole: {
@@ -27,7 +27,6 @@ const userSchema = new mongoose.Schema({
       'student',
       'faculty',
       'organization',
-      'event planner',
       'alumni',
       
     ],
