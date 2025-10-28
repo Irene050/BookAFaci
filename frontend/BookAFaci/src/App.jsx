@@ -1,3 +1,19 @@
+import { Route, Routes } from 'react-router'
+import Login from './Pages/Login'
+
+const App = () => {
+  return (
+    <div>
+      <Routes>
+        <Route path="/" element={<Login />} />
+      </Routes>
+    </div>
+  )
+}
+
+export default App
+
+/*
 import { useState } from "react";
 import UserTypeSelection from "./components/UserTypeSelection";
 import InternalSignUp from "./components/InternalSignUp";
@@ -23,3 +39,4 @@ function App() {
 }
 
 export default App;
+*/
