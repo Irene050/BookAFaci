@@ -112,7 +112,14 @@ export default function InternalSignUp() {
         >
           Sign Up
         </button>
-      </form>
+        </form>
+
+        <p className="text-sm text-gray-600 mt-5">
+          Already have an account?{" "}
+          <a href="#" className="text-blue-700 font-medium hover:underline">
+            Login
+          </a>
+        </p>
     </div>
   );
 }
