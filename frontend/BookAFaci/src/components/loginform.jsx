@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -23,7 +24,7 @@ function LoginForm() {
     <div>
         <div className="form-container bg-white rounded-[45px] p-10 w-[450px] h-[fit-content]">
             <h1 className="text-center font-Inter font-bold text-[23px]">Welcome Back!</h1>
-            <h3 className="text-center font-Inter mb-[45px]">Please enter your details</h3>
+            <h3 className="text-center font-Inter text-[15px] font-medium mb-[45px] text-[#717171]/80">Please enter your details</h3>
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <div className="mb-4">
                     <label className="block text-sm font-Inter font-bold text-black">Email</label>
@@ -49,7 +50,7 @@ function LoginForm() {
                 <button type="submit" disabled={isSubmitting} className="w-full h-[50px] bg-[#2A6495] text-white p-2 rounded-md">Login</button>
                 <button type="button" className="w-full h-[50px] bg-[#FFFFFF] text-black p-2 rounded-md mt-[30px] border border-[#A9A9A9]">Login with google</button>
 
-                <h1 className="text-center font-Inter font-bold text-[13px] mt-[50px]">Don't have an account? <a href="#" className="text-[#2A6495]">Sign up</a></h1>
+                <h1 className="text-center font-Inter font-bold text-[13px] mt-[50px]">Don't have an account? <Link to="/user-select" className="text-[#2A6495]">Sign up</Link></h1>
             </form>
         </div>
     </div>
