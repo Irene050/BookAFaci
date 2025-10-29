@@ -5,7 +5,7 @@ export default function UserTypeSelection({ onContinue }) {
 
   return (
       <div className="bg-white rounded-2xl shadow-lg w-[360px] p-8 text-center">
-        <h3 className="text-2xl font-bold text-[#0b2a4a] mb-2">Sign Up</h3>
+        <h3 className="text-2xl font-bold text-[#0] mb-2">Sign Up</h3>
         <p className="text-gray-500 text-sm mb-6">
           Are you creating this account as an Ateneo de Naga member or an external user?
         </p>

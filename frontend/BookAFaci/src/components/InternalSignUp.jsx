@@ -25,7 +25,7 @@ export default function InternalSignUp() {
 
   return (
     <div className="bg-white rounded-[45px] shadow-lg w-[450px] p-8 text-center">
-      <h3 className="text-2xl font-bold text-[#0b2a4a] mb-1">Sign Up</h3>
+      <h3 className="text-2xl font-bold text-[#0] mb-1">Sign Up</h3>
       <p className="text-gray-500 text-sm mb-6">
         Create an <span className="font-medium">Internal Account</span> to continue
       </p>
