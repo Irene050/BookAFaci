@@ -18,12 +18,11 @@ export default function ExternalSignUp() {
 
     if (Object.keys(tempErrors).length === 0) {
       console.log("Form submitted:", { fullName, email, phone });
-      // Here you can call your API or move to the next step
     }
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg w-[450px] p-8 text-center">
+    <div className="bg-white rounded-[45px] shadow-lg w-[450px] p-8 text-center">
       <h3 className="text-2xl font-bold text-[#0b2a4a] mb-1">Sign Up</h3>
       <p className="text-gray-500 text-sm mb-6">
         Create an <span className="font-medium">External Account</span> to continue
