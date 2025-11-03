@@ -51,7 +51,7 @@ export default function InternalSignUp({ onBack, initialValues }) {
 
   useEffect(() => {
     // validators activate based on roles
-    setValue('department', '');
+    setValue('student', '');
     setValue('organization', '');
     setValue('faculty', '');
   }, [role, setValue]);
@@ -131,7 +131,7 @@ export default function InternalSignUp({ onBack, initialValues }) {
             <>
               <select
                 className="border p-2 rounded w-full mb-4"
-                {...register('department')}
+                {...register('student')}
               >
                 <option value="">-- Select Department --</option>
                 <option value="COLLEGE OF COMPUTER STUDIES">COLLEGE OF COMPUTER STUDIES</option>
@@ -141,7 +141,7 @@ export default function InternalSignUp({ onBack, initialValues }) {
                 <option value="COLLEGE OF ENGINEERING">COLLEGE OF ENGINEERING</option>
                 <option value="COLLEGE OF NURSING">COLLEGE OF NURSING</option>
               </select>
-              {errors.department && <p className="text-red-500 text-sm mt-0">{errors.department.message}</p>}
+              {errors.student && <p className="text-red-500 text-sm mt-0">{errors.student.message}</p>}
             </>
           )}
 
