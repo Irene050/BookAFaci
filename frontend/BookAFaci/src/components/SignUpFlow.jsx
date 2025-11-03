@@ -9,33 +9,18 @@ export default function SignUpFlow() {
   const navigate = useNavigate()
 
   return (
-    <div className="flex items-center justify-center p-6">
+    <div className=""/*flex items-center justify-center p-6*/>
       {type === '' && (
-        <UserTypeSelection onContinue={(selected) => setType(selected)} />
+        <UserTypeSelection onContinue={(selected) => setType(selected)}
+        onBack={() => navigate('/')} />
       )}
 
       {type === 'internal' && (
-        <div className="w-full max-w-md">
-          <button
-            onClick={() => navigate('/')}
-            className="mb-6 text-sm text-[#2A6495] font-semibold"
-          >
-            ← Back
-          </button>
-          <InternalSignUp />
-        </div>
+        <InternalSignUp onBack={() => setType('')} />
       )}
 
       {type === 'external' && (
-        <div className="w-full max-w-md">
-          <button
-            onClick={() => navigate('/')}
-            className="mb-6 text-sm text-[#2A6495] font-semibold"
-          >
-            ← Back
-          </button>
-          <ExternalSignUp />
-        </div>
+        <ExternalSignUp onBack={() => setType('')} />
       )}
     </div>
   )
