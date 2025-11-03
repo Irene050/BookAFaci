@@ -21,8 +21,13 @@ function LoginForm() {
   }
 
   return (
-    <div>
-      <div className="form-container bg-white rounded-[45px] p-10 w-[450px] h-[fit-content]">
+    <div className="">
+      <div className="form-container bg-white rounded-[45px] p-10 w-[450px] h-[fit-content] 
+        min-[320px]:w-[350px]  max-[640px]:w-[450px] 
+        md:w-[450px] 
+        lg:w-[450px] 
+        transition-all">
+
         <h1 className="text-center font-Inter font-bold text-[23px]">Welcome Back!</h1>
         <h3 className="text-center font-Inter text-[15px] font-medium mb-[45px] text-[#717171]/80">Please enter your details</h3>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>

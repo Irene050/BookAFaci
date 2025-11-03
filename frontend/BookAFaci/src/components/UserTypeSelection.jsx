@@ -4,7 +4,10 @@ export default function UserTypeSelection({ onContinue, onBack }) {
   const [selected, setSelected] = useState("");
 
   return (
-      <div className="bg-white rounded-2xl shadow-lg w-[360px] p-8 text-center">
+      <div className="bg-white rounded-2xl shadow-lg w-[360px] p-8 text-center min-[320px]:w-[350px]  max-[640px]:w-[450px] 
+        md:w-[450px] 
+        lg:w-[450px] 
+        transition-all">
       <div className="flex justify-start mb-0">
         <button onClick={() => onBack && onBack()} className="text-sm text-[#2A6495] font-semibold">
           ← Back

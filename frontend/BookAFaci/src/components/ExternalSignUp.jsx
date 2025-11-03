@@ -25,7 +25,12 @@ export default function ExternalSignUp({ onBack, initialValues }) {
   };
 
   return (
-    <div className="bg-white rounded-[45px] shadow-lg w-[450px] p-10 text-center">
+    <div className="bg-white rounded-[45px] shadow-lg w-[450px] p-10 text-center
+      min-[320px]:w-[350px]  max-[640px]:w-[450px] 
+      md:w-[450px] 
+      lg:w-[450px] 
+      transition-all
+    ">
       <div className="flex justify-start mb-4">
         <button onClick={() => onBack && onBack()} className="text-sm text-[#2A6495] font-semibold">
           ← Back
