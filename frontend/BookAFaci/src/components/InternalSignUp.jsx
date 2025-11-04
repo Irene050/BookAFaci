@@ -2,10 +2,12 @@ import { useEffect } from "react";
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import axios from 'axios';
 
 const schema = yup.object({
   role: yup.string().required('Role is required'),
   fullName: yup.string().required('Full Name is required'),
+  password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
   email: yup
     .string()
     .email('Please enter a valid email')
@@ -42,6 +44,7 @@ export default function InternalSignUp({ onBack, initialValues }) {
       organization: initialValues?.organization || '',
       faculty: initialValues?.faculty || '',
       fullName: initialValues?.fullName || '',
+      password: initialValues?.password || '',
       email: initialValues?.email || '',
       phone: initialValues?.phone || '',
     }
@@ -50,16 +53,36 @@ export default function InternalSignUp({ onBack, initialValues }) {
   const role = watch('role');
 
   useEffect(() => {
-    // validators activate based on roles
-    setValue('student', '');
+    // Clear dependent fields when role changes
+    setValue('department', '');
     setValue('organization', '');
     setValue('faculty', '');
   }, [role, setValue]);
 
-  const onSubmit = (data) => {
-    // data payload will be -> account fields and role-related values
-    console.log('Form submitted:', data);
-  };
+  const onSubmit = async (data) => {
+  try {
+    console.log('Submitting internal form data:', data);
+    
+    const submitData = {
+      accountType: 'Internal',
+      name: data.fullName, // Map to 'name' field in backend
+      password: data.password,
+      role: data.role,
+      email: data.email,
+      phone: data.phone,
+      department: data.department || data.student, // Handle department mapping
+      organization: data.organization,
+      faculty: data.faculty
+    };
+
+    const response = await axios.post('http://localhost:5000/api/users/register', submitData);
+    console.log('Internal registration successful:', response.data);
+    // Handle success (redirect, show message, etc.)
+  } catch (error) {
+    console.error('Registration failed:', error.response?.data || error.message);
+    // Handle error (show error message to user)
+  }
+};
 
   return (
     <div className="bg-white rounded-[45px] shadow-lg w-[450px] p-10 text-center
@@ -103,6 +126,19 @@ export default function InternalSignUp({ onBack, initialValues }) {
             className={`placeholder:font-Inter placeholder:text-[#717171]/30 mt-1 block w-full border border-[#A9A9A9] rounded-[10px] shadow-sm p-2 ${errors.email ? "border-red-500" : "border-gray-300"}`}
           />
           {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+        </div>
+
+        <div>
+          <label className="font-bold text-sm text-black-700 mb-1 block">
+            Password
+          </label>
+          <input
+            type="password"
+            placeholder="Enter your password"
+            {...register('password')}
+            className={`placeholder:font-Inter placeholder:text-[#717171]/30 mt-1 block w-full border border-[#A9A9A9] rounded-[10px] shadow-sm p-2 ${errors.password ? "border-red-500" : "border-gray-300"}`}
+          />
+          {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
         </div>
 
         <div>
