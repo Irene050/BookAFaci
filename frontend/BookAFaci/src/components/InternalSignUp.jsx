@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 
 const schema = yup.object({
@@ -70,17 +71,24 @@ export default function InternalSignUp({ onBack, initialValues }) {
       role: data.role,
       email: data.email,
       phone: data.phone,
-      department: data.department || data.student, // Handle department mapping
+      department: data.department || data.student, // Handle department routing
       organization: data.organization,
       faculty: data.faculty
     };
 
     const response = await axios.post('http://localhost:5000/api/users/register', submitData);
     console.log('Internal registration successful:', response.data);
-    // Handle success (redirect, show message, etc.)
+
+    //straight to login
+    setTimeout(() => {
+        navigate('/');
+      }, 3000);
+
   } catch (error) {
     console.error('Registration failed:', error.response?.data || error.message);
-    // Handle error (show error message to user)
+    toast.error(`${error.response.data.message}`, {
+          autoClose: 1500,
+        });
   }
 };
 
@@ -91,6 +99,20 @@ export default function InternalSignUp({ onBack, initialValues }) {
       lg:w-[450px] 
       transition-all
     ">
+
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+
       <div className="flex justify-start mb-4">
         <button onClick={() => onBack && onBack()} className="text-sm text-[#2A6495] font-semibold">
           ← Back

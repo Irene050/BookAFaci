@@ -1,11 +1,14 @@
 import React from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function LoginForm() {
+  const navigate = useNavigate();
+  
   const schema = yup.object().shape({
     email: yup.string().email('Please enter a valid email').required('Email is required'),
     password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
@@ -16,8 +19,53 @@ function LoginForm() {
     mode: 'onTouched',
   });
 
-  const onSubmit = (data) => {
-    console.log('submit', data)
+  const onSubmit = async (data) => {
+    try {
+      console.log('Login attempt:', data);
+      
+      const response = await axios.post('http://localhost:5000/api/users/login', data, {
+        withCredentials: true,
+      });
+      
+      console.log('Login successful:', response.data);
+      
+      // storing data to localstorage
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      
+      //TOAST SCCESS
+      toast.success('Login successful! Redirecting...', {
+        position: "top-right",
+        autoClose: 2000,
+      });
+      
+      // REDIRECT TO DASHBOARD
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 2000);
+      
+    } catch (error) {
+      console.error('Login failed:', error);
+      
+      if (error.response) {
+        // ERROR response toast and message from backend
+        toast.error(`Login failed: ${error.response.data.message}`, {
+          position: "top-right",
+          autoClose: 5000,
+        });
+      } else if (error.request) {
+        // Request made but no response received
+        toast.error('Cannot connect to server. Please try again.', {
+          position: "top-right",
+          autoClose: 5000,
+        });
+      } else {
+        // ELSE general error
+        toast.error('Login failed. Please check your credentials.', {
+          position: "top-right",
+          autoClose: 2000,
+        });
+      }
+    }
   }
 
   return (

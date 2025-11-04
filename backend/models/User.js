@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Hash password before saving
+
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) {
     return next();
@@ -66,7 +66,7 @@ userSchema.pre('save', async function(next) {
   }
 });
 
-// Add validation for internal users' email domain
+
 userSchema.pre('save', function(next) {
   if (this.accountType === 'Internal' && !this.email.endsWith('@gbox.adnu.edu.ph')) {
     return next(new Error('Internal users must have a @gbox.adnu.edu.ph email address'));
@@ -74,13 +74,13 @@ userSchema.pre('save', function(next) {
   next();
 });
 
-// Phone number validation for all users
+// phone number validation
 userSchema.path('phone').validate(function(phone) {
   const phoneRegex = /^\d+$/;
   return phoneRegex.test(phone);
 }, 'Phone number must contain only digits');
 
-// Method to compare password
+// Password last validation method
 userSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };

@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 
 const schema = yup.object({
@@ -36,10 +37,21 @@ export default function ExternalSignUp({ onBack, initialValues }) {
 
     const response = await axios.post('http://localhost:5000/api/users/register', submitData);
     console.log('Registration successful:', response.data);
-    // Handle success (redirect, show message, etc.)
+    
+    toast.success('Registration successful! Redirecting...', {
+        autoClose: 2000,
+      });
+      
+      // Go To Login
+      setTimeout(() => {
+        navigate('/');
+      }, 3000);
+
   } catch (error) {
     console.error('Registration failed:', error.response?.data || error.message);
-    // Handle error (show error message to user)
+    toast.error(`${error.response.data.message}`, {
+          autoClose: 1500,
+        });
   }
 };
 
@@ -51,6 +63,20 @@ export default function ExternalSignUp({ onBack, initialValues }) {
       lg:w-[450px] 
       transition-all
     ">
+
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+
       <div className="flex justify-start mb-4">
         <button onClick={() => onBack && onBack()} className="text-sm text-[#2A6495] font-semibold">
           ← Back
@@ -60,7 +86,6 @@ export default function ExternalSignUp({ onBack, initialValues }) {
       <p className="text-gray-500 text-sm mb-6">
         Create an <span className="font-medium">External Account</span> to continue
       </p>
-
       <form className="text-left space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label className="font-bold text-sm text-black-700 mb-1 block">
