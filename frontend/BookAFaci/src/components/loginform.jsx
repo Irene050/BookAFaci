@@ -35,13 +35,13 @@ function LoginForm() {
       //TOAST SCCESS
       toast.success('Login successful! Redirecting...', {
         position: "top-right",
-        autoClose: 2000,
+        autoClose: 2800,
       });
       
       // REDIRECT TO DASHBOARD
       setTimeout(() => {
         navigate('/dashboard');
-      }, 2000);
+      }, 2500);
       
     } catch (error) {
       console.error('Login failed:', error);

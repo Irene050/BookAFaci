@@ -1,7 +1,12 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, Navigate } from 'react-router';
 import { toast } from 'react-toastify';
+import Sidebar, { SidebarItem } from '../components/sidebar';
+import {
+  Building2,
+  LayoutDashboard,
+} from "lucide-react"
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -26,16 +31,16 @@ function Dashboard() {
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold">Welcome, {user.name}!</h1>
-      <p className="text-gray-600">Email: {user.email}</p>
-      <p className="text-gray-600">Account Type: {user.accountType}</p>
-      <button 
-        onClick={handleLogout}
-        className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-      >
-        Logout
-      </button>
+    <div className="flex h-screen">
+      <title>Dashboard</title>
+      <Sidebar>
+        <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={true} />
+        <SidebarItem type="button" icon={<Building2 size={20} />} text="Facilities" active={false} onClick={() => navigate('/facilities')} />
+      </Sidebar>
+
+      <main className="flex-1 p-6">
+        <h3 className="text-2xl font-bold">Welcome, {user.name}!</h3>
+      </main>
     </div>
   );
 }

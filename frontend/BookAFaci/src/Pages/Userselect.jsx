@@ -9,6 +9,7 @@ function Userselect() {
       <div className="w-full text-center mb-3">
         <h1 className="text-[19px] font-bold text-white">BOOKAFACI</h1>
       </div>
+      <title>User Selection</title>
       <SignUpFlow />
     </div>
   )
