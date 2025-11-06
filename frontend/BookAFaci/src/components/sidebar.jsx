@@ -65,7 +65,7 @@ export default function Sidebar({ children }) {
 
   return (
     <aside className="h-screen w-fit">
-      <nav className="h-full flex flex-col bg-white border-r shadow-sm">
+      <nav className="h-full flex flex-col bg-gradient-to-b from-[#FFFEFF] to-[#D2EDFF] border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
             src={logo}
@@ -131,7 +131,7 @@ export function SidebarItem({ icon, text, active, alert, onClick}) {
         font-medium rounded-md cursor-pointer
       transition-colors group ${
           active
-            ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800'
+            ? 'bg-gradient-to-r from-[#346D9A] to-[#83C9FF] text-[#FFFFFF]'
             : 'hover:bg-indigo-50 text-gray-600'
         }
     `}
