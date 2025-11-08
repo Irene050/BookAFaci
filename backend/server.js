@@ -11,24 +11,22 @@ connectDB();
 const app = express();
 
 app.use(cors({
-origin: true,
-credentials: true,
-methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-allowedHeaders: ['Content-Type', 'Authorization']
+  origin: true,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
 
-
 app.use('/api', userRoutes);
-app.use('/api', bookingRoutes); 
-
+app.use('/api/bookings', bookingRoutes);
 
 app.get('/', (req, res) => {
-res.send('BookAFaci API running...');
+  res.send('BookAFaci API running...');
 });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '127.0.0.1', () => {
-console.log(` Server running on port ${PORT}`);
+  console.log(` Server running on port ${PORT}`);
 });

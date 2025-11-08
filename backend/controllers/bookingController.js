@@ -1,65 +1,54 @@
-const Booking = require('../models/Booking');
+const bookingService = require('../services/bookingService');
 
 const getBookingStatus = async (req, res) => {
-try {
-const { userId } = req.params;
+  try {
+    const { userName } = req.params;
+    const bookings = await bookingService.getBookingsByUser(userId);
 
-const bookings = await Booking.find({ user: userId })
-  .populate('user', 'name email')
-  .sort({ createdAt: -1 });
+    if (!bookings.length)
+      return res.status(404).json({ message: 'No bookings found for this user' });
 
-if (!bookings.length) {
-  return res.status(404).json({ message: 'No bookings found for this user' });
-}
-
-res.status(200).json({ message: 'Bookings fetched successfully', bookings });
-
-} catch (error) {
-console.error('Error fetching booking status:', error);
-res.status(500).json({ message: 'Server error' });
-}
+    res.status(200).json({ message: 'Bookings fetched successfully', bookings });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 const createBooking = async (req, res) => {
-try {
-const { user, facility, date } = req.body;
-
-// Convert date string to Date object (accepts "YYYY-MM-DD" or "MM/DD/YYYY")
-const bookingDate = new Date(date);
-if (isNaN(bookingDate.getTime())) {
-  return res.status(400).json({ message: 'Invalid date format' });
-}
-
-// Check for overlapping booking
-const existingBooking = await Booking.findOne({
-  facility,
-  date: bookingDate,
-});
-
-if (existingBooking) {
-  return res.status(400).json({
-    message: 'This facility is already booked on the selected date.',
-  });
-}
-
-const newBooking = new Booking({
-  user,
-  facility,
-  date: bookingDate,
-  status: 'pending',
-});
-
-await newBooking.save();
-
-res.status(201).json({
-  message: 'Booking created successfully',
-  booking: newBooking,
-});
-
-} catch (error) {
-console.error('Error creating booking:', error);
-res.status(500).json({ message: 'Server error' });
-}
+  try {
+    const { user, facility, date } = req.body; // 'user' here is the name
+    const booking = await bookingService.createBooking(user, facility, date);
+    res.status(201).json({ message: 'Booking created successfully', booking });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
-module.exports = { getBookingStatus, createBooking };
+const editBooking = async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    const { user, facility, date } = req.body;
+
+    const booking = await bookingService.editBooking(bookingId, user, facility, date);
+    res.status(200).json({ message: 'Booking updated successfully', booking });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const cancelBooking = async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    const booking = await bookingService.cancelBooking(bookingId);
+    res.status(200).json({ message: 'Booking cancelled successfully', booking });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  getBookingStatus,
+  createBooking,
+  editBooking,
+  cancelBooking,
+};
