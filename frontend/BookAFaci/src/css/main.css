@@ -1,6 +1,8 @@
 :root{
     --fc-button-active-bg-color:rgb(0 123 218 / var(--tw-text-opacity, 1));
     --fc-button-active-border-color:rgb(0 123 218 / var(--tw-text-opacity, 1));
+    --fc-button-bg-color: rgb(0 123 218 / var(--tw-text-opacity, 1));
+    --fc-button-border-color: rgb(0 123 218 / var(--tw-text-opacity, 1));
 }
 .fc, .fc .fc-view-harness, .fc .fc-daygrid, .fc .fc-daygrid-view,   
 .fc .fc-scroller-harness, .fc .fc-scroller {
@@ -50,6 +52,10 @@
     border-top-right-radius: 0.5rem;
 }
 
+.fc-theme-standard .fc-scrollgrid{
+  border-color: #b5ceff;
+  border-radius: 0.5rem;
+}
 
 /* control day cell height and layout */
 .fc .fc-daygrid-day-frame {
