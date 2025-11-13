@@ -3,6 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
+const base = import.meta.env.VITE_API_URL
 
 const schema = yup.object({
   fullName: yup.string().required('Full Name is required'),
@@ -35,7 +36,7 @@ export default function ExternalSignUp({ onBack, initialValues }) {
       phone: data.phone,
     };
 
-    const response = await axios.post('http://localhost:5000/api/users/register', submitData);
+    const response = await axios.post(`${base}/api/users/register`, submitData);
     console.log('Registration successful:', response.data);
     
     toast.success('Registration successful! Redirecting...', {

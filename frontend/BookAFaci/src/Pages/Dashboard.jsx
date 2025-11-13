@@ -52,10 +52,10 @@ function Dashboard() {
         <div className="bg-gradient-to-b from-[#E0E0E0] via-[#DDF2FF] to-[#E0E0E0] h-fit rounded-[10px] p-[1px] mt-[20px]">
           <h1 className='pl-[35px] pt-[35px] mb-5 font-inter font-bold text-[2rem] text-[#007BDA]'>Dashboard</h1>
             <div className='flex items-center gap-[10rem] mb-1 pl-[45px] pr-[45px] pb-[45px]'>
-              <div className='flex items-center justify-center text-center bg-slate-300 w-[250px] h-[150px] p-[10px] rounded-[20px] drop-shadow-lg'></div>
-              <div className='flex items-center justify-center text-center bg-slate-300 w-[250px] h-[150px] p-[10px] rounded-[20px] drop-shadow-lg'></div>
-              <div className='flex items-center justify-center text-center bg-slate-300 w-[250px] h-[150px] p-[10px] rounded-[20px] drop-shadow-lg'></div>
-              <div className='flex items-center justify-center text-center bg-slate-300 w-[250px] h-[150px] p-[10px] rounded-[20px] drop-shadow-lg'></div>
+              <div className='flex grow items-center justify-center text-center bg-slate-300 w-[250px] h-[150px] p-[10px] rounded-[20px] drop-shadow-lg'></div>
+              <div className='flex grow items-center justify-center text-center bg-slate-300 w-[250px] h-[150px] p-[10px] rounded-[20px] drop-shadow-lg'></div>
+              <div className='flex grow items-center justify-center text-center bg-slate-300 w-[250px] h-[150px] p-[10px] rounded-[20px] drop-shadow-lg'></div>
+              <div className='flex grow items-center justify-center text-center bg-slate-300 w-[250px] h-[150px] p-[10px] rounded-[20px] drop-shadow-lg'></div>
             </div>
 
             <div className='grid grid-flow-col gap-[45px] pl-[45px] pr-[45px] pb-[45px]'>
@@ -71,5 +71,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
-{/*<h3 className="text-2xl font-bold">Welcome, {user.name}!</h3>*/}

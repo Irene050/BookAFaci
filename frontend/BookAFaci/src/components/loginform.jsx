@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios';
 import { toast } from 'react-toastify';
+const base = import.meta.env.VITE_API_URL
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ function LoginForm() {
     try {
       console.log('Login attempt:', data);
       
-      const response = await axios.post('http://localhost:5000/api/users/login', data, {
+      const response = await axios.post(`${base}/api/users/login`, data, {
         withCredentials: true,
       });
       
