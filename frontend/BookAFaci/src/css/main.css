@@ -1,0 +1,62 @@
+:root{
+    --fc-button-active-bg-color:rgb(0 123 218 / var(--tw-text-opacity, 1));
+    --fc-button-active-border-color:rgb(0 123 218 / var(--tw-text-opacity, 1));
+}
+.fc, .fc .fc-view-harness, .fc .fc-daygrid, .fc .fc-daygrid-view,   
+.fc .fc-scroller-harness, .fc .fc-scroller {
+  height: 100% !important;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.fc-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.fc-scroller {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.fc-theme-standard td, .fc-theme-standard th{
+    border-color: #e5e7eb;
+}
+
+.fc .fc-button-primary{
+    background: rgb(0 123 218 / var(--tw-text-opacity, 1));
+    border-color: rgb(0 123 218 / var(--tw-text-opacity, 1));
+    border-radius: 2rem;
+}
+
+.fc .fc-button-primary:hover{
+    background: rgb(0 100 218 / var(--tw-text-opacity, 1));
+    border-color: rgb(0 100 218 / var(--tw-text-opacity, 1));
+}
+
+.fc-view-harness.fc-view-harness-active {
+  color: rgb(0 150 218 / var(--tw-text-opacity, 1));
+}
+.fc-toolbar-chunk{
+    color: rgb(0 123 218 / var(--tw-text-opacity, 1));
+    font-weight: bold;
+}
+.fc td  {
+    border-color: #b5ceff;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+.fc th {
+    border-color: #b5ceff;
+    border-top-right-radius: 0.5rem;
+}
+
+
+/* control day cell height and layout */
+.fc .fc-daygrid-day-frame {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-right: 0.4rem;
+  padding-top: 0.2rem;
+}

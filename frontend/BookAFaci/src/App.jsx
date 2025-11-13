@@ -6,6 +6,7 @@ import Userselect from './Pages/Userselect'
 import Dashboard from './Pages/Dashboard';
 import Facilities from './Pages/facilities';
 import ProtectedRoute from './Routeprotection';
+import Calendar from './components/calendar';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="/user-select" element={<Userselect />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/facilities" element={<ProtectedRoute><Facilities /></ProtectedRoute>} />
+        <Route path="/calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
       </Routes>
     </div>
   )
