@@ -1,13 +1,17 @@
 const express = require('express');
+const path = require('path');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/database');
 const userRoutes = require('./routes/userRoutes'); 
+const facilityRoutes = require('./routes/facilityRoutes')
 
 dotenv.config();
 connectDB();
 
 const app = express();
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cors({
   origin: true,
@@ -19,6 +23,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use('/api', userRoutes); 
+app.use('/api', facilityRoutes)
 
 app.get('/', (req, res) => {
   res.send('BookAFaci API running...');
