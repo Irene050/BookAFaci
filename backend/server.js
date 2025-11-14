@@ -22,8 +22,8 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use('/api', userRoutes); 
-app.use('/api', facilityRoutes)
+app.use('/bookafaci', userRoutes); 
+app.use('/bookafaci', facilityRoutes)
 
 app.get('/', (req, res) => {
   res.send('BookAFaci API running...');
