@@ -76,7 +76,7 @@ export default function InternalSignUp({ onBack, initialValues }) {
       faculty: data.faculty
     };
 
-    const response = await axios.post('http://localhost:5000/api/users/register', submitData);
+    const response = await axios.post('http://localhost:5000/bookafaci/users/register', submitData);
     console.log('Internal registration successful:', response.data);
 
     //straight to login

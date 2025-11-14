@@ -35,7 +35,7 @@ export default function ExternalSignUp({ onBack, initialValues }) {
       phone: data.phone,
     };
 
-    const response = await axios.post('http://localhost:5000/api/users/register', submitData);
+    const response = await axios.post('http://localhost:5000/bookafaci/users/register', submitData);
     console.log('Registration successful:', response.data);
     
     toast.success('Registration successful! Redirecting...', {

@@ -23,7 +23,7 @@ function LoginForm() {
     try {
       console.log('Login attempt:', data);
       
-      const response = await axios.post('http://localhost:5000/api/users/login', data, {
+      const response = await axios.post('http://localhost:5000/bookafaci/users/login', data, {
         withCredentials: true,
       });
       
