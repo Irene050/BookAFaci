@@ -33,6 +33,12 @@ function LoginForm() {
       // storing data to localstorage
       localStorage.setItem('user', JSON.stringify(response.data.user));
       
+      const { accountType, role } = response.data.user || {};
+      let destination = '/dashboard';
+      if (accountType === 'External') destination = '/dashboard-ext';
+      else if (accountType === 'Internal') destination = '/dashboard-int';
+      if (role === 'admin') destination = '/admin';
+
       //TOAST SCCESS
       toast.success('Login successful! Redirecting...', {
         position: "top-right",
@@ -40,9 +46,7 @@ function LoginForm() {
       });
       
       // REDIRECT TO DASHBOARD
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 2500);
+      setTimeout(() => navigate(destination, { replace: true }), 1200);
       
     } catch (error) {
       console.error('Login failed:', error);
