@@ -6,6 +6,12 @@ import Userselect from './Pages/Userselect'
 import Dashboard from './Pages/Dashboard';
 import Facilities from './Pages/facilities';
 import ProtectedRoute from './Routeprotection';
+import Calendar from './components/calendar';
+import EXTdash from './Pages/DashboardEXT';
+import INTdash from './Pages/DashboardINT';
+import EXTfaci from './Pages/FacilitiesEXT';
+import INTfaci from './Pages/FacilitiesINT';
+
 
 const App = () => {
   return (
@@ -14,8 +20,13 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/user-select" element={<Userselect />} />
-        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/facilities" element={<ProtectedRoute><Facilities /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<ProtectedRoute allowedRoles={['admin']}><Dashboard /></ProtectedRoute>} />
+        <Route path="/facilities" element={<ProtectedRoute allowedRoles={['admin']}><Facilities /></ProtectedRoute>} />
+        <Route path="/calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
+        <Route path="/dashboard-ext" element={<ProtectedRoute allowedRoles={['External']}><EXTdash /></ProtectedRoute>} />
+        <Route path="/dashboard-int" element={<ProtectedRoute allowedRoles={['Internal']}><INTdash /></ProtectedRoute>} />
+        <Route path="/facilities-ext" element={<ProtectedRoute allowedRoles={['External']}><EXTfaci /></ProtectedRoute>} />
+        <Route path="/facilities-int" element={<ProtectedRoute allowedRoles={['Internal']}><INTfaci /></ProtectedRoute>} />
       </Routes>
     </div>
   )

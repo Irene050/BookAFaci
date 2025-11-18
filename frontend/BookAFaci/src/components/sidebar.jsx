@@ -14,7 +14,7 @@ try {
 }
 
 export default function Sidebar({ children }) {
-  const [expanded, setExpanded] = useState(true)
+  const [expanded, setExpanded] = useState(false)
   const navigate = useNavigate()
 
     const [user, setUser] = useState(() => {
@@ -64,8 +64,9 @@ export default function Sidebar({ children }) {
   }
 
   return (
-    <aside className="h-screen w-fit">
-      <nav className="h-full flex flex-col bg-gradient-to-b from-[#FFFEFF] to-[#D2EDFF] border-r shadow-sm">
+    <>
+    <aside className="fixed left-0 top-0 h-screen z-40">
+      <nav className={`h-full flex flex-col bg-gradient-to-b from-[#FFFEFF] to-[#D2EDFF] border-r shadow-sm transition-all ${expanded ? "w-64" : "w-16"}`}>
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
             src={logo}
@@ -117,6 +118,15 @@ export default function Sidebar({ children }) {
         </div>
       </nav>
     </aside>
+
+      {expanded && (
+        <div
+          aria-hidden="true"
+          onClick={() => setExpanded(false)}
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30"
+        />
+      )}
+    </>
   )
 }
 

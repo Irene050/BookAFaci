@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios';
 import { toast } from 'react-toastify';
+const base = import.meta.env.VITE_API_URL
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ function LoginForm() {
     try {
       console.log('Login attempt:', data);
       
-      const response = await axios.post('http://localhost:5000/api/users/login', data, {
+      const response = await axios.post(`${base}/api/users/login`, data, {
         withCredentials: true,
       });
       
@@ -32,6 +33,12 @@ function LoginForm() {
       // storing data to localstorage
       localStorage.setItem('user', JSON.stringify(response.data.user));
       
+      const { accountType, role } = response.data.user || {};
+      let destination = '/dashboard';
+      if (accountType === 'External') destination = '/dashboard-ext';
+      else if (accountType === 'Internal') destination = '/dashboard-int';
+      if (role === 'admin') destination = '/admin';
+
       //TOAST SCCESS
       toast.success('Login successful! Redirecting...', {
         position: "top-right",
@@ -39,9 +46,7 @@ function LoginForm() {
       });
       
       // REDIRECT TO DASHBOARD
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 2500);
+      setTimeout(() => navigate(destination, { replace: true }), 1200);
       
     } catch (error) {
       console.error('Login failed:', error);

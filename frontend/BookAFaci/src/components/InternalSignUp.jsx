@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
+const base = import.meta.env.VITE_API_URL
 
 const schema = yup.object({
   role: yup.string().required('Role is required'),
@@ -76,7 +77,7 @@ export default function InternalSignUp({ onBack, initialValues }) {
       faculty: data.faculty
     };
 
-    const response = await axios.post('http://localhost:5000/api/users/register', submitData);
+    const response = await axios.post(`${base}/api/users/register`, submitData);
     console.log('Internal registration successful:', response.data);
 
     //straight to login

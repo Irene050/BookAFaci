@@ -10,9 +10,12 @@ import Calendar from '../components/calendar';
 import {
   Building2,
   LayoutDashboard,
+  GalleryVerticalEnd,
+  ClipboardClock,
+  SquareX
 } from "lucide-react"
 
-function Dashboard() {
+function DashboardEXT() {
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -35,15 +38,15 @@ function Dashboard() {
   };
 
   return (
-    <div className="flex h-screen transition-all">
+    <div className="flex h-full transition-all">
       <title>Dashboard</title>
       <Sidebar>
         <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={true} />
-        <SidebarItem type="button" icon={<Building2 size={20} />} text="Facilities" active={false} onClick={() => navigate('/facilities')} />
+        <SidebarItem type="button" icon={<Building2 size={20} />} text="Facilities" active={false} onClick={() => navigate('/facilities-ext')} />
       </Sidebar>
 
-      <main className="flex-1 pl-6 pr-6 bg-center bg-cover h-full relative" style={{
-          paddingLeft: '5.5rem', // or '16rem' when expanded; quick fix keeps main visible
+      <main className="flex-1 pl-6 pr-6 bg-center bg-cover h-full relative pb-5" style={{
+          paddingLeft: '5.5rem', 
           backgroundImage: `linear-gradient(rgba(194, 217, 249, 0.9), rgba(194, 217, 249, 0.9)), url(${loginbg})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -54,10 +57,10 @@ function Dashboard() {
         <div className="bg-gradient-to-b from-[#E0E0E0] via-[#DDF2FF] to-[#E0E0E0] h-fit rounded-[10px] p-[1px] mt-[20px]">
           <h1 className='pl-[35px] pt-[35px] mb-5 font-inter font-bold text-[2rem] text-[#007BDA]'>Dashboard</h1>
             <div className='flex items-center gap-[10rem] mb-1 pl-[45px] pr-[45px] pb-[45px]'>
-              <div className='flex grow items-center justify-center text-center bg-slate-300 w-[250px] h-[150px] p-[10px] rounded-[20px] drop-shadow-lg'></div>
-              <div className='flex grow items-center justify-center text-center bg-slate-300 w-[250px] h-[150px] p-[10px] rounded-[20px] drop-shadow-lg'></div>
-              <div className='flex grow items-center justify-center text-center bg-slate-300 w-[250px] h-[150px] p-[10px] rounded-[20px] drop-shadow-lg'></div>
-              <div className='flex grow items-center justify-center text-center bg-slate-300 w-[250px] h-[150px] p-[10px] rounded-[20px] drop-shadow-lg'></div>
+              <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1'><GalleryVerticalEnd size={40} className="text-[#007BDA]" />Active: </div>
+              <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1'><ClipboardClock size={40} className="text-[#007BDA]" />Pending:</div>
+              <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1'><SquareX size={40} className="text-[#007BDA]" />Cancelled:</div>
+              <div className='flex grow items-center justify-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg'></div>
             </div>
 
             <div className='grid grid-flow-col gap-[45px] pl-[45px] pr-[45px] pb-[45px]'>
@@ -72,4 +75,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default DashboardEXT

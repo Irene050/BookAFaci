@@ -1,23 +1,12 @@
 // import React, { useContext, createContext, useState, useEffect } from "react"
 // import { useNavigate } from 'react-router'
 // import { toast } from 'react-toastify'
-
-// function topbar() {
-//   return (
-//     <nav className="bg-[#dbdbdb] h-[73px] rounded-b-[10px]">
-          
-//     </nav>
-//   )
-// }
-
-// export default topbar
-
 import React from "react";
 import { Search, Bell } from "lucide-react";
 
 function Topbar() {
   return (
-    <nav className="w-full bg-[#dbdbdb] h-[73px] rounded-b-[10px] px-6 flex items-center justify-between shadow-sm">
+    <nav className="w-full bg-[#dbdbdb] h-[73px] rounded-b-[10px] sticky top-0 z-10 flex items-center justify-between px-6 shadow-md">
 
       {/* LEFT — SEARCH BAR */}
       <div className="flex items-center bg-white px-4 py-2 rounded-full shadow-sm w-[350px]">
