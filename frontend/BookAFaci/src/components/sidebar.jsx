@@ -98,7 +98,7 @@ export default function Sidebar({ children }) {
             </span>
           </button>
         </div>
-        <div className="border-t flex p-3">
+        {/*<div className="border-t flex p-3">
           <img
             src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || '')}&background=c7d2fe&color=3730a3&bold=true`}
             alt=""
@@ -116,6 +116,7 @@ export default function Sidebar({ children }) {
             </div>
           </div>
         </div>
+        */}
       </nav>
     </aside>
 

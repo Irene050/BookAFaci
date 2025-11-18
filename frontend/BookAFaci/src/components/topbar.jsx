@@ -4,6 +4,14 @@
 import React from "react";
 import { Search, Bell } from "lucide-react";
 
+const raw = localStorage.getItem('user');
+let user = {};
+try {
+  user = raw ? JSON.parse(raw) : {};
+} catch (e) {
+  user = {};
+}
+
 function Topbar() {
   return (
     <nav className="w-full bg-[#dbdbdb] h-[73px] rounded-b-[10px] sticky top-0 z-10 flex items-center justify-between px-6 shadow-md">
@@ -19,7 +27,7 @@ function Topbar() {
       </div>
 
       {/* RIGHT — PROFILE AREA */}
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-1">
 
         {/* NOTIFICATION ICON (MATCHES YOUR DESIGN) */}
         <button className="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center hover:bg-gray-100 transition">
@@ -27,14 +35,23 @@ function Topbar() {
         </button>
 
         {/* PROFILE CIRCLE */}
-        <div className="w-10 h-10 rounded-full bg-[#B5C6DB] flex items-center justify-center font-semibold text-gray-700">
-          AP
-        </div>
-
-        {/* PROFILE TEXT */}
-        <div className="leading-tight">
-          <p className="font-semibold text-gray-800">Admin PPA</p>
-          <p className="text-sm text-gray-600">admin@adnu.edu.ph</p>
+        <div className="border-t flex p-3 gap-3">
+          <img
+            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || '')}&background=c7d2fe&color=3730a3&bold=true`}
+            alt=""
+            className="w-10 h-10 rounded-[2rem]"
+          />
+          <div
+            className={`
+              flex justify-between items-center
+          `}
+          >  
+          {/* PROFILE TEXT */}
+            <div className="leading-4">
+              <h4 className="font-semibold">{user.name}</h4>
+              <span className="text-xs text-gray-600">{user.email}</span>
+            </div>
+          </div>
         </div>
       </div>
 

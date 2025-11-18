@@ -12,7 +12,7 @@ import {
   LayoutDashboard,
   GalleryVerticalEnd,
   ClipboardClock,
-  SquareX
+  SquareX, SquareCheck
 } from "lucide-react"
 
 function DashboardEXT() {
@@ -60,7 +60,7 @@ function DashboardEXT() {
               <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1'><GalleryVerticalEnd size={40} className="text-[#007BDA]" />Active: </div>
               <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1'><ClipboardClock size={40} className="text-[#007BDA]" />Pending:</div>
               <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1'><SquareX size={40} className="text-[#007BDA]" />Cancelled:</div>
-              <div className='flex grow items-center justify-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg'></div>
+              <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1'><SquareCheck size={40} className="text-[#007BDA]" />Completed:</div>
             </div>
 
             <div className='grid grid-flow-col gap-[45px] pl-[45px] pr-[45px] pb-[45px]'>
