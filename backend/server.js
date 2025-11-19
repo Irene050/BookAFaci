@@ -4,7 +4,8 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/database');
 const userRoutes = require('./routes/userRoutes'); 
-const facilityRoutes = require('./routes/facilityRoutes')
+const facilityRoutes = require('./routes/facilityRoutes');
+const resourceRoutes = require('./routes/resourceRoutes');
 
 dotenv.config();
 connectDB();
@@ -22,8 +23,9 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use('/bookafaci', userRoutes); 
+app.use('/bookafaci', userRoutes)
 app.use('/bookafaci', facilityRoutes)
+app.use('/bookafaci', resourceRoutes)
 
 app.get('/', (req, res) => {
   res.send('BookAFaci API running...');

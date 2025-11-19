@@ -1,4 +1,5 @@
 const facilityService = require('../services/facilityService');
+const { isAdmin } = require('../middleware/facilityMiddleware'); 
 
 //changed the syntax sa mas naiintindihan q
 class FacilityController {

@@ -1,12 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const facilityController = require('../controllers/facilityController');
-const { validateFacility, upload } = require('../middleware/facilityMiddleware');
+const { upload, authenticate, isAdmin } = require('../middleware/facilityMiddleware');
+const { validateFacility } = require('../validators/facilityValidator');
 
-router.post('/facility', upload.single('image'), validateFacility, facilityController.createFacility);
+//only admins can add, updated, and delete
+router.post('/facility', authenticate, isAdmin, upload.single('image'), validateFacility, facilityController.createFacility);
+router.put('/facility/:id', authenticate, isAdmin, upload.single('image'), validateFacility, facilityController.updateFacility);
+router.delete('/facility/:id', authenticate, isAdmin, facilityController.deleteFacility);
+
+//accessible by all
 router.get('/facility', facilityController.getAllFacilities);
 router.get('/facility/:id', facilityController.getFacilityById);
-router.patch('/facility/:id', upload.single('image'), validateFacility, facilityController.updateFacility);
-router.delete('/facility/:id', facilityController.deleteFacility);
 
 module.exports = router;

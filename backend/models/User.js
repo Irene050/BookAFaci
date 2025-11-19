@@ -29,10 +29,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  // Fields for internal users (optional for external)
+
   role: {
     type: String,
-    enum: ['student', 'organization', 'faculty'],
+    enum: ['student', 'organization', 'faculty', 'admin'],
     required: false
   },
   department: {

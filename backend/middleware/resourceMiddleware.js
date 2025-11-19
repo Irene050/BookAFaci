@@ -1,7 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const { authenticate } = require('./authMiddleware'); 
+const { authenticate } = require('./authMiddleware');
 
 const uploadsDir = path.join(__dirname, '../uploads');
 if (!fs.existsSync(uploadsDir)) {
@@ -39,14 +39,4 @@ const isAdmin = (req, res, next) => {
   next();
 };
 
-const errorHandler = (err, req, res, next) => {
-  console.error(err.stack);
-  if (err instanceof multer.MulterError) {
-    if (err.code === 'LIMIT_FILE_SIZE') {
-      return res.status(400).json({ success: false, message: 'File too large. Max size is 5MB.' });
-    }
-  }
-  res.status(500).json({ success: false, message: err.message || 'Internal Server Error' });
-};
-
-module.exports = { upload, errorHandler, authenticate, isAdmin };
+module.exports = { upload, authenticate, isAdmin };
