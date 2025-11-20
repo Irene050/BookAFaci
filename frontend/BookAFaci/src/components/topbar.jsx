@@ -1,18 +1,48 @@
-// import React, { useContext, createContext, useState, useEffect } from "react"
-// import { useNavigate } from 'react-router'
-// import { toast } from 'react-toastify'
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Search, Bell } from "lucide-react";
 
-const raw = localStorage.getItem('user');
-let user = {};
-try {
-  user = raw ? JSON.parse(raw) : {};
-} catch (e) {
-  user = {};
-}
-
 function Topbar() {
+  const [user, setUser] = useState(() => {
+    try {
+      const raw = localStorage.getItem('user');
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    let last = localStorage.getItem('user');
+    const id = setInterval(() => {
+      const current = localStorage.getItem('user');
+      if (current !== last) {
+        last = current;
+        try {
+          setUser(current ? JSON.parse(current) : {});
+        } catch {
+          setUser({});
+        }
+      }
+    }, 800); // poll every 800ms
+
+    // Also listen for cross-document storage events
+    const onStorage = (e) => {
+      if (e.key === 'user') {
+        try {
+          setUser(e.newValue ? JSON.parse(e.newValue) : {});
+        } catch {
+          setUser({});
+        }
+      }
+    };
+    window.addEventListener('storage', onStorage);
+
+    return () => {
+      clearInterval(id);
+      window.removeEventListener('storage', onStorage);
+    };
+  }, []);
+
   return (
     <nav className="w-full bg-[#dbdbdb] h-[73px] rounded-b-[10px] sticky top-0 z-10 flex items-center justify-between px-6 shadow-md">
 
@@ -35,9 +65,9 @@ function Topbar() {
         </button>
 
         {/* PROFILE CIRCLE */}
-        <div className="border-t flex p-3 gap-3">
+        <div className="flex p-3 gap-3">
           <img
-            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || '')}&background=c7d2fe&color=3730a3&bold=true`}
+            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || '')}&background=c7d2fe&color=3730a3&bold=true`}
             alt=""
             className="w-10 h-10 rounded-[2rem]"
           />
@@ -45,11 +75,11 @@ function Topbar() {
             className={`
               flex justify-between items-center
           `}
-          >  
-          {/* PROFILE TEXT */}
+          >
+            {/* PROFILE TEXT */}
             <div className="leading-4">
-              <h4 className="font-semibold">{user.name}</h4>
-              <span className="text-xs text-gray-600">{user.email}</span>
+              <h4 className="font-semibold">{user?.name}</h4>
+              <span className="text-xs text-gray-600">{user?.email}</span>
             </div>
           </div>
         </div>

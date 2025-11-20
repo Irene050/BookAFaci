@@ -38,14 +38,14 @@ function DashboardEXT() {
   };
 
   return (
-    <div className="flex h-full transition-all">
+    <div className="flex min-h-screen transition-all">
       <title>Dashboard</title>
       <Sidebar>
         <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={true} />
         <SidebarItem type="button" icon={<Building2 size={20} />} text="Facilities" active={false} onClick={() => navigate('/facilities-ext')} />
       </Sidebar>
 
-      <main className="flex-1 pl-6 pr-6 bg-center bg-cover h-full relative pb-5 
+      <main className="flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5 
           min-[320px]:w-[350px] max-[640px]:w-[450px] md:w-[450px] lg:w-[450px]" 
           style={{
           paddingLeft: '5.5rem', 
