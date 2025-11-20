@@ -20,22 +20,24 @@ function Facilities() {
   }, [navigate]);
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen transition-all">
       <title>Facilities</title>
 
       {/* SIDEBAR */}
       <Sidebar>
-        <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={false} onClick={() => navigate("/dashboard")} />
-        <SidebarItem icon={<Building2 size={20} />} text="Facilities" active={true} onClick={() => navigate("/facilities")} />
+        <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={false} onClick={() => navigate("/dashboard-ext")} />
+        <SidebarItem icon={<Building2 size={20} />} text="Facilities" active={true} onClick={() => navigate("/facilities-ext")} />
       </Sidebar>
 
       {/* MAIN */}
       <main
         className="flex-1 pl-6 pr-6 bg-center bg-cover h-full relative pb-5"
         style={{
+          paddingLeft: '5.5rem', 
           backgroundImage: `linear-gradient(rgba(194, 217, 249, 0.85), rgba(194, 217, 249, 0.85)), url(${loginbg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         }}
       >
         {/* TOPBAR */}
@@ -64,7 +66,7 @@ function Facilities() {
                 {/* FACILITY CARD 1 */}
                 <div className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex gap-5 items-start">
                   <img
-                    src="https://images.unsplash.com/photo-1582582494700-1c7b810f0b8a"
+                    src="https://images.unsplash.com/photo-1487260211189-670c54da558d"
                     className="w-[180px] h-[150px] rounded-xl object-cover"
                   />
                   <div className="flex-1">
@@ -87,7 +89,7 @@ function Facilities() {
                 {/* FACILITY CARD 2 */}
                 <div className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex gap-5 items-start">
                   <img
-                    src="https://images.unsplash.com/photo-1582582494700-1c7b810f0b8a"
+                    src="https://images.unsplash.com/photo-1725680647885-aa3b49b5b33b"
                     className="w-[180px] h-[150px] rounded-xl object-cover"
                   />
                   <div className="flex-1">
