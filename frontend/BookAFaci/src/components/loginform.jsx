@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -7,8 +7,13 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 const base = import.meta.env.VITE_API_URL
 
+import {
+  Eye, EyeOff, Mail, KeyIcon
+} from "lucide-react"
+
 function LoginForm() {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   
   const schema = yup.object().shape({
     email: yup.string().email('Please enter a valid email').required('Email is required'),
@@ -22,13 +27,13 @@ function LoginForm() {
 
   const onSubmit = async (data) => {
     try {
-      console.log('Login attempt:', data);
+      console.log('Login attempt failed');
       
       const response = await axios.post(`${base}/api/users/login`, data, {
         withCredentials: true,
       });
       
-      console.log('Login successful:', response.data);
+      console.log('Login successful:');
       
       // storing data to localstorage
       localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -75,8 +80,10 @@ function LoginForm() {
 
   return (
     <div className="">
-      <div className="form-container bg-white rounded-[45px] p-10 w-[450px] h-[fit-content] 
-        min-[320px]:w-[350px]  max-[640px]:w-[450px] 
+      <div className="form-container bg-white rounded-[25px] p-10 w-[450px] h-[fit-content] 
+        min-[320px]:w-[350px]  
+        max-[640px]:w-[450px] 
+        min-[1024px]:w-[200px]
         md:w-[450px] 
         lg:w-[450px] 
         transition-all">
@@ -86,22 +93,34 @@ function LoginForm() {
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="mb-4">
             <label className="block text-sm font-Inter font-bold text-black">Email</label>
-            <input
-              type="email"
-              className="placeholder:font-Inter placeholder:text-[#717171]/30 mt-1 block w-full border border-[#A9A9A9] rounded-[10px] shadow-sm p-2"
-              placeholder="Enter your email"
-              {...register("email")}
-            />
+              <div className="relative">
+               <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+               <input
+                 type="email"
+                 className="placeholder:font-Inter placeholder:text-[#717171]/30 mt-1 block w-full border border-[#A9A9A9] rounded-[10px] shadow-sm p-2 pl-10"
+                 placeholder="Enter your email"
+                 {...register("email")}
+               />
+             </div>
             {errors.email && <p className="text-red-500 text-sm mt-0">{errors.email.message}</p>}
           </div>
           <div className="mb-4">
             <label className="block text-sm font-Inter font-bold text-black">Password</label>
-            <input
-              type="password"
-              className="placeholder:font-Inter placeholder:text-[#717171]/30 mt-1 block w-full border border-[#A9A9A9] rounded-[10px] shadow-sm p-2"
-              placeholder="Enter your password"
-              {...register("password")}
-            />
+            <div className="relative">
+               <KeyIcon size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+               <input
+                 type={showPassword ? 'text' : 'password'}
+                 className="placeholder:font-Inter placeholder:text-[#717171]/30 mt-1 block w-full border border-[#A9A9A9] rounded-[10px] shadow-sm p-2 pl-10 pr-12"
+                 placeholder="Enter your password"
+                 {...register("password")}/>
+               <button
+                 type="button"
+                 onClick={() => setShowPassword((s) => !s)}
+                 className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-600 hover:text-gray-800"
+                 aria-label={showPassword ? 'Hide password' : 'Show password'}>
+                 {showPassword ? <EyeOff size={20} strokeWidth={1.5} className="text-[#000000]" /> : <Eye size={20} strokeWidth={1.5} className="text-[#000000]" />}
+               </button>
+             </div>
             {errors.password && <p className="text-red-500 text-sm mt-0">{errors.password.message}</p>}
             <h1 className=" text-right text-sm font-Inter text-[#2A6495] font-bold mt-[6px] mb-[20px]">Forgot Password?</h1>
           </div>

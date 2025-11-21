@@ -27,7 +27,7 @@ export default function ExternalSignUp({ onBack, initialValues }) {
 
   const onSubmit = async (data) => {
   try {
-    console.log('Submitting form data:', data);
+    console.log('Submitting form data');
     const submitData = {
       accountType: 'External',
       name: data.fullName, // Map to 'name' field in backend
@@ -37,7 +37,7 @@ export default function ExternalSignUp({ onBack, initialValues }) {
     };
 
     const response = await axios.post(`${base}/api/users/register`, submitData);
-    console.log('Registration successful:', response.data);
+    console.log('Registration successful');
     
     toast.success('Registration successful! Redirecting...', {
         autoClose: 2000,
@@ -49,8 +49,8 @@ export default function ExternalSignUp({ onBack, initialValues }) {
       }, 3000);
 
   } catch (error) {
-    console.error('Registration failed:', error.response?.data || error.message);
-    toast.error(`${error.response.data.message}`, {
+    console.error('Registration failed:', error.response || error.message);
+    toast.error(`${error.response.message}`, {
           autoClose: 1500,
         });
   }

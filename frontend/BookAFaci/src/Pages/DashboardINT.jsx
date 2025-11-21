@@ -1,11 +1,78 @@
-import React from 'react'
+import React from 'react';
+import { useEffect } from 'react';
+import { useNavigate, Navigate } from 'react-router';
+import { toast } from 'react-toastify';
+import Sidebar, { SidebarItem } from '../components/sidebar';
+import Topbar from '../components/topbar';
+import loginbg from '../assets/Gradient blur.png'
+import Calendar from '../components/calendar';
+
+import {
+  Building2,
+  LayoutDashboard,
+  GalleryVerticalEnd,
+  ClipboardClock,
+  SquareX, SquareCheck
+} from "lucide-react"
 
 function DashboardINT() {
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (!user) {
+      navigate('/');
+    }
+  }, [navigate]);
+
   return (
-    <div>
-      
+    <div className="flex min-h-screen transition-all">
+      <title>Dashboard</title>
+      <Sidebar>
+        <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={true} />
+        <SidebarItem type="button" icon={<Building2 size={20} />} text="Facilities" active={false} onClick={() => navigate('/facilities-int')} />
+      </Sidebar>
+
+      <main className="flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5 
+          min-[320px]:w-[350px] max-[640px]:w-[450px] md:w-[450px] lg:w-[450px]" 
+          style={{
+          paddingLeft: '5.5rem', 
+          backgroundImage: `linear-gradient(rgba(194, 217, 249, 0.9), rgba(194, 217, 249, 0.9)), url(${loginbg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}>
+          <Topbar />
+
+        <div className="grid grid-cols-[1fr_2fr] gap-10 "></div>
+        <div className="bg-gradient-to-b from-[#E0E0E0] via-[#DDF2FF] to-[#E0E0E0] h-fit rounded-[10px] p-[1px] mt-[20px]">
+          <h1 className='pl-[35px] pt-[35px] mb-5 font-inter font-bold text-[2rem] text-[#007BDA]'>Dashboard</h1>
+            <div className='flex flex-wrap items-center gap-[10rem] mb-1 pl-[45px] pr-[45px] pb-[45px] 
+              min-[320px]:flex-wrap min-[320px]:gap-[2rem] max-[640px]:flex-wrap md:flex-wrap lg:flex-wrap'>
+              <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1
+              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0
+              '><GalleryVerticalEnd size={40} className="text-[#007BDA]" />Active: </div>
+              <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1
+              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0
+              '><ClipboardClock size={40} className="text-[#007BDA]" />Pending:</div>
+              <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1
+              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0
+              '><SquareX size={40} className="text-[#007BDA]" />Cancelled:</div>
+              <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1
+              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0
+              '><SquareCheck size={40} className="text-[#007BDA]" />Completed:</div>
+            </div>
+
+            <div className='grid grid-flow-col gap-[45px] pl-[45px] pr-[45px] pb-[45px]'>
+              <div className='flex items-center justify-center text-center bg-white col-span-2 h-[15rem] rounded-[10px] drop-shadow-lg transition-all hover:transform hover:scale-[1.01]'></div>
+              <div className='flex items-center justify-center text-center bg-white col-span-2 h-[13rem] rounded-[10px] drop-shadow-lg transition-all hover:transform hover:scale-[1.01]'></div>
+              <div className='font-inter flex items-center justify-center text-center bg-white col-span-2 row-span-2 rounded-[10px] drop-shadow-lg transition-all hover:transform hover:scale-[1.01]'><Calendar /></div>
+            </div>
+
+        </div>
+      </main>
     </div>
-  )
+  );
 }
 
 export default DashboardINT
