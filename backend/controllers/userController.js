@@ -1,9 +1,13 @@
 const User = require('../models/User');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const userController = {
   // REGIS FUNCTION FOR INTERNAL AND EXTERNAL USERS
   registerUser: async (req, res) => {
     try {
+      
       const { 
         accountType, 
         name, 
@@ -48,6 +52,9 @@ const userController = {
         }
         if (role === 'faculty') {
           userData.faculty = faculty;
+        }
+        if (role === 'admin') {
+          userData.admin = admin;
         }
       }
 
@@ -99,18 +106,34 @@ const userController = {
       const userResponse = user.toObject();
       delete userResponse.password;
 
-      res.json({
-        success: true,
-        message: 'Login successful',
-        user: userResponse
-      });
-    } catch (error) {
-      console.error('Login error:', error);
-      res.status(500).json({
-        success: false,
-        message: 'Server error during login'
-      });
-    }
+      if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET is not defined');
+      }
+
+      const payload = {
+      id: user._id,
+      role: user.role,
+      email: user.email
+    };
+      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '15d' });
+
+      res.status(200).json({
+      success: true,
+      message: 'Login successful',
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        department: user.department,
+        phone: user.phone
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Login error' });
+  };
   },
 
   // Get all users or filter by account type
