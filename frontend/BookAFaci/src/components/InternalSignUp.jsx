@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -36,6 +37,7 @@ const schema = yup.object({
 }).required();
 
 export default function InternalSignUp({ onBack, initialValues }) {
+  const navigate = useNavigate();
   const { register, handleSubmit, watch, setValue, formState: { errors, isSubmitting } } = useForm({
     resolver: yupResolver(schema),
     mode: 'onTouched',
@@ -62,36 +64,39 @@ export default function InternalSignUp({ onBack, initialValues }) {
   }, [role, setValue]);
 
   const onSubmit = async (data) => {
-  try {
-    console.log('Submitting internal form data:', data);
-    
-    const submitData = {
-      accountType: 'Internal',
-      name: data.fullName, // Map to 'name' field in backend
-      password: data.password,
-      role: data.role,
-      email: data.email,
-      phone: data.phone,
-      department: data.department || data.student, // Handle department routing
-      organization: data.organization,
-      faculty: data.faculty
-    };
+    try {
+      console.log('Submitting internal form data');
+      
+      const submitData = {
+        accountType: 'Internal',
+        name: data.fullName,
+        password: data.password,
+        role: data.role,
+        email: data.email,
+        phone: data.phone,
+        department: data.department,
+        organization: data.organization,
+        faculty: data.faculty
+      };
 
-    const response = await axios.post(`${base}/api/users/register`, submitData);
-    console.log('Internal registration successful:', response.data);
+      const response = await axios.post(`${base}/api/users/register`, submitData);
+      console.log('Internal registration successful');
+
+      toast.success('Registration successful', { autoClose: 1500 });
+
 
     //straight to login
     setTimeout(() => {
         navigate('/');
       }, 3000);
 
-  } catch (error) {
-    console.error('Registration failed:', error.response?.data || error.message);
-    toast.error(`${error.response.data.message}`, {
-          autoClose: 1500,
-        });
-  }
-};
+    } catch (error) {
+      console.error('Registration failed:', error.response || error.message);
+      toast.error(error.response?.message || error.message || 'Registration failed', {
+            autoClose: 1500,
+          });
+    }
+  };
 
   return (
     <div className="bg-white rounded-[45px] shadow-lg w-[450px] p-10 text-center
@@ -124,7 +129,7 @@ export default function InternalSignUp({ onBack, initialValues }) {
         Create an <span className="font-medium">Internal Account</span> to continue
       </p>
 
-      <form className="text-left space-y-4" onSubmit={handleSubmit(onSubmit)}>
+      <form className="text-left space-y-4" onSubmit={handleSubmit(onSubmit, (errors) => { console.log('Validation errors:', errors); })}>
         <div>
           <label className="font-bold text-sm text-black-700 mb-1 block">
             Full Name
@@ -190,7 +195,7 @@ export default function InternalSignUp({ onBack, initialValues }) {
             <>
               <select
                 className="border p-2 rounded w-full mb-4"
-                {...register('student')}
+                {...register('department')}
               >
                 <option value="">-- Select Department --</option>
                 <option value="COLLEGE OF COMPUTER STUDIES">COLLEGE OF COMPUTER STUDIES</option>
@@ -200,7 +205,7 @@ export default function InternalSignUp({ onBack, initialValues }) {
                 <option value="COLLEGE OF ENGINEERING">COLLEGE OF ENGINEERING</option>
                 <option value="COLLEGE OF NURSING">COLLEGE OF NURSING</option>
               </select>
-              {errors.student && <p className="text-red-500 text-sm mt-0">{errors.student.message}</p>}
+              {errors.department && <p className="text-red-500 text-sm mt-0">{errors.department.message}</p>}
             </>
           )}
 
@@ -239,9 +244,10 @@ export default function InternalSignUp({ onBack, initialValues }) {
 
         <button
           type="submit"
+          disabled={isSubmitting}
           className="w-full bg-[#2A6495] text-white py-2.5 rounded-md font-medium hover:bg-[#0d5694] transition"
         >
-          Sign Up
+          {isSubmitting ? 'Submitting...' : 'Sign Up'}
         </button>
         <button
           type="button"

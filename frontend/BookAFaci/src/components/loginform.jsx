@@ -22,13 +22,13 @@ function LoginForm() {
 
   const onSubmit = async (data) => {
     try {
-      console.log('Login attempt:', data);
+      console.log('Login attempt failed');
       
       const response = await axios.post(`${base}/api/users/login`, data, {
         withCredentials: true,
       });
       
-      console.log('Login successful:', response.data);
+      console.log('Login successful:');
       
       // storing data to localstorage
       localStorage.setItem('user', JSON.stringify(response.data.user));

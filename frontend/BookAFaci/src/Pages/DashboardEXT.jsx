@@ -25,18 +25,6 @@ function DashboardEXT() {
     }
   }, [navigate]);
 
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    toast.info('You have been logged out', {
-      position: "top-right",
-      autoClose: 1000,
-    });
-    navigate('/');
-  };
-
   return (
     <div className="flex min-h-screen transition-all">
       <title>Dashboard</title>
