@@ -81,7 +81,9 @@ function LoginForm() {
   return (
     <div className="">
       <div className="form-container bg-white rounded-[25px] p-10 w-[450px] h-[fit-content] 
-        min-[320px]:w-[350px]  max-[640px]:w-[450px] 
+        min-[320px]:w-[350px]  
+        max-[640px]:w-[450px] 
+        min-[1024px]:w-[200px]
         md:w-[450px] 
         lg:w-[450px] 
         transition-all">

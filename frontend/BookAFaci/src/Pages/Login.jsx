@@ -17,7 +17,17 @@ const Login = () => {
         xl:w-[70%]
         " style={{
         }}>
-          <h1 className="mt-[25%] text-center text-[10rem] font-bold text-white">BOOKAFACI</h1>
+          <h1 className="mt-[25%] text-center text-[10rem] font-bold text-white
+        min-[320px]:text-[0rem]
+        min-[375px]:text-[0rem]
+        min-[425px]:text-[0rem]
+        sm:text-[0rem]
+        md:text-[0rem]
+        lg:text-[6rem]
+        lg:mt-[35%]
+        xl:text-[10rem]
+        xl:mt-[25%]
+          ">BOOKAFACI</h1>
         </div>
 
         <div className="w-[40%] bg-[url('/src/assets/right.png')] bg-cover bg-center
