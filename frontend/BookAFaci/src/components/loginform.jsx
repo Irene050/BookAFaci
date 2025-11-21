@@ -27,8 +27,6 @@ function LoginForm() {
 
   const onSubmit = async (data) => {
     try {
-      console.log('Login attempt failed');
-      
       const response = await axios.post(`${base}/api/users/login`, data, {
         withCredentials: true,
       });
