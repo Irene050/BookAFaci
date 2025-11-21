@@ -7,7 +7,7 @@ const Login = () => {
   return (
     <div className="min-h-screen relative transition-all">
       <div className="absolute inset-0 flex">
-        <div className="w-[60%] bg-[url('/src/assets/left.jpeg')] bg-cover bg-center
+        <div className="flex items-center justify-center h-screen bg-[url('/src/assets/left.jpeg')] bg-cover bg-center
         min-[320px]:w-[0%]
         min-[375px]:w-[0%]
         min-[425px]:w-[0%]
@@ -17,16 +17,14 @@ const Login = () => {
         xl:w-[70%]
         " style={{
         }}>
-          <h1 className="mt-[25%] text-center text-[10rem] font-bold text-white
+          <h1 className="text-center text-[10rem] font-bold text-white
         min-[320px]:text-[0rem]
         min-[375px]:text-[0rem]
         min-[425px]:text-[0rem]
         sm:text-[0rem]
         md:text-[0rem]
         lg:text-[6rem]
-        lg:mt-[35%]
         xl:text-[10rem]
-        xl:mt-[25%]
           ">BOOKAFACI</h1>
         </div>
 
@@ -39,8 +37,8 @@ const Login = () => {
         lg:w-[40%]
         xl:w-[40%]
         ">
-            <div className="w-full mb-3 mt-[25%]">
-              <div className='flex flex-col items-center justify-center mt-10'>
+            <div className="w-full flex items-center justify-center h-screen">
+              <div className='flex items-center justify-center'>
                 <LoginForm />
               </div>
             </div>

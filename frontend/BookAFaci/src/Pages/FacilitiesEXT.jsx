@@ -272,7 +272,7 @@
 //       setTime("");
 //       setNotes("");
 //     }
-  
+
 //   }, [open]);
 
 //   const resourceImages = {
@@ -308,7 +308,7 @@
 
 //   return (
 //     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-     
+
 //       <div className="bg-white w-full max-w-[1100px] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
 //         {/* Header */}
 //         <div className="flex items-center justify-between px-6 py-4 border-b">
@@ -683,7 +683,7 @@ function ResourceModal({ open, onClose, onSubmit, facilityName, initialResources
       <div className="bg-white w-full max-w-[1100px] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         <div className="flex items-center justify-between px-6 py-4 border-b">
           <div>
-            <h3 className="text-2xl font-extrabold text-[#007BDA]">
+            <h3 className="text-2xl font-bold font-inter text-[#007BDA]">
               Would you like to add resources?
             </h3>
             <p className="text-sm text-gray-600">{facilityName}</p>
@@ -718,7 +718,7 @@ function ResourceModal({ open, onClose, onSubmit, facilityName, initialResources
                         onClick={() => updateResource(key, -1)}
                         className="w-9 h-9 rounded-md bg-gray-200 flex items-center justify-center text-lg"
                       >
-                        −
+                        -
                       </button>
 
                       <div className="w-10 text-center font-semibold">{resources[key]}</div>
@@ -851,21 +851,23 @@ function Facilities() {
       <title>Facilities</title>
 
       <Sidebar>
-        <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={false} onClick={() => navigate("/dashboard")} />
-        <SidebarItem icon={<Building2 size={20} />} text="Facilities" active={true} onClick={() => navigate("/facilities")} />
+        <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={false} onClick={() => navigate("/dashboard-ext")} />
+        <SidebarItem icon={<Building2 size={20} />} text="Facilities" active={true} onClick={() => navigate("/facilities-ext")} />
       </Sidebar>
 
       <main
         className="flex-1 pl-6 pr-6 bg-center bg-cover h-full relative pb-5"
         style={{
+          paddingLeft: '5.5rem',
           backgroundImage: `linear-gradient(rgba(194, 217, 249, 0.85), rgba(194, 217, 249, 0.85)), url(${loginbg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         }}
       >
         <Topbar />
 
-        <div className="bg-gradient-to-b from-[#E0E0E0] via-[#DDF2FF] to-[#E0E0E0] rounded-[10px] p-[1px] mt-[20px] min-h-[90%]">
+        <div className="bg-gradient-to-b from-[#E0E0E0] via-[#DDF2FF] to-[#E0E0E0] h-fit rounded-[10px] p-[1px] mt-[20px]">
           <div className="bg-gradient-to-b from-[#E0E0E0] via-[#DDF2FF] to-[#E0E0E0] rounded-[10px] p-10 mt-[20px]">
             <div className="flex items-center justify-between w-full mb-8">
               <h1 className="font-inter font-bold text-[2rem] text-[#007BDA]">Facilities</h1>
@@ -879,7 +881,7 @@ function Facilities() {
                 {/* FACILITY CARD 1 (UPDATED) */}
                 <div className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex gap-5 items-start">
                   <img
-                    src="https://th.bing.com/th/id/R.0906d93a9bad0dc9afe3da46206fdc37?rik=%2fFd2fWDcLfIUyw&riu=http%3a%2f%2f4.bp.blogspot.com%2f_8EuANYHPvas%2fSM0wmwQN6AI%2fAAAAAAAADbw%2fZLfEdD8Uan4%2fs400%2fw2.jpg&ehk=jz1walLmjDyOfBz75avbLfbCPssEPdRrEMEX1W%2biBUI%3d&risl=&pid=ImgRaw&r=0"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png?20220519031949"
                     className="w-[180px] h-[150px] rounded-xl object-cover"
                     alt="Xavier Grounds"
                   />
@@ -891,8 +893,8 @@ function Facilities() {
                     <p className="text-sm text-gray-600">250 Pax</p>
                     <p className="text-sm text-gray-600">Big Space</p>
 
-                    <p className="mt-4 text-[#007BDA] font-semibold">
-                      Would you like to add resources?
+                    <p className="mt-4 text-[#007BDA] font-inter font-semibold">
+                      See booking options?
                     </p>
 
                     <button
@@ -902,7 +904,7 @@ function Facilities() {
                         setModalOpen(true);
                       }}
                     >
-                      Add Resources
+                      Booking Options
                     </button>
                   </div>
                 </div>
@@ -910,7 +912,7 @@ function Facilities() {
                 {/* FACILITY CARD 2 (UPDATED) */}
                 <div className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex gap-5 items-start">
                   <img
-                    src="https://tse3.mm.bing.net/th/id/OIP.sHbMTFqQTCH12EDM1bIkMgHaEK"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png?20220519031949"
                     className="w-[180px] h-[150px] rounded-xl object-cover"
                     alt="Alingal Convention Hall"
                   />
@@ -924,8 +926,8 @@ function Facilities() {
                     <p className="text-sm text-gray-600">250 Pax</p>
                     <p className="text-sm text-gray-600">Big Space</p>
 
-                    <p className="mt-4 text-[#007BDA] font-semibold">
-                      Would you like to add resources?
+                    <p className="mt-4 text-[#007BDA] font-inter font-semibold">
+                      See booking options?
                     </p>
 
                     <button
@@ -935,7 +937,7 @@ function Facilities() {
                         setModalOpen(true);
                       }}
                     >
-                      Add Resources
+                      Booking Options
                     </button>
                   </div>
                 </div>
