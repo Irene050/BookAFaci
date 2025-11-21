@@ -25,8 +25,8 @@ function FacilitiesINT() {
   
         {/* SIDEBAR */}
         <Sidebar>
-          <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={false} onClick={() => navigate("/dashboard-ext")} />
-          <SidebarItem icon={<Building2 size={20} />} text="Facilities" active={true} onClick={() => navigate("/facilities-ext")} />
+          <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={false} onClick={() => navigate("/dashboard-int")} />
+          <SidebarItem icon={<Building2 size={20} />} text="Facilities" active={true} onClick={() => navigate("/facilities-int")} />
         </Sidebar>
   
         {/* MAIN */}
