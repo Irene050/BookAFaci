@@ -113,7 +113,8 @@ const userController = {
       const payload = {
       id: user._id,
       role: user.role,
-      email: user.email
+      email: user.email,
+      accountType: user.accountType
     };
       const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '15d' });
 
@@ -127,7 +128,8 @@ const userController = {
         email: user.email,
         role: user.role,
         department: user.department,
-        phone: user.phone
+        phone: user.phone,
+        accountType: user.accountType,
       }
     });
   } catch (error) {

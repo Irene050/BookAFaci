@@ -27,10 +27,9 @@ function LoginForm() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(`${base}/api/users/login`, data, {
+      const response = await axios.post(`${base}/bookafaci/users/login`, data, {
         withCredentials: true,
       });
-      
       console.log('Login successful:');
       
       // storing data to localstorage

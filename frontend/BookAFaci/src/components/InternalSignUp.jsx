@@ -79,7 +79,7 @@ export default function InternalSignUp({ onBack, initialValues }) {
         faculty: data.faculty
       };
 
-      const response = await axios.post(`${base}/api/users/register`, submitData);
+      const response = await axios.post(`${base}/bookafaci/users/register`, submitData);
       console.log('Internal registration successful');
 
       toast.success('Registration successful', { autoClose: 1500 });
