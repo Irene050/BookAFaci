@@ -59,7 +59,7 @@ function Topbar() {
       {/* RIGHT — PROFILE AREA */}
       <div className="flex items-center gap-1">
 
-        {/* NOTIFICATION ICON (MATCHES YOUR DESIGN) */}
+        {/* NOTIFICATION ICON*/}
         <button className="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center hover:bg-gray-100 transition">
           <Bell size={20} className="text-gray-600" />
         </button>
