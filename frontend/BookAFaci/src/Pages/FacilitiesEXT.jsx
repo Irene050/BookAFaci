@@ -7,7 +7,7 @@ import Topbar from "../components/topbar";
 import loginbg from "../assets/Gradient blur.png";
 import ResourceModal from "../components/ResourceModal";
 
-import { LayoutDashboard, Building2 } from "lucide-react";
+import { LayoutDashboard, Building2, Clipboard } from "lucide-react";
 
 const base = import.meta.env.VITE_API_URL || "";
 
@@ -91,6 +91,7 @@ function Facilities() {
       <Sidebar>
         <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={false} onClick={() => navigate("/dashboard-ext")} />
         <SidebarItem icon={<Building2 size={20} />} text="Facilities" active={true} onClick={() => navigate("/facilities-ext")} />
+        <SidebarItem icon={<Clipboard size={20} />} text="Bookings" active={false} onClick={() => navigate('/bookings-ext')}/>
       </Sidebar>
 
       <main className="flex-1 pl-6 pr-6 bg-center bg-cover h-full relative pb-5"

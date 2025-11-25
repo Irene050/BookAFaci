@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router'
-import SignUpFlow from "./components/SignUpFlow";
 import { ToastContainer } from 'react-toastify';
 import Login from './Pages/Login'
 import Userselect from './Pages/Userselect'
@@ -10,6 +9,7 @@ import EXTdash from './Pages/DashboardEXT';
 import INTdash from './Pages/DashboardINT';
 import EXTfaci from './Pages/FacilitiesEXT';
 import INTfaci from './Pages/FacilitiesINT';
+import EXTBKS from './Pages/BookingsEXT';
 
 
 const App = () => {
@@ -25,6 +25,7 @@ const App = () => {
         <Route path="/dashboard-int" element={<ProtectedRoute allowedRoles={['Internal']}><INTdash /></ProtectedRoute>} />
         <Route path="/facilities-ext" element={<ProtectedRoute allowedRoles={['External']}><EXTfaci /></ProtectedRoute>} />
         <Route path="/facilities-int" element={<ProtectedRoute allowedRoles={['Internal']}><INTfaci /></ProtectedRoute>} />
+        <Route path="/bookings-ext" element={<ProtectedRoute allowedRoles={['External']}><EXTBKS /></ProtectedRoute>} />
       </Routes>
     </div>
   )

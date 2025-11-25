@@ -65,7 +65,7 @@ export default function Sidebar({ children }) {
 
   return (
     <>
-    <aside className="fixed left-0 top-0 h-screen z-40">
+    <aside className="fixed left-0 top-0 h-full z-40">
       <nav className={`h-full flex flex-col bg-gradient-to-b from-[#FFFEFF] to-[#D2EDFF] border-r shadow-sm transition-all ${expanded ? "w-64" : "w-16"}`}>
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
@@ -98,25 +98,6 @@ export default function Sidebar({ children }) {
             </span>
           </button>
         </div>
-        {/*<div className="border-t flex p-3">
-          <img
-            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || '')}&background=c7d2fe&color=3730a3&bold=true`}
-            alt=""
-            className="w-10 h-10 rounded-md"
-          />
-          <div
-            className={`
-              flex justify-between items-center
-              overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}
-          `}
-          >
-            <div className="leading-4">
-              <h4 className="font-semibold">{user.name}</h4>
-              <span className="text-xs text-gray-600">{user.email}</span>
-            </div>
-          </div>
-        </div>
-        */}
       </nav>
     </aside>
 

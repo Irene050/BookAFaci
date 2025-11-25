@@ -32,7 +32,6 @@ function LoginForm() {
       });
       console.log('Login successful:');
       
-      // storing data to localstorage
       localStorage.setItem('user', JSON.stringify(response.data.user));
       
       const { accountType, role } = response.data.user || {};
@@ -41,13 +40,13 @@ function LoginForm() {
       else if (accountType === 'Internal') destination = '/dashboard-int';
       if (role === 'admin') destination = '/admin';
 
-      //TOAST SCCESS
       toast.success('Login successful! Redirecting...', {
         position: "top-right",
         autoClose: 2800,
+        pauseOnHover : false,
       });
       
-      // REDIRECT TO DASHBOARD
+      // REDIRECT TO DASH
       setTimeout(() => navigate(destination, { replace: true }), 1200);
       
     } catch (error) {

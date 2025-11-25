@@ -52,8 +52,12 @@ function Facilities() {
       const userObj = JSON.parse(localStorage.getItem("user") || "null");
       const userId = userObj?._id || userObj?.id || userObj?.user || null;
 
-      // payload.resource is an array of resource IDs
-      const resourceIds = Array.isArray(payload.resource) ? payload.resource : [];
+      // support payload.resource (array) OR payload.resources (array) OR object mapping id=>qty
+      const resourceIds = Array.isArray(payload.resource)
+        ? payload.resource
+        : Array.isArray(payload.resources)
+        ? payload.resources
+        : Object.keys(payload.resource || {}).filter((id) => (payload.resource[id] || 0) > 0);
 
       const facilityValue = (selectedFacility && typeof selectedFacility === 'object')
         ? (selectedFacility._id || selectedFacility.name || selectedFacility)
@@ -63,7 +67,7 @@ function Facilities() {
         user: userId,
         bookingType: payload.bookingType,
         facility: facilityValue,
-        resources: resourceIds,
+        resource: resourceIds,
         startDate: payload.startDate,
         endDate: payload.endDate,
       };
