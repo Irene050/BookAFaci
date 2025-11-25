@@ -10,6 +10,7 @@ import INTdash from './Pages/DashboardINT';
 import EXTfaci from './Pages/FacilitiesEXT';
 import INTfaci from './Pages/FacilitiesINT';
 import EXTBKS from './Pages/BookingsEXT';
+import INTBKS from './Pages/BookingsINT';
 
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/facilities-ext" element={<ProtectedRoute allowedRoles={['External']}><EXTfaci /></ProtectedRoute>} />
         <Route path="/facilities-int" element={<ProtectedRoute allowedRoles={['Internal']}><INTfaci /></ProtectedRoute>} />
         <Route path="/bookings-ext" element={<ProtectedRoute allowedRoles={['External']}><EXTBKS /></ProtectedRoute>} />
+        <Route path="/bookings-int" element={<ProtectedRoute allowedRoles={['Internal']}><INTBKS /></ProtectedRoute>} />
       </Routes>
     </div>
   )

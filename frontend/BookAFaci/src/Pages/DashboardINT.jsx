@@ -1,7 +1,8 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Navigate } from 'react-router';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 import Sidebar, { SidebarItem } from '../components/sidebar';
 import Topbar from '../components/topbar';
 import loginbg from '../assets/Gradient blur.png'
@@ -12,18 +13,43 @@ import {
   LayoutDashboard,
   GalleryVerticalEnd,
   ClipboardClock,
-  SquareX, SquareCheck
+  SquareX, SquareCheck,
+  Clipboard
 } from "lucide-react"
 
-function DashboardINT() {
+const base = import.meta.env.VITE_API_URL || "";
+
+
+function DashboardEXT() {
   const navigate = useNavigate();
+  const [summary, setSummary] = useState({ totalBookings: 0, upcoming: 0, cancelled: 0 });
   
   useEffect(() => {
     const user = localStorage.getItem('user');
     if (!user) {
       navigate('/');
+      return;
     }
+
+    (async () => {
+      try {
+        const userObj = JSON.parse(user);
+        const userId = userObj?._id || userObj?.id;
+        if (!userId) return;
+
+        const res = await axios.get(`${base}/bookafaci/dashboard/summary/${userId}`);
+        const data = res?.data || {};
+        setSummary({
+          totalBookings: data.totalBookings ?? 0,
+          upcoming: data.upcoming ?? 0,
+          cancelled: data.cancelled ?? 0,
+        });
+      } catch (err) {
+        console.error('Failed to load dashboard summary', err?.response?.data || err);
+      }
+    })();
   }, [navigate]);
+  
 
   return (
     <div className="flex min-h-screen transition-all">
@@ -31,6 +57,7 @@ function DashboardINT() {
       <Sidebar>
         <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={true} />
         <SidebarItem type="button" icon={<Building2 size={20} />} text="Facilities" active={false} onClick={() => navigate('/facilities-int')} />
+        <SidebarItem icon={<Clipboard size={20} />} text="Bookings" active={false} onClick={() => navigate('/bookings-int')}/>
       </Sidebar>
 
       <main className="flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5 
@@ -50,17 +77,32 @@ function DashboardINT() {
             <div className='flex flex-wrap items-center gap-[10rem] mb-1 pl-[45px] pr-[45px] pb-[45px] 
               min-[320px]:flex-wrap min-[320px]:gap-[2rem] max-[640px]:flex-wrap md:flex-wrap lg:flex-wrap'>
               <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1
-              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0
-              '><GalleryVerticalEnd size={40} className="text-[#007BDA]" />Active: </div>
+              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0'>
+                <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
+                <span className="ml-2">Total Bookings:</span>
+                <div className="text-4xl indent-4">{summary.totalBookings}</div>
+              </div>
+
               <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1
-              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0
-              '><ClipboardClock size={40} className="text-[#007BDA]" />Pending:</div>
+              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0'>
+                <ClipboardClock size={40} className="text-[#007BDA]" />
+                <span className="ml-2">Upcoming Bookings: </span>
+                <div className="text-4xl indent-4">{summary.upcoming}</div>
+              </div>
+
               <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1
-              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0
-              '><SquareX size={40} className="text-[#007BDA]" />Cancelled:</div>
+              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0'>
+                <SquareX size={40} className="text-[#007BDA]" />
+                <span className="ml-2">Cancelled Bookings: </span>
+                <div className="text-4xl indent-4">{summary.cancelled}</div>
+              </div>
+
               <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1
-              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0
-              '><SquareCheck size={40} className="text-[#007BDA]" />Completed:</div>
+              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0'>
+                <SquareCheck size={40} className="text-[#007BDA]" />
+                <span className="ml-2">Completed Bookings: </span>
+                <div className="text-4xl indent-4">{summary.completed}</div>
+              </div>
             </div>
 
             <div className='grid grid-flow-col gap-[45px] pl-[45px] pr-[45px] pb-[45px]'>
@@ -75,4 +117,4 @@ function DashboardINT() {
   );
 }
 
-export default DashboardINT
+export default DashboardEXT
