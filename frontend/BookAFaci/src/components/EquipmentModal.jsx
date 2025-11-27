@@ -136,7 +136,9 @@ export default function EquipmentModal({ open, onClose, onSubmit, facilityName, 
 
             <div className="mt-6 space-y-2">
               <button onClick={handleContinue}
-                className={`w-full py-3 rounded-lg font-bold text-white transition ${(totalItems>0) ? "bg-gradient-to-r from-[#346D9A] to-[#83C9FF] text-[#FFFFFF] hover:brightness-95" : "bg-gray-300 cursor-not-allowed"}`}>
+                className={`w-full py-3 rounded-lg font-bold text-white transition ${((totalItems>0 && startDate !== "" && endDate !== "") || (startDate !== "" && endDate !== "")) ? "bg-gradient-to-r from-[#346D9A] to-[#83C9FF] text-[#FFFFFF] hover:brightness-95" : "bg-gray-300 cursor-not-allowed"}`}
+                disabled={!(totalItems>0 || (startDate !== "" && endDate !== ""))}
+                >
                 Book
               </button>
               <button onClick={onClose} className="w-full py-3 rounded-lg font-bold bg-white border border-gray-200">Cancel</button>
