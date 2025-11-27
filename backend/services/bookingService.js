@@ -10,7 +10,7 @@ const getBookingsByUser = async (userId) => {
     .sort({ createdAt: -1 });
 };
 
-const createBooking = async ({ userName, bookingType, facility, resource, startDate, endDate }) => {
+const createBooking = async ({ userName, bookingType, facility, equipment, startDate, endDate }) => {
   const foundUser = await User.findOne({ name: userName });
   if (!foundUser) throw new Error('User not found');
 
@@ -26,8 +26,8 @@ const createBooking = async ({ userName, bookingType, facility, resource, startD
     endDate: { $gt: start }
   };
 
-  if (bookingType !== 'resource') conflictQuery.facility = facility;
-  if (bookingType !== 'facility') conflictQuery.resource = resource;
+  if (bookingType !== 'equipment') conflictQuery.facility = facility;
+  if (bookingType !== 'facility') conflictQuery.equipment = equipment;
 
   const existingBooking = await Booking.findOne(conflictQuery);
   if (existingBooking) throw new Error('A conflicting booking already exists for that time range.');
@@ -36,7 +36,7 @@ const createBooking = async ({ userName, bookingType, facility, resource, startD
     user: foundUser._id,
     bookingType,
     facility: facility || null,
-    resource: resource || null,
+    equipment: equipment || null,
     startDate: start,
     endDate: end,
     status: 'pending'
@@ -52,7 +52,7 @@ const editBooking = async (bookingId, updates) => {
 
   if (updates.bookingType) booking.bookingType = updates.bookingType;
   if (updates.facility) booking.facility = updates.facility;
-  if (updates.resource) booking.resource = updates.resource;
+  if (updates.equipment) booking.equipment = updates.equipment;
   if (updates.startDate) booking.startDate = new Date(updates.startDate);
   if (updates.endDate) booking.endDate = new Date(updates.endDate);
 
@@ -96,10 +96,10 @@ const getCalendarBookings = async (userId) => {
     let title = "";
     if (b.bookingType === "facility") {
       title = b.facility;
-    } else if (b.bookingType === "resource") {
-      title = b.resource;
+    } else if (b.bookingType === "equipment") {
+      title = b.equipment;
     } else {
-      title = [b.facility, b.resource].filter(Boolean).join(" + ");
+      title = [b.facility, b.equipment].filter(Boolean).join(" + ");
     }
 
     return {
@@ -122,13 +122,13 @@ const getNotifications = async (userId) => {
     user: userId,
     startDate: { $gte: now, $lte: twoDaysLater },
     status: { $ne: 'cancelled' },
-  }).populate('user', 'name email facility resource startDate endDate');
+  }).populate('user', 'name email facility equipment startDate endDate');
 
   const recentCancellations = await Booking.find({
     user: userId,
     status: 'cancelled',
     updatedAt: { $gte: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000) },
-  }).populate('user', 'name email facility resource startDate endDate');
+  }).populate('user', 'name email facility equipment startDate endDate');
 
   return { upcomingBookings, recentCancellations };
 };

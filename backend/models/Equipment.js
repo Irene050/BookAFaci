@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // schema medj same lang din sa facility 
-const resourceSchema = new mongoose.Schema({
+const equipmentSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -26,4 +26,4 @@ const resourceSchema = new mongoose.Schema({
   timestamps: true,
 })
 
-module.exports = mongoose.model('Resource', resourceSchema);
+module.exports = mongoose.model('Equipment', equipmentSchema);

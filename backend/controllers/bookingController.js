@@ -9,7 +9,7 @@ const getBookingStatus = async (req, res) => {
     const bookings = await Booking.find({ user: userObjectId })
       .populate("user", "name email")
       .populate("facility")   // populate facility details
-      .populate("resource")   // populate resource details
+      .populate("equipment")   // populate equipment details
       .sort({ startDate: 1 });
 
     if (!bookings.length)
@@ -26,7 +26,7 @@ const getAllBookings = async (req, res) => {
     const bookings = await Booking.find()
       .populate("user", "name email")
       .populate("facility")
-      .populate("resource")
+      .populate("equipment")
       .sort({ createdAt: -1 });
     res.status(200).json({ bookings });
   } catch (error) {
@@ -36,13 +36,13 @@ const getAllBookings = async (req, res) => {
 
 const createBooking = async (req, res) => {
   try {
-    const { user, bookingType, facility, resource, startDate, endDate } = req.body;
+    const { user, bookingType, facility, equipment, startDate, endDate } = req.body;
 
     const booking = await Booking.create({
       user,
       bookingType,
       facility,
-      resource,
+      equipment,
       startDate,
       endDate,
       status: "pending",
@@ -58,15 +58,15 @@ const createBooking = async (req, res) => {
 const editBooking = async (req, res) => {
   try {
     const { bookingId } = req.params;
-    const { user, bookingType, facility, resource, startDate, endDate, status } = req.body;
+    const { user, bookingType, facility, equipment, startDate, endDate, status } = req.body;
 
     const booking = await Booking.findByIdAndUpdate(
       bookingId,
-      { user, bookingType, facility, resource, startDate, endDate, status },
+      { user, bookingType, facility, equipment, startDate, endDate, status },
       { new: true }
     ).populate("user", "name email")
      .populate("facility")
-     .populate("resource");
+     .populate("equipment");
 
     res.status(200).json({ message: "Booking updated successfully", booking });
   } catch (error) {
@@ -83,7 +83,7 @@ const cancelBooking = async (req, res) => {
       { new: true }
     ).populate("user", "name email")
      .populate("facility")
-     .populate("resource");
+     .populate("equipment");
 
     res.status(200).json({ message: "Booking cancelled successfully", booking });
   } catch (error) {
@@ -115,7 +115,7 @@ const getDashboardLists = async (req, res) => {
     const lists = await Booking.find({ user: userObjectId })
       .populate("user", "name email")
       .populate("facility")
-      .populate("resource")
+      .populate("equipment")
       .sort({ createdAt: -1 });
 
     res.status(200).json(lists);
@@ -135,10 +135,10 @@ const getDashboardCalendar = async (req, res) => {
       let title = "";
       if (b.bookingType === "facility") {
         title = b.facility ? b.facility.name : ""; // assuming facility has a 'name' field
-      } else if (b.bookingType === "resource") {
-        title = b.resource ? b.resource.name : ""; // assuming resource has a 'name' field
+      } else if (b.bookingType === "equipment") {
+        title = b.equipment ? b.equipment.name : ""; // assuming equipment has a 'name' field
       } else {
-        title = [b.facility?.name, b.resource?.name].filter(Boolean).join(" + ");
+        title = [b.facility?.name, b.equipment?.name].filter(Boolean).join(" + ");
       }
 
       return {
@@ -170,13 +170,13 @@ const getNotifications = async (req, res) => {
       user: userObjectId,
       startDate: { $gte: now, $lte: twoDaysLater },
       status: { $ne: "cancelled" },
-    }).populate("user", "name email facility resource startDate endDate");
+    }).populate("user", "name email facility equipment startDate endDate");
 
     const recentCancellations = await Booking.find({
       user: userObjectId,
       status: "cancelled",
       updatedAt: { $gte: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000) },
-    }).populate("user", "name email facility resource startDate endDate");
+    }).populate("user", "name email facility equipment startDate endDate");
 
     res.status(200).json({ upcomingBookings, recentCancellations });
   } catch (error) {

@@ -1,6 +1,6 @@
 const { body, validationResult } = require('express-validator');
 
-const validateResource = [
+const validateEquipment = [
   body('name')
     .isString()
     .notEmpty()
@@ -50,4 +50,4 @@ const validateResource = [
   },
 ];
 
-module.exports = { validateResource }
+module.exports = { validateEquipment }

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bookingSchema = new mongoose.Schema({
   bookingType: {
     type: String,
-    enum: ['facility', 'resource', 'facility_with_resource'],
+    enum: ['facility', 'equipment', 'facility_with_equipment'],
     required: true
   },
   user: {
@@ -15,14 +15,14 @@ const bookingSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Facility',
     required: function () {
-      return this.bookingType === 'facility' || this.bookingType === 'facility_with_resource';
+      return this.bookingType === 'facility' || this.bookingType === 'facility_with_equipment';
     }
   },
-  resource: {
+  equipment: {
     type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Resource',
+    ref: 'equipment',
     required: function () {
-      return this.bookingType === 'resource' || this.bookingType === 'facility_with_resource';
+      return this.bookingType === 'equipment' || this.bookingType === 'facility_with_equipment';
     }
   },
   startDate: { type: Date, required: true },
