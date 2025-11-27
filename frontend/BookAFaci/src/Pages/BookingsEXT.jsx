@@ -17,7 +17,7 @@ const base = import.meta.env.VITE_API_URL || "";
     function BookingsEXT() {
         const navigate = useNavigate();
         const [bookings, setBookings] = useState([]);
-        const [resources, setResources] = React.useState([])
+        const [equipment, setEquipment] = React.useState([])
 
     useEffect(() => {
     const user = localStorage.getItem('user');
@@ -37,9 +37,9 @@ const base = import.meta.env.VITE_API_URL || "";
         const list = Array.isArray(res.data?.bookings) ? res.data.bookings : [];
         setBookings(list);
 
-        const rRes = await axios.get(`${base}/bookafaci/resources`).catch(() => ({ data: [] }));
-        const resourcesList = Array.isArray(rRes.data) ? rRes.data : (rRes.data?.resources || rRes.data?.data || []);
-        setResources(resourcesList);
+        const rRes = await axios.get(`${base}/bookafaci/equipment`).catch(() => ({ data: [] }));
+        const equipmentList = Array.isArray(rRes.data) ? rRes.data : (rRes.data?.equipment || rRes.data?.data || []);
+        setEquipment(equipmentList);
       } catch (err) {
         console.error('Failed to load bookings', err?.response?.data || err);
         toast.error('Failed to load bookings');
@@ -87,10 +87,10 @@ const base = import.meta.env.VITE_API_URL || "";
                       </div>
 
                       <div className="mt-3 text-sm text-gray-700">
-                        Resources:
-                        {Array.isArray(b.resource) && b.resource.length
+                        Equipment:
+                        {Array.isArray(b.equipment) && b.equipment.length
                           ? <ul className="list-disc list-inside">
-                              {b.resource.map(r => <li key={r._id || r}>{ typeof r === 'object' ? (r.name || r._id) : r }</li>)}
+                              {b.equipment.map(r => <li key={r._id || r}>{ typeof r === 'object' ? (r.name || r._id) : r }</li>)}
                             </ul>
                           : <span className="ml-2 text-gray-500"> none</span>
                         }
