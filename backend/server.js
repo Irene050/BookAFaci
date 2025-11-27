@@ -5,7 +5,7 @@ const cors = require('cors');
 const connectDB = require('./config/database');
 const userRoutes = require('./routes/userRoutes'); 
 const facilityRoutes = require('./routes/facilityRoutes');
-const resourceRoutes = require('./routes/resourceRoutes');
+const equipmentRoutes = require('./routes/equipmentRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 
 dotenv.config();
@@ -26,7 +26,7 @@ app.use(express.json());
 
 app.use('/bookafaci', userRoutes)
 app.use('/bookafaci', facilityRoutes)
-app.use('/bookafaci', resourceRoutes)
+app.use('/bookafaci', equipmentRoutes)
 app.use('/bookafaci', bookingRoutes);
 
 app.get('/', (req, res) => {
