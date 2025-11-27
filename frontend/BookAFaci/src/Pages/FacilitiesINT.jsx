@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import Sidebar, { SidebarItem } from "../components/sidebar";
 import Topbar from "../components/topbar";
 import loginbg from "../assets/Gradient blur.png";
-import ResourceModal from "../components/ResourceModal";
+import EquipmentModal from "../components/EquipmentModal";
 
 import { LayoutDashboard, Building2, Clipboard } from "lucide-react";
 
@@ -14,7 +14,7 @@ const base = import.meta.env.VITE_API_URL || "";
 function Facilities() {
   const navigate = useNavigate();
   const [facilities, setFacilities] = useState([]);
-  const [resources, setResources] = useState([]);
+  const [equipments, setEquipments] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState(null);
 
@@ -37,11 +37,11 @@ function Facilities() {
               : [];
         setFacilities(list);
 
-        const rRes = await axios.get(`${base}/bookafaci/resources`).catch(() => axios.get(`${base}/bookafaci/resources`).catch(() => ({ data: [] })));
-        const resourcesList = Array.isArray(rRes.data) ? rRes.data : (rRes.data?.resources || rRes.data?.data || []);
-        setResources(resourcesList);
+        const rRes = await axios.get(`${base}/bookafaci/equipments`).catch(() => axios.get(`${base}/bookafaci/equipments`).catch(() => ({ data: [] })));
+        const equipmentsList = Array.isArray(rRes.data) ? rRes.data : (rRes.data?.equipments || rRes.data?.data || []);
+        setEquipments(equipmentsList);
       } catch (err) {
-        console.error("Failed to load facilities/resources", err);
+        console.error("Failed to load facilities/equipments", err);
       }
     })();
   }, []);
@@ -52,12 +52,12 @@ function Facilities() {
       const userObj = JSON.parse(localStorage.getItem("user") || "null");
       const userId = userObj?._id || userObj?.id || userObj?.user || null;
 
-      // support payload.resource (array) OR payload.resources (array) OR object mapping id=>qty
-      const resourceIds = Array.isArray(payload.resource)
-        ? payload.resource
-        : Array.isArray(payload.resources)
-        ? payload.resources
-        : Object.keys(payload.resource || {}).filter((id) => (payload.resource[id] || 0) > 0);
+      // support payload.equipment (array) OR payload.equipments (array) OR object mapping id=>qty
+      const equipmentIds = Array.isArray(payload.equipment)
+        ? payload.equipment
+        : Array.isArray(payload.equipments)
+        ? payload.equipments
+        : Object.keys(payload.equipment || {}).filter((id) => (payload.equipment[id] || 0) > 0);
 
       const facilityValue = (selectedFacility && typeof selectedFacility === 'object')
         ? (selectedFacility._id || selectedFacility.name || selectedFacility)
@@ -65,9 +65,8 @@ function Facilities() {
 
       const body = {
         user: userId,
-        bookingType: payload.bookingType,
         facility: facilityValue,
-        resource: resourceIds,
+        equipment: equipmentIds,
         startDate: payload.startDate,
         endDate: payload.endDate,
       };
@@ -85,10 +84,10 @@ function Facilities() {
     <div className="flex h-screen">
       <title>Facilities</title>
 
-      <ResourceModal
+      <EquipmentModal
         open={modalOpen}
         facilityName={selectedFacility?.name || selectedFacility}
-        resources={Array.isArray(resources) ? resources : []}
+        equipments={Array.isArray(equipments) ? equipments : []}
         onClose={() => setModalOpen(false)}
         onSubmit={handleBookingSubmit}
       />

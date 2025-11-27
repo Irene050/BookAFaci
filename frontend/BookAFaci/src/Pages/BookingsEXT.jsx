@@ -80,7 +80,7 @@ const base = import.meta.env.VITE_API_URL || "";
                   <div key={b._id} className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col">
                     <div className="flex-1">
                       <p className="font-bold text-lg text-[#1A1A1A]">{b.facility?.name ?? b.facility ?? 'Facility'}</p>
-                      <p className="text-gray-500 text-sm mb-2">{b.bookingType}</p>
+                  
                       <div className="flex items-center gap-3 mt-2">
                         <span className="text-sm text-gray-600">From: {b.startDate ? new Date(b.startDate).toLocaleString() : '-'}</span>
                         <span className="text-sm text-gray-600">To: {b.endDate ? new Date(b.endDate).toLocaleString() : '-'}</span>

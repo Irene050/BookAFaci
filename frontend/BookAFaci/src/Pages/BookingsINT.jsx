@@ -17,7 +17,7 @@ const base = import.meta.env.VITE_API_URL || "";
     function BookingsINT() {
         const navigate = useNavigate();
         const [bookings, setBookings] = useState([]);
-        const [resources, setResources] = React.useState([])
+        const [equipments, setEquipments] = React.useState([])
 
     useEffect(() => {
     const user = localStorage.getItem('user');
@@ -37,9 +37,9 @@ const base = import.meta.env.VITE_API_URL || "";
         const list = Array.isArray(res.data?.bookings) ? res.data.bookings : [];
         setBookings(list);
 
-        const rRes = await axios.get(`${base}/bookafaci/resources`).catch(() => ({ data: [] }));
-        const resourcesList = Array.isArray(rRes.data) ? rRes.data : (rRes.data?.resources || rRes.data?.data || []);
-        setResources(resourcesList);
+        const rRes = await axios.get(`${base}/bookafaci/equipments`).catch(() => ({ data: [] }));
+        const equipmentsList = Array.isArray(rRes.data) ? rRes.data : (rRes.data?.equipments || rRes.data?.data || []);
+        setEquipments(equipmentsList);
       } catch (err) {
         console.error('Failed to load bookings', err?.response?.data || err);
         toast.error('Failed to load bookings');
@@ -80,17 +80,16 @@ const base = import.meta.env.VITE_API_URL || "";
                   <div key={b._id} className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col">
                     <div className="flex-1">
                       <p className="font-bold text-lg text-[#1A1A1A]">{b.facility?.name ?? b.facility ?? 'Facility'}</p>
-                      <p className="text-gray-500 text-sm mb-2">{b.bookingType}</p>
                       <div className="flex items-center gap-3 mt-2">
                         <span className="text-sm text-gray-600">From: {b.startDate ? new Date(b.startDate).toLocaleString() : '-'}</span>
                         <span className="text-sm text-gray-600">To: {b.endDate ? new Date(b.endDate).toLocaleString() : '-'}</span>
                       </div>
 
                       <div className="mt-3 text-sm text-gray-700">
-                        Resources:
-                        {Array.isArray(b.resource) && b.resource.length
+                        Equipments:
+                        {Array.isArray(b.equipment) && b.equipment.length
                           ? <ul className="list-disc list-inside">
-                              {b.resource.map(r => <li key={r._id || r}>{ typeof r === 'object' ? (r.name || r._id) : r }</li>)}
+                              {b.equipment.map(r => <li key={r._id || r}>{ typeof r === 'object' ? (r.name || r._id) : r }</li>)}
                             </ul>
                           : <span className="ml-2 text-gray-500"> none</span>
                         }

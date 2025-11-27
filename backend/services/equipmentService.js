@@ -10,7 +10,7 @@ class EquipmentService {
     }
   }
 
-  async getAllEquipments(filters = {}) {
+  async getAllEquipment(filters = {}) {
     try {
       return await Equipment.find(filters);
     } catch (error) {
