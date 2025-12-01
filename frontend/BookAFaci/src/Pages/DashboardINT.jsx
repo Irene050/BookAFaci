@@ -76,33 +76,33 @@ function DashboardEXT() {
           <h1 className='pl-[35px] pt-[35px] mb-5 font-inter font-bold text-[2rem] text-[#007BDA]'>Dashboard</h1>
             <div className='flex flex-wrap items-center gap-[10rem] mb-1 pl-[45px] pr-[45px] pb-[45px] 
               min-[320px]:flex-wrap min-[320px]:gap-[2rem] max-[640px]:flex-wrap md:flex-wrap lg:flex-wrap'>
-              <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1
-              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0'>
+
+              {/* Total -> navigate to all in bks */}
+              <button onClick={() => navigate('/bookings-int?status=all')} className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] text-[#007BDA] indent-1 border-[#a7bace] border-2 hover:shadow-lg transition-all hover:border-[#5881aa] border-1'>
                 <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
                 <span className="ml-2">Total Bookings:</span>
                 <div className="text-4xl indent-4">{summary.totalBookings}</div>
-              </div>
+              </button>
 
-              <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1
-              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0'>
+              {/* Upcoming -> navigate to upcoming in bks */}
+              <button onClick={() => navigate('/bookings-int?status=upcoming')} className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] text-[#007BDA] indent-1 border-[#a7bace] border-2 hover:shadow-lg transition-all hover:border-[#5881aa] border-1'>
                 <ClipboardClock size={40} className="text-[#007BDA]" />
                 <span className="ml-2">Upcoming Bookings: </span>
                 <div className="text-4xl indent-4">{summary.upcoming}</div>
-              </div>
+              </button>
 
-              <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1
-              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0'>
-                <SquareX size={40} className="text-[#007BDA]" />
+              {/* Cancelled -> navigate to cancelled in bks */}
+              <button onClick={() => navigate('/bookings-int?status=cancelled')} className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] text-[#007BDA] indent-1 border-[#a7bace] border-2 hover:shadow-lg transition-all hover:border-[#5881aa] border-1'>
                 <span className="ml-2">Cancelled Bookings: </span>
                 <div className="text-4xl indent-4">{summary.cancelled}</div>
-              </div>
+              </button>
 
-              <div className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] drop-shadow-lg text-[#007BDA] indent-1
-              min-[320px]:flex-grow-1 max-[640px]:flex-grow-0'>
+              {/* Completed -> navigate to completed to completed in bks*/}
+              <button onClick={() => navigate('/bookings-int?status=completed')} className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] text-[#007BDA] indent-1 border-[#a7bace] border-2 hover:shadow-lg transition-all hover:border-[#5881aa] border-1'>
                 <SquareCheck size={40} className="text-[#007BDA]" />
                 <span className="ml-2">Completed Bookings: </span>
                 <div className="text-4xl indent-4">{summary.completed}</div>
-              </div>
+              </button>
             </div>
 
             <div className='grid grid-flow-col gap-[45px] pl-[45px] pr-[45px] pb-[45px]'>
