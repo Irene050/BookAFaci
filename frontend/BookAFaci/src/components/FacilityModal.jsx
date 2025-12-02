@@ -1,0 +1,281 @@
+import React, { useEffect, useState } from "react";
+import { X, Upload, Image, Calendar, CheckCircle, XCircle, Edit3 } from "lucide-react";
+const base = import.meta.env.VITE_API_URL || "";
+
+export default function FacilityModal({ isOpen, onClose, onSubmit, facility = null, isEdit = false }) {
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    capacity: '',
+    status: 'available',
+    availableDates: [],
+    image: null,
+    imagePreview: null
+  });
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [tempDateRange, setTempDateRange] = useState({ startDate: null, endDate: null });
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      if (isEdit && facility) {
+        setFormData({
+          name: facility.name || '',
+          description: facility.description || '',
+          capacity: facility.capacity || '',
+          status: facility.status || 'available',
+          availableDates: facility.availableDates || [],
+          image: null,
+          imagePreview: facility.image ? (facility.image.startsWith('http') ? facility.image : `${base}${facility.image}`) : null
+        });
+      } else {
+        setFormData({
+          name: '',
+          description: '',
+          capacity: '',
+          status: 'available',
+          availableDates: [],
+          image: null,
+          imagePreview: null
+        });
+      }
+      setTempDateRange({ startDate: null, endDate: null });
+      setShowDatePicker(false);
+    }
+  }, [isOpen, isEdit, facility]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const preview = URL.createObjectURL(file);
+      setFormData(prev => ({
+        ...prev,
+        image: file,
+        imagePreview: preview
+      }));
+    }
+  };
+
+  const addDateRange = () => {
+    if (tempDateRange.startDate && tempDateRange.endDate) {
+      setFormData(prev => ({
+        ...prev,
+        availableDates: [...prev.availableDates, { 
+          startDate: tempDateRange.startDate, 
+          endDate: tempDateRange.endDate 
+        }]
+      }));
+      setTempDateRange({ startDate: null, endDate: null });
+      setShowDatePicker(false);
+    }
+  };
+
+  const removeDateRange = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      availableDates: prev.availableDates.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      const payload = {
+        name: formData.name,
+        description: formData.description,
+        capacity: parseInt(formData.capacity),
+        status: formData.status,
+        availableDates: formData.availableDates
+      };
+
+      onSubmit(payload, formData.image, isEdit ? facility._id : null);
+    } catch (error) {
+      console.error('Submit error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const DateRangePicker = () => (
+    <div className="space-y-4 p-4 bg-gray-50 rounded-xl border">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+          <input
+            type="date"
+            value={tempDateRange.startDate ? tempDateRange.startDate.toISOString().split('T')[0] : ''}
+            onChange={(e) => setTempDateRange(prev => ({
+              ...prev,
+              startDate: e.target.value ? new Date(e.target.value) : null
+            }))}
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+          <input
+            type="date"
+            value={tempDateRange.endDate ? tempDateRange.endDate.toISOString().split('T')[0] : ''}
+            onChange={(e) => setTempDateRange(prev => ({
+              ...prev,
+              endDate: e.target.value ? new Date(e.target.value) : null
+            }))}
+            min={tempDateRange.startDate ? tempDateRange.startDate.toISOString().split('T')[0] : ''}
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+          />
+        </div>
+      </div>
+      <div className="flex gap-3 pt-2">
+        <button
+          type="button"
+          onClick={addDateRange}
+          disabled={!tempDateRange.startDate || !tempDateRange.endDate}
+          className="flex-1 px-6 py-2 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] text-white rounded-xl font-medium hover:from-[#83C9FF] hover:to-[#346D9A] transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        >
+          <CheckCircle size={20} />
+          Add Date Range
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setShowDatePicker(false);
+            setTempDateRange({ startDate: null, endDate: null });
+          }}
+          className="px-6 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl font-medium transition-all border border-gray-200 flex items-center justify-center gap-2"
+        >
+          <XCircle size={20} />
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+
+  if (!isOpen) return null;
+
+  return (
+    <>
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center p-4" onClick={onClose} />
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="p-6 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">
+                {isEdit ? 'Edit Facility' : 'Add New Facility'}
+              </h2>
+              <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                <X size={24} className="text-gray-500" />
+              </button>
+            </div>
+          </div>
+
+          <form onSubmit={handleFormSubmit} className="p-6 space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="name">Facility Name *</label>
+              <input id="name" type="text" name="name" value={formData.name} onChange={handleInputChange} required
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="description">Description</label>
+              <textarea id="description" name="description" value={formData.description} onChange={handleInputChange} rows={3}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-vertical" />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="capacity">Capacity *</label>
+              <input id="capacity" type="number" name="capacity" value={formData.capacity} onChange={handleInputChange} min="1" required
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="status">Status *</label>
+              <select id="status" name="status" value={formData.status} onChange={handleInputChange} required
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white">
+                <option value="available">Available</option>
+                <option value="maintenance">Maintenance</option>
+                <option value="reserved">Reserved</option>
+                <option value="unavailable">Unavailable</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <Calendar size={18} className="mr-2" />
+                Availability Dates
+              </label>
+              {showDatePicker ? (
+                <DateRangePicker />
+              ) : (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                    <span className="text-sm font-medium text-blue-800 flex items-center gap-2">
+                      <Calendar size={18} />
+                      {formData.availableDates.length === 0 ? "No availability dates set" : `${formData.availableDates.length} date range(s) added`}
+                    </span>
+                    <button type="button" onClick={() => setShowDatePicker(true)}
+                      className="px-4 py-2 bg-white border border-blue-500 text-blue-600 rounded-xl hover:bg-blue-50 font-medium transition-all flex items-center gap-2 text-sm">
+                      <Calendar size={16} /> Add Dates
+                    </button>
+                  </div>
+                  {formData.availableDates.length > 0 && (
+                    <div className="max-h-32 overflow-y-auto space-y-2">
+                      {formData.availableDates.map((range, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
+                          <span className="text-sm text-gray-900">
+                            {range.startDate.toLocaleDateString()} - {range.endDate.toLocaleDateString()}
+                          </span>
+                          <button type="button" onClick={() => removeDateRange(index)}
+                            className="p-1 hover:bg-red-100 rounded-full transition-colors">
+                            <X size={16} className="text-red-500" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center" htmlFor="image-upload">
+                <Image size={18} className="mr-2" />
+                Facility Image
+              </label>
+              <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-400 transition-colors">
+                <input id="image-upload" type="file" name="image" accept="image/*" onChange={handleImageChange} className="hidden" />
+                <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center">
+                  <Upload size={32} className="text-gray-400 mb-2" />
+                  <p className="text-sm text-gray-500 mb-2">Click to upload or drag and drop</p>
+                  <p className="text-xs text-gray-400">PNG, JPG up to 5MB</p>
+                </label>
+              </div>
+              {formData.imagePreview && (
+                <div className="mt-4">
+                  <img src={formData.imagePreview} alt="Facility Preview" className="w-full h-48 object-cover rounded-xl shadow-md" />
+                </div>
+              )}
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <button type="button" onClick={onClose}
+                className="flex-1 px-6 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl font-medium transition-all border border-gray-200">
+                Cancel
+              </button>
+              <button type="submit" disabled={loading}
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] text-white rounded-xl font-medium hover:from-[#83C9FF] hover:to-[#346D9A] transition-all shadow-lg hover:shadow-xl disabled:opacity-50">
+                {loading ? 'Saving...' : (isEdit ? 'Update Facility' : 'Add Facility')}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  );
+}
