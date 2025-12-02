@@ -162,7 +162,7 @@ function BookingsEXT() {
                   <button
                     key={status}
                     onClick={() => setSelectedStatus(status)}
-                    className={`px-4 py-2 rounded-lg border ${selectedStatus === status ? 'bg-gradient-to-r from-[#63bbff] to-[#346D9A] text-[#ffffff]' : 'bg-transparent text-gray-700 hover:bg-white'}`}
+                    className={`px-4 py-2 rounded-lg ${selectedStatus === status ? 'bg-gradient-to-r from-[#63bbff] to-[#346D9A] text-[#ffffff]' : 'bg-transparent text-gray-700 hover:bg-white'}`}
                     aria-pressed={selectedStatus === status}
                   >
                     <span className="capitalize">{status}</span>
