@@ -18,11 +18,6 @@ function AdminFacilities() {
   const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (!user) navigate("/");
-  }, [navigate]);
-
-  useEffect(() => {
     (async () => {
       try {
         const res = await axios.get(`${base}/bookafaci/facility`);
