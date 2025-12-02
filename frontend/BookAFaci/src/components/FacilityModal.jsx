@@ -206,7 +206,7 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+              <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
                 <Calendar size={18} className="mr-2" />
                 Availability Dates
               </label>
@@ -244,7 +244,7 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center" htmlFor="image-upload">
+              <label className="text-sm font-medium text-gray-700 mb-2 flex items-center" htmlFor="image-upload">
                 <Image size={18} className="mr-2" />
                 Facility Image
               </label>
