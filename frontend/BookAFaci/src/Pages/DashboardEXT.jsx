@@ -25,6 +25,8 @@ function DashboardEXT() {
   const [summary, setSummary] = useState({ totalBookings: 0, upcoming: 0, cancelled: 0 });
   const [latestPending, setLatestPending] = useState(null);
   const [latestPendingLoading, setLatestPendingLoading] = useState(false);
+  const [latestApproved, setLatestApproved] = useState(null);
+  const [latestApprovedLoading, setLatestApprovedLoading] = useState(false);
   
   useEffect(() => {
     const user = localStorage.getItem('user');
@@ -109,31 +111,92 @@ function DashboardEXT() {
               min-[320px]:flex-wrap min-[320px]:gap-[2rem] max-[640px]:flex-wrap md:flex-wrap lg:flex-wrap'>
 
               {/* Total -> navigate to all in bks */}
-              <button onClick={() => navigate('/bookings-ext?status=all')} className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] text-[#007BDA] indent-1 border-[#a7bace] border-2 hover:shadow-lg transition-all hover:border-[#5881aa] border-1'>
-                <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
-                <span className="ml-2">Total Bookings:</span>
-                <div className="text-4xl indent-4">{summary.totalBookings}</div>
-              </button>
+              <button
+                 onClick={() => navigate('/bookings-ext?status=all')}
+                 className="flex grow group relative w-[auto] p-[3px] rounded-[25px] overflow-hidden hover:shadow-lg transition-all"
+                 aria-label="Total bookings"
+               >
+                 <span
+                   className="flex grow pointer-events-none absolute inset-0 bg-transparent w-[650px] h-[500px] m-[-7.5rem] mb-[10px] transition-transform duration-1000 group-hover:ease-in-out group-hover:rotate-[360deg] group-hover:bg-[conic-gradient(#83C9FF,_#346D9A,_#83C9FF)]"
+                   style={{ zIndex: 0 }}
+                 />
+ 
+                 {/* inner card */}
+                 <div
+                   className="relative flex grow items-center font-inter font-bold text-center bg-slate-300  w-[250px] h-[150px] p-[25px] rounded-[22px] text-[#007BDA] indent-1 border-[#a7bace]"
+                   style={{ zIndex: 10 }}
+                 >
+                   <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
+                   <span className="ml-2">Total Bookings:</span>
+                   <div className="text-4xl indent-4">{summary.totalBookings}</div>
+                 </div>
+               </button>
 
               {/* Upcoming -> navigate to upcoming in bks */}
-              <button onClick={() => navigate('/bookings-ext?status=upcoming')} className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] text-[#007BDA] indent-1 border-[#a7bace] border-2 hover:shadow-lg transition-all hover:border-[#5881aa] border-1'>
-                <ClipboardClock size={40} className="text-[#007BDA]" />
-                <span className="ml-2">Upcoming Bookings: </span>
-                <div className="text-4xl indent-4">{summary.upcoming}</div>
-              </button>
+              <button
+                 onClick={() => navigate('/bookings-ext?status=all')}
+                 className="flex grow group relative w-[auto] p-[3px] rounded-[25px] overflow-hidden hover:shadow-lg transition-all"
+                 aria-label="Total bookings"
+               >
+                 <span
+                   className="flex grow pointer-events-none absolute inset-0 bg-transparent w-[650px] h-[500px] m-[-7.5rem] mb-[10px] transition-transform duration-1000 group-hover:ease-in-out group-hover:rotate-[360deg] group-hover:bg-[conic-gradient(#83C9FF,_#346D9A,_#83C9FF)]"
+                   style={{ zIndex: 0 }}
+                 />
+ 
+                 {/* inner card */}
+                 <div
+                   className="relative flex grow items-center font-inter font-bold text-center bg-slate-300  w-[250px] h-[150px] p-[25px] rounded-[22px] text-[#007BDA] indent-1 border-[#a7bace]"
+                   style={{ zIndex: 10 }}
+                 >
+                   <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
+                   <span className="ml-2">Upcoming Bookings:</span>
+                   <div className="text-4xl indent-4">{summary.upcoming}</div>
+                 </div>
+               </button>
 
               {/* Cancelled -> navigate to cancelled in bks */}
-              <button onClick={() => navigate('/bookings-ext?status=cancelled')} className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] text-[#007BDA] indent-1 border-[#a7bace] border-2 hover:shadow-lg transition-all hover:border-[#5881aa] border-1'>
-                <span className="ml-2">Cancelled Bookings: </span>
-                <div className="text-4xl indent-4">{summary.cancelled}</div>
-              </button>
+              <button
+                 onClick={() => navigate('/bookings-ext?status=all')}
+                 className="flex grow group relative w-[auto] p-[3px] rounded-[25px] overflow-hidden hover:shadow-lg transition-all"
+                 aria-label="Total bookings"
+               >
+                 <span
+                   className="flex grow pointer-events-none absolute inset-0 bg-transparent w-[650px] h-[500px] m-[-7.5rem] mb-[10px] transition-transform duration-1000 group-hover:ease-in-out group-hover:rotate-[360deg] group-hover:bg-[conic-gradient(#83C9FF,_#346D9A,_#83C9FF)]"
+                   style={{ zIndex: 0 }}
+                 />
+ 
+                 {/* inner card */}
+                 <div
+                   className="relative flex grow items-center font-inter font-bold text-center bg-slate-300  w-[250px] h-[150px] p-[25px] rounded-[22px] text-[#007BDA] indent-1 border-[#a7bace]"
+                   style={{ zIndex: 10 }}
+                 >
+                   <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
+                   <span className="ml-2">Cancelled Bookings:</span>
+                   <div className="text-4xl indent-4">{summary.cancelled}</div>
+                 </div>
+               </button>
 
               {/* Completed -> navigate to completed to completed in bks*/}
-              <button onClick={() => navigate('/bookings-ext?status=completed')} className='flex grow items-center font-inter font-bold text-center bg-slate-300 w-[250px] h-[150px] p-[25px] rounded-[25px] text-[#007BDA] indent-1 border-[#a7bace] border-2 hover:shadow-lg transition-all hover:border-[#5881aa] border-1'>
-                <SquareCheck size={40} className="text-[#007BDA]" />
-                <span className="ml-2">Completed Bookings: </span>
-                <div className="text-4xl indent-4">{summary.completed}</div>
-              </button>
+              <button
+                 onClick={() => navigate('/bookings-ext?status=all')}
+                 className="flex grow group relative w-[auto] p-[3px] rounded-[25px] overflow-hidden hover:shadow-lg transition-all"
+                 aria-label="Total bookings"
+               >
+                 <span
+                   className="flex grow pointer-events-none absolute inset-0 bg-transparent w-[650px] h-[500px] m-[-7.5rem] mb-[10px] transition-transform duration-1000 group-hover:ease-in-out group-hover:rotate-[360deg] group-hover:bg-[conic-gradient(#83C9FF,_#346D9A,_#83C9FF)]"
+                   style={{ zIndex: 0 }}
+                 />
+ 
+                 {/* inner card */}
+                 <div
+                   className="relative flex grow items-center font-inter font-bold text-center bg-slate-300  w-[250px] h-[150px] p-[25px] rounded-[22px] text-[#007BDA] indent-1 border-[#a7bace]"
+                   style={{ zIndex: 10 }}
+                 >
+                   <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
+                   <span className="ml-2">Complete Bookings:</span>
+                   <div className="text-4xl indent-4">{summary.completed}</div>
+                 </div>
+               </button>
             </div>
 
             <div className='grid grid-flow-col gap-[45px] pl-[45px] pr-[45px] pb-[45px]'>
@@ -144,7 +207,7 @@ function DashboardEXT() {
                 onClick={() => navigate('/bookings-ext?status=pending')}
                 onKeyDown={(e) => { if (e.key === 'Enter') navigate('/bookings-ext?status=pending'); }}
                 className='cursor-pointer flex flex-col justify-between ] bg-white col-span-2 h-[fit] rounded-[10px] drop-shadow-lg transition-all hover:transform hover:scale-[1.01] p-6'
-              > <b>Pending:</b>
+              > <b className='text-[#007BDA]'>Pending:</b>
                 <hr className='mt-3 mb-3'></hr>
                 {latestPendingLoading ? (
                   <div className='text-gray-500'>Loading latest pending booking...</div>
@@ -152,7 +215,7 @@ function DashboardEXT() {
                   <div className='flex flex-col h-full'>
                     <div>
                       <p className='font-bold text-xl text-[#1A1A1A] ml-10'>{latestPending.facility?.name ?? latestPending.facility ?? 'Facility'}</p>
-                      <p className='text-sm text-gray-600'>{latestPending.bookingType ?? ''}</p>
+                      <p className='ml-10 text-sm text-gray-600'>{latestPending.bookingType ?? ''}</p>
                     </div>
 
                     <div className='mt-4 text-sm text-gray-700 flex-1 ml-10'>
@@ -169,7 +232,7 @@ function DashboardEXT() {
                       </div>
                     </div>
 
-                    <div className='mt-4 ml-10'>
+                    <div className='mt-2 ml-10'>
                       <span className='px-3 py-1 rounded-full text-sm bg-yellow-100 text-yellow-800'>pending</span>
                       <div className='text-xs text-gray-500 mt-2'>Click to view all pending bookings</div>
                     </div>
@@ -179,7 +242,46 @@ function DashboardEXT() {
                 )}
               </div>
 
-              <div className='flex items-center justify-center text-center bg-white col-span-2 h-[13rem] rounded-[10px] drop-shadow-lg transition-all hover:transform hover:scale-[1.01]'></div>
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() => navigate('/bookings-ext?status=approved')}
+              onKeyDown={(e) => { if (e.key === 'Enter') navigate('/bookings-ext?status=approved'); }}
+              className='cursor-pointer flex flex-col justify-between ] bg-white col-span-2 h-[fit] rounded-[10px] drop-shadow-lg transition-all hover:transform hover:scale-[1.01] p-6'
+            > <b className='text-[#007BDA]'>Approved:</b>
+              <hr className='mt-3 mb-3'></hr>
+              {latestApprovedLoading ? (
+                <div className='text-gray-500'>Loading latest approved booking...</div>
+              ) : latestApproved ? (
+                <div className='flex flex-col h-full'>
+                  <div>
+                    <p className='font-bold text-xl text-[#1A1A1A] ml-10'>{latestApproved.facility?.name ?? latestApproved.facility ?? 'Facility'}</p>
+                    <p className='ml-10 text-sm text-gray-600'>{latestApproved.bookingType ?? ''}</p>
+                  </div>
+
+                  <div className='mt-1 text-sm text-gray-700 flex-1 ml-10'>
+                    <div><strong>From:</strong> {latestApproved.startDate ? new Date(latestApproved.startDate).toLocaleString() : '-'}</div>
+                    <div><strong>To:</strong> {latestApproved.endDate ? new Date(latestApproved.endDate).toLocaleString() : '-'}</div>
+
+                    <div className='mt-3'>
+                      <strong>Resources:</strong>
+                      {Array.isArray(latestApproved.resource) && latestApproved.resource.length ? (
+                        <ul className='list-disc list-inside text-sm'>
+                          {latestApproved.resource.map(r => <li key={r._id || r}>{typeof r === 'object' ? (r.name || r._id) : r}</li>)}
+                        </ul>
+                      ) : <span className='ml-2 text-gray-500'> none</span>}
+                    </div>
+                  </div>
+
+                  <div className='mt-2 ml-10'>
+                    <span className='px-3 py-1 rounded-full text-sm bg-yellow-100 text-yellow-800'>approved</span>
+                    <div className='text-xs text-gray-500 mt-2'>Click to view all approved bookings</div>
+                  </div>
+                </div>
+              ) : (
+                <div className='text-gray-500'>No approved bookings</div>
+              )}
+            </div>
               <div className='font-inter flex items-center justify-center text-center bg-white col-span-2 row-span-2 rounded-[10px] drop-shadow-lg transition-all hover:transform hover:scale-[1.01]'><Calendar /></div>
             </div>
 

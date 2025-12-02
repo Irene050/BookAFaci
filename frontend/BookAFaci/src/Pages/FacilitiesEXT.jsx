@@ -137,9 +137,9 @@ function Facilities() {
                     className="mt-4 relative overflow-hidden text-white px-6 py-2 rounded-full shadow group"
                   >
                     {/* base gradient layer */}
-                    <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-opacity duration-300 ease-in-out group-hover:opacity-0" />
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
                     {/* hover gradient layer (fades in) */}
-                    <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
                     {/* button content */}
                     <span className="relative z-10 font-medium">Book</span>
                   </button>

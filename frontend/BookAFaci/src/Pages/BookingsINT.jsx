@@ -143,13 +143,13 @@ function BookingsINT() {
       </Sidebar>
 
       <main className='flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5'
-              style={{
-                  paddingLeft: '5.5rem',
-                  backgroundImage: `linear-gradient(rgba(194, 217, 249, 0.85), rgba(194, 217, 249, 0.85)), url(${loginbg})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  backgroundRepeat: "no-repeat",
-              }}>
+        style={{
+          paddingLeft: '5.5rem',
+          backgroundImage: `linear-gradient(rgba(194, 217, 249, 0.85), rgba(194, 217, 249, 0.85)), url(${loginbg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}>
         <Topbar />
 
         <div className='bg-gradient-to-b from-[#E0E0E0] via-[#DDF2FF] to-[#E0E0E0] h-fit rounded-[10px] p-[1px] mt-[20px]'>
@@ -162,7 +162,7 @@ function BookingsINT() {
                   <button
                     key={status}
                     onClick={() => setSelectedStatus(status)}
-                    className={`px-4 py-2 rounded-lg border ${selectedStatus === status ? 'bg-white text-[#007BDA] border-[#007BDA]' : 'bg-transparent text-gray-700 border-transparent hover:bg-white'}`}
+                    className={`px-4 py-2 rounded-lg border ${selectedStatus === status ? 'bg-gradient-to-r from-[#63bbff] to-[#346D9A] text-[#ffffff]' : 'bg-transparent text-gray-700 hover:bg-white'}`}
                     aria-pressed={selectedStatus === status}
                   >
                     <span className="capitalize">{status}</span>
