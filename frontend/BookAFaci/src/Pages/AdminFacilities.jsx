@@ -124,7 +124,7 @@ function AdminFacilities() {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex min-h-screen transition-all">
       <title>Facilities</title>
 
       <FacilityModal
@@ -146,7 +146,8 @@ function AdminFacilities() {
         <SidebarItem icon={<Users size={20} />} text="Users" active={false} onClick={() => navigate("/adminusers")} />
       </Sidebar>
 
-      <main className="flex-1 pl-6 pr-6 bg-center bg-cover h-full relative pb-5"
+      <main className="flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5 
+          min-[320px]:w-[350px] max-[640px]:w-[450px] md:w-[450px] lg:w-[450px]" 
         style={{
           paddingLeft: '5.5rem',
           backgroundImage: `linear-gradient(rgba(194, 217, 249, 0.85), rgba(194, 217, 249, 0.85)), url(${loginbg})`,
