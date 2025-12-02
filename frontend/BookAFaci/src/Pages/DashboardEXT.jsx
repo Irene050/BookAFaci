@@ -134,7 +134,7 @@ function DashboardEXT() {
 
               {/* Upcoming -> navigate to upcoming in bks */}
               <button
-                 onClick={() => navigate('/bookings-ext?status=all')}
+                 onClick={() => navigate('/bookings-ext?status=upcoming')}
                  className="flex grow group relative w-[auto] p-[3px] rounded-[25px] overflow-hidden hover:shadow-lg transition-all"
                  aria-label="Total bookings"
                >
@@ -156,7 +156,7 @@ function DashboardEXT() {
 
               {/* Cancelled -> navigate to cancelled in bks */}
               <button
-                 onClick={() => navigate('/bookings-ext?status=all')}
+                 onClick={() => navigate('/bookings-ext?status=cancelled')}
                  className="flex grow group relative w-[auto] p-[3px] rounded-[25px] overflow-hidden hover:shadow-lg transition-all"
                  aria-label="Total bookings"
                >
@@ -178,7 +178,7 @@ function DashboardEXT() {
 
               {/* Completed -> navigate to completed to completed in bks*/}
               <button
-                 onClick={() => navigate('/bookings-ext?status=all')}
+                 onClick={() => navigate('/bookings-ext?status=completed')}
                  className="flex grow group relative w-[auto] p-[3px] rounded-[25px] overflow-hidden hover:shadow-lg transition-all"
                  aria-label="Total bookings"
                >
