@@ -34,7 +34,7 @@ function BookingsEXT() {
   useEffect(() => {
     const user = localStorage.getItem('user');
     if (!user) {
-      navigate('/');
+      navigate('/login');
       return;
     }
 

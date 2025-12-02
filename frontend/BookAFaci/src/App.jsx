@@ -8,6 +8,7 @@ import AdminUsers from './Pages/AdminUsers';
 import AdminBookings from './Pages/AdminBookings';
 
 import ProtectedRoute from './Routeprotection';
+import Landing from './Pages/landing';
 import EXTdash from './Pages/DashboardEXT';
 import INTdash from './Pages/DashboardINT';
 import EXTfaci from './Pages/FacilitiesEXT';
@@ -21,7 +22,7 @@ const App = () => {
     <div>
       <ToastContainer />
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/user-select" element={<Userselect />} />
         <Route path="/dashboard-int" element={<ProtectedRoute allowedRoles={['Internal']}><INTdash /></ProtectedRoute>} />
         <Route path="/dashboard-ext" element={<ProtectedRoute allowedRoles={['External']}><EXTdash /></ProtectedRoute>} />
@@ -41,6 +42,7 @@ const App = () => {
         <Route path="/adminfaci" element={<AdminFacilities />} />
         <Route path="/adminusers" element={<AdminUsers />} />
         <Route path="/adminbks" element={<AdminBookings />} />
+        <Route path="/" element={<Landing />} />
       </Routes>
     </div>
   )

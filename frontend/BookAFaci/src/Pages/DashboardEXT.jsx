@@ -31,7 +31,7 @@ function DashboardEXT() {
   useEffect(() => {
     const user = localStorage.getItem('user');
     if (!user) {
-      navigate('/');
+      navigate('/login');
       return;
     }
 

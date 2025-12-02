@@ -20,7 +20,7 @@ function Facilities() {
 
   useEffect(() => {
     const user = localStorage.getItem("user");
-    if (!user) navigate("/");
+    if (!user) navigate("/login");
   }, [navigate]);
 
   useEffect(() => {
