@@ -16,8 +16,8 @@ export default function NotFound() {
         }}>
             <title>404 Not Found</title>
 
-            <div className='ms-px backdrop-blur-md w-full backdrop-grayscale'>
-                <div className='flex place-items-start items-center pl-[10%] pt-[19%] gap-4'>
+            <div className='ms-px backdrop-blur-md w-full backdrop-grayscale transition-all'>
+                <div className='flex place-items-start items-center pl-[10%] pt-[19%] gap-4 transition-al'>
                     <CircleAlert className="mb-0 mr-2 text-red-400 drop-shadow-2xl" size={65} />
                     <h1 className="text-7xl font-bold mb-0 text-[#007BDA] drop-shadow-2xl bg-white/50 px-1">404 Page Not Found</h1>
                 </div>
@@ -25,8 +25,8 @@ export default function NotFound() {
                     <h1 className="text-[1.5rem] font-semibold mb-4 mt-2 text-[#007BDA] drop-shadow-2xl bg-white/50 px-1 py-[2px]">URL Missing or Incorrect</h1>
                 </div>
                 <div className='flex place-items-start flex-row gap-2 pl-[10%] transition-all'>
-                    <button onClick={() => navigate(-1)} className="px-2 py-[2px] bg-transparent border text-white rounded-md w-fit h-fit text-[1.5rem] hover:bg-white hover:text-black mix-blend-screen">Go back</button>
-                    <button onClick={() => navigate('/login')} className="px-2 py-[2px] bg-transparent border text-white rounded-md w-fit h-fit text-[1.5rem] hover:bg-white hover:text-black mix-blend-screen">Login</button>
+                    <a onClick={() => navigate(-1)} className='text-white font-semibold bg-white/10 border p-2 rounded-md text-[1.5rem] hover:bg-white/30 hover:text-white transition-all cursor-pointer'>Go Back</a>
+                    <a className='text-white font-semibold bg-transparent border p-2 rounded-md text-[1.5rem] hover:bg-white hover:text-[#007BDA] transition-all' href="/Login">Login</a>
                 </div>
 
             </div>
