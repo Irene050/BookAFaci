@@ -58,9 +58,9 @@ export default function Sidebar({ children }) {
     localStorage.removeItem('token')
     toast.info('You have been logged out', {
       position: 'top-right',
-      autoClose: 1000,
+      autoClose: 1300,
     })
-    navigate('/')
+    setTimeout(() => navigate('/login', { replace: true }), 1300);
   }
 
   return (

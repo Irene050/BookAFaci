@@ -37,7 +37,7 @@ function Facilities() {
               : [];
         setFacilities(list);
 
-        const rRes = await axios.get(`${base}/bookafaci/equipments`).catch(() => axios.get(`${base}/bookafaci/equipments`).catch(() => ({ data: [] })));
+        const rRes = await axios.get(`${base}/bookafaci/equipment`).catch(() => axios.get(`${base}/bookafaci/equipment`).catch(() => ({ data: [] })));
         const equipmentsList = Array.isArray(rRes.data) ? rRes.data : (rRes.data?.equipments || rRes.data?.data || []);
         setEquipments(equipmentsList);
       } catch (err) {
@@ -52,12 +52,7 @@ function Facilities() {
       const userObj = JSON.parse(localStorage.getItem("user") || "null");
       const userId = userObj?._id || userObj?.id || userObj?.user || null;
 
-      // support payload.equipment (array) OR payload.equipments (array) OR object mapping id=>qty
-      const equipmentIds = Array.isArray(payload.equipment)
-        ? payload.equipment
-        : Array.isArray(payload.equipments)
-        ? payload.equipments
-        : Object.keys(payload.equipment || {}).filter((id) => (payload.equipment[id] || 0) > 0);
+      const equipmentIds = Array.isArray(payload.equipment) ? payload.equipment : [];
 
       const facilityValue = (selectedFacility && typeof selectedFacility === 'object')
         ? (selectedFacility._id || selectedFacility.name || selectedFacility)
@@ -66,7 +61,7 @@ function Facilities() {
       const body = {
         user: userId,
         facility: facilityValue,
-        equipment: equipmentIds,
+        equipments: equipmentIds,
         startDate: payload.startDate,
         endDate: payload.endDate,
       };
@@ -93,9 +88,9 @@ function Facilities() {
       />
 
       <Sidebar>
-        <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={false} onClick={() => navigate("/dashboard-int")} />
-        <SidebarItem icon={<Building2 size={20} />} text="Facilities" active={true} onClick={() => navigate("/facilities-int")} />
-        <SidebarItem icon={<Clipboard size={20} />} text="Bookings" active={false} onClick={() => navigate('/bookings-int')}/>
+        <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={false} onClick={() => navigate("/UserDashboard")} />
+        <SidebarItem icon={<Building2 size={20} />} text="Facilities" active={true} />
+        <SidebarItem icon={<Clipboard size={20} />} text="Bookings" active={false} onClick={() => navigate('/UserBookings')}/>
       </Sidebar>
 
       <main className="flex-1 pl-6 pr-6 bg-center bg-cover h-full relative pb-5"
@@ -142,11 +137,11 @@ function Facilities() {
                     className="mt-4 relative overflow-hidden text-white px-6 py-2 rounded-full shadow group"
                   >
                     {/* base gradient layer */}
-                    <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-opacity duration-300 ease-in-out group-hover:opacity-0" />
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
                     {/* hover gradient layer (fades in) */}
-                    <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
                     {/* button content */}
-                    <span className="relative z-10 font-medium">Booking Options</span>
+                    <span className="relative z-10 font-medium">Book</span>
                   </button>
                 </div>
               ))}

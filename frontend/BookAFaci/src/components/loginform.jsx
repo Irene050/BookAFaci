@@ -36,18 +36,16 @@ function LoginForm() {
       
       const { accountType, role } = response.data.user || {};
       let destination = '/dashboard';
-      if (accountType === 'External' || accountType === 'Internal') destination = '/dashboard-ext';
+      if (accountType === 'External' || accountType === 'Internal') destination = '/UserDashboard';
       //else if (accountType === 'Internal') destination = '/dashboard-int';
       if (role === 'admin') destination = '/admin';
 
+      setTimeout(() => navigate(destination, { replace: true }), 1500);
       toast.success('Login successful! Redirecting...', {
         position: "top-right",
-        autoClose: 2800,
+        autoClose: 1500,
         pauseOnHover : false,
       });
-      
-      // REDIRECT TO DASH
-      setTimeout(() => navigate(destination, { replace: true }), 1200);
       
     } catch (error) {
       console.error('Login failed:', error);

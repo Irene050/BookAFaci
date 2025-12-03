@@ -20,7 +20,7 @@ import {
 const base = import.meta.env.VITE_API_URL || "";
 
 
-function DashboardEXT() {
+function UserDashboard() {
   const navigate = useNavigate();
   const [summary, setSummary] = useState({ totalBookings: 0, upcoming: 0, cancelled: 0 });
   const [latestPending, setLatestPending] = useState(null);
@@ -89,8 +89,8 @@ function DashboardEXT() {
       <title>Dashboard</title>
       <Sidebar>
         <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={true} />
-        <SidebarItem type="button" icon={<Building2 size={20} />} text="Facilities" active={false} onClick={() => navigate('/facilities-int')} />
-        <SidebarItem icon={<Clipboard size={20} />} text="Bookings" active={false} onClick={() => navigate('/bookings-int')}/>
+        <SidebarItem type="button" icon={<Building2 size={20} />} text="Facilities" active={false} onClick={() => navigate('/UserFacilities')} />
+        <SidebarItem icon={<Clipboard size={20} />} text="Bookings" active={false} onClick={() => navigate('/UserBookings')}/>
       </Sidebar>
 
       <main className="flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5 
@@ -112,7 +112,7 @@ function DashboardEXT() {
 
               {/* Total -> navigate to all in bks */}
               <button
-                 onClick={() => navigate('/bookings-int?status=all')}
+                 onClick={() => navigate('/UserBookings?status=all')}
                  className="flex grow group relative w-[auto] p-[3px] rounded-[25px] overflow-hidden hover:shadow-lg transition-all"
                  aria-label="Total bookings"
                >
@@ -134,7 +134,7 @@ function DashboardEXT() {
 
               {/* Upcoming -> navigate to upcoming in bks */}
               <button
-                 onClick={() => navigate('/bookings-int?status=upcoming')}
+                 onClick={() => navigate('/UserBookings?status=upcoming')}
                  className="flex grow group relative w-[auto] p-[3px] rounded-[25px] overflow-hidden hover:shadow-lg transition-all"
                  aria-label="Total bookings"
                >
@@ -156,7 +156,7 @@ function DashboardEXT() {
 
               {/* Cancelled -> navigate to cancelled in bks */}
               <button
-                 onClick={() => navigate('/bookings-int?status=cancelled')}
+                 onClick={() => navigate('/UserBookings?status=cancelled')}
                  className="flex grow group relative w-[auto] p-[3px] rounded-[25px] overflow-hidden hover:shadow-lg transition-all"
                  aria-label="Total bookings"
                >
@@ -178,7 +178,7 @@ function DashboardEXT() {
 
               {/* Completed -> navigate to completed to completed in bks*/}
               <button
-                 onClick={() => navigate('/bookings-int?status=completed')}
+                 onClick={() => navigate('/UserBookings?status=completed')}
                  className="flex grow group relative w-[auto] p-[3px] rounded-[25px] overflow-hidden hover:shadow-lg transition-all"
                  aria-label="Total bookings"
                >
@@ -204,8 +204,8 @@ function DashboardEXT() {
               <div
                 role="button"
                 tabIndex={0}
-                onClick={() => navigate('/bookings-int?status=pending')}
-                onKeyDown={(e) => { if (e.key === 'Enter') navigate('/bookings-int?status=pending'); }}
+                onClick={() => navigate('/UserBookings?status=pending')}
+                onKeyDown={(e) => { if (e.key === 'Enter') navigate('/UserBookings?status=pending'); }}
                 className='cursor-pointer flex flex-col justify-between ] bg-white col-span-2 h-[fit] rounded-[10px] drop-shadow-lg transition-all hover:transform hover:scale-[1.01] p-6'
               > <b className='text-[#007BDA]'>Pending:</b>
                 <hr className='mt-3 mb-3'></hr>
@@ -245,8 +245,8 @@ function DashboardEXT() {
             <div
               role="button"
               tabIndex={0}
-              onClick={() => navigate('/bookings-int?status=approved')}
-              onKeyDown={(e) => { if (e.key === 'Enter') navigate('/bookings-int?status=approved'); }}
+              onClick={() => navigate('/UserBookings?status=approved')}
+              onKeyDown={(e) => { if (e.key === 'Enter') navigate('/UserBookings?status=approved'); }}
               className='cursor-pointer flex flex-col justify-between ] bg-white col-span-2 h-[fit] rounded-[10px] drop-shadow-lg transition-all hover:transform hover:scale-[1.01] p-6'
             > <b className='text-[#007BDA]'>Approved:</b>
               <hr className='mt-3 mb-3'></hr>
@@ -291,4 +291,4 @@ function DashboardEXT() {
   );
 }
 
-export default DashboardEXT
+export default UserDashboard

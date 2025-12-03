@@ -10,6 +10,8 @@ export default function ProtectedRoute({ children, allowedRoles = [] }) {
   const role = (user.role || '').toString().toLowerCase()
   const allowed = allowedRoles.map(r => r.toString().toLowerCase())
   if (allowed.length && !allowed.includes(accountType)) {
+    localStorage.removeItem('user')
+    localStorage.removeItem('token')
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
         <div className="max-w-xl w-full bg-white rounded-lg shadow-lg p-8 text-center">
@@ -24,6 +26,8 @@ export default function ProtectedRoute({ children, allowedRoles = [] }) {
     )
   }
   else if (role !== 'admin' && allowedRoles.includes('admin')) {
+    localStorage.removeItem('user')
+    localStorage.removeItem('token')
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
         <div className="max-w-xl w-full bg-white rounded-lg shadow-lg p-8 text-center">

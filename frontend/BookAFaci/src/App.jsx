@@ -7,30 +7,26 @@ import AdminFacilities from './Pages/AdminFacilities';
 import AdminUsers from './Pages/AdminUsers';
 import AdminBookings from './Pages/AdminBookings';
 
-import ProtectedRoute from './Routeprotection';
-import Landing from './Pages/landing';
-import EXTdash from './Pages/DashboardEXT';
-import INTdash from './Pages/DashboardINT';
-import EXTfaci from './Pages/FacilitiesEXT';
-import INTfaci from './Pages/FacilitiesINT';
-import EXTBKS from './Pages/BookingsEXT';
-import INTBKS from './Pages/BookingsINT';
+import Landing from './Pages/LandingPage';
+import UserDashboard from './Pages/UserDashboard';
+import UserFacilities from './Pages/UserFacilities';
+import UserBookings from './Pages/UserBookings';
 
+import ProtectedRoute from './Routeprotection';
+import NotFound from './Pages/NotFound';
 
 const App = () => {
   return (
     <div>
       <ToastContainer />
       <Routes>
+        <Route path="*" element={<NotFound />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/user-select" element={<Userselect />} />
-        <Route path="/dashboard-int" element={<ProtectedRoute allowedRoles={['Internal']}><INTdash /></ProtectedRoute>} />
-        <Route path="/dashboard-ext" element={<ProtectedRoute allowedRoles={['External']}><EXTdash /></ProtectedRoute>} />
-        <Route path="/facilities-ext" element={<ProtectedRoute allowedRoles={['External']}><EXTfaci /></ProtectedRoute>} />
-        <Route path="/facilities-int" element={<ProtectedRoute allowedRoles={['Internal']}><INTfaci /></ProtectedRoute>} />
-        <Route path="/bookings-ext" element={<ProtectedRoute allowedRoles={['External']}><EXTBKS /></ProtectedRoute>} />
-        <Route path="/bookings-int" element={<ProtectedRoute allowedRoles={['Internal']}><INTBKS /></ProtectedRoute>} />
-
+        <Route path="/UserDashboard" element={<ProtectedRoute allowedRoles={['External', 'Internal']}><UserDashboard /></ProtectedRoute>} />
+        <Route path="/UserFacilities" element={<ProtectedRoute allowedRoles={['External', 'Internal']}><UserFacilities /></ProtectedRoute>} />
+        <Route path="/UserBookings" element={<ProtectedRoute allowedRoles={['External', 'Internal']}><UserBookings /></ProtectedRoute>} />
 
         {/*ADMIN*/}
         {/*
@@ -42,7 +38,6 @@ const App = () => {
         <Route path="/adminfaci" element={<AdminFacilities />} />
         <Route path="/adminusers" element={<AdminUsers />} />
         <Route path="/adminbks" element={<AdminBookings />} />
-        <Route path="/" element={<Landing />} />
       </Routes>
     </div>
   )

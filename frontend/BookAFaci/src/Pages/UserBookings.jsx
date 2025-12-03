@@ -14,7 +14,7 @@ import {
 
 const base = import.meta.env.VITE_API_URL || "";
 
-function BookingsINT() {
+function BookingsEXT() {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -137,9 +137,9 @@ function BookingsINT() {
       <title>Bookings</title>
 
       <Sidebar>
-        <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={false} onClick={() => navigate('/dashboard-int')} />
-        <SidebarItem icon={<Building2 size={20} />} text="Facilities" active={false} onClick={() => navigate('/facilities-int')} />
-        <SidebarItem icon={<Clipboard size={20} />} text="Bookings" active={true} onClick={() => navigate('/bookings-int')}/>
+        <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={false} onClick={() => navigate('/UserDashboard')} />
+        <SidebarItem icon={<Building2 size={20} />} text="Facilities" active={false} onClick={() => navigate('/UserFacilities')} />
+        <SidebarItem icon={<Clipboard size={20} />} text="Bookings" active={true}/>
       </Sidebar>
 
       <main className='flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5'
@@ -188,4 +188,4 @@ function BookingsINT() {
   )
 }
 
-export default BookingsINT
+export default BookingsEXT
