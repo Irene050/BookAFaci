@@ -36,8 +36,8 @@ function LoginForm() {
       
       const { accountType, role } = response.data.user || {};
       let destination = '/dashboard';
-      if (accountType === 'External') destination = '/dashboard-ext';
-      else if (accountType === 'Internal') destination = '/dashboard-int';
+      if (accountType === 'External' || accountType === 'Internal') destination = '/dashboard-ext';
+      //else if (accountType === 'Internal') destination = '/dashboard-int';
       if (role === 'admin') destination = '/admin';
 
       toast.success('Login successful! Redirecting...', {
