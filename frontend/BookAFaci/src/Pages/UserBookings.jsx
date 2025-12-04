@@ -133,7 +133,7 @@ function BookingsEXT() {
   );
 
   return (
-    <div className='flex min-h-screen transition-all'>
+    <div className='flex min-h-screen transition-all font-inter'>
       <title>Bookings</title>
 
       <Sidebar>

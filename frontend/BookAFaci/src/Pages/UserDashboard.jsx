@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, Navigate } from 'react-router';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -19,14 +19,62 @@ import {
 
 const base = import.meta.env.VITE_API_URL || "";
 
+function useCountAnimation(target, { duration = 500, delay = 0 } = {}) {
+  const [value, setValue] = useState(0);
+  const prevRef = useRef(0);
+  useEffect(() => {
+    const from = Number(prevRef.current || 0);
+    const to = Number(target || 0);
+    if (from === to) {
+      setValue(to);
+      prevRef.current = to;
+      return;
+    }
+
+    let raf = null;
+    let startTime = null;
+    let timeoutId = null;
+
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+    const start = () => {
+      startTime = performance.now();
+      const step = (now) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = easeOutCubic(progress);
+        const current = Math.round(from + (to - from) * eased);
+        setValue(current);
+        if (progress < 1) raf = requestAnimationFrame(step);
+        else prevRef.current = to;
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    if (delay > 0) timeoutId = setTimeout(start, delay);
+    else start();
+
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [target, duration, delay]);
+
+  return value;
+}
 
 function UserDashboard() {
   const navigate = useNavigate();
-  const [summary, setSummary] = useState({ totalBookings: 0, upcoming: 0, cancelled: 0 });
+  const [summary, setSummary] = useState({ totalBookings: 0, upcoming: 0, cancelled: 0, completed: 0 });
   const [latestPending, setLatestPending] = useState(null);
   const [latestPendingLoading, setLatestPendingLoading] = useState(false);
   const [latestApproved, setLatestApproved] = useState(null);
   const [latestApprovedLoading, setLatestApprovedLoading] = useState(false);
+  
+  const animatedBookings = useCountAnimation(summary.totalBookings, { duration: 800, delay: 100 });
+  const animatedUpcoming = useCountAnimation(summary.upcoming, { duration: 800, delay: 100 });
+  const animatedCancelled = useCountAnimation(summary.cancelled, { duration: 800, delay: 100 });
+  const animatedCompleted = useCountAnimation(summary.completed, { duration: 800, delay: 100 });
   
   useEffect(() => {
     const user = localStorage.getItem('user');
@@ -47,6 +95,7 @@ function UserDashboard() {
           totalBookings: data.totalBookings ?? 0,
           upcoming: data.upcoming ?? 0,
           cancelled: data.cancelled ?? 0,
+          completed: data.completed ?? 0,
         });
 
         // fetch bookings and extract the most recent 'pending' booking
@@ -85,7 +134,7 @@ function UserDashboard() {
   
 
   return (
-    <div className="flex min-h-screen transition-all">
+    <div className="flex min-h-screen transition-all font-inter">
       <title>Dashboard</title>
       <Sidebar>
         <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={true} />
@@ -128,7 +177,7 @@ function UserDashboard() {
                  >
                    <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
                    <span className="ml-2">Total Bookings:</span>
-                   <div className="text-4xl indent-4">{summary.totalBookings}</div>
+                   <div className="text-4xl indent-4">{animatedBookings}</div>
                  </div>
                </button>
 
@@ -150,7 +199,7 @@ function UserDashboard() {
                  >
                    <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
                    <span className="ml-2">Upcoming Bookings:</span>
-                   <div className="text-4xl indent-4">{summary.upcoming}</div>
+                   <div className="text-4xl indent-4">{animatedUpcoming}</div>
                  </div>
                </button>
 
@@ -172,7 +221,7 @@ function UserDashboard() {
                  >
                    <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
                    <span className="ml-2">Cancelled Bookings:</span>
-                   <div className="text-4xl indent-4">{summary.cancelled}</div>
+                   <div className="text-4xl indent-4">{animatedCancelled}</div>
                  </div>
                </button>
 
@@ -182,19 +231,27 @@ function UserDashboard() {
                  className="flex grow group relative w-[auto] p-[3px] rounded-[25px] overflow-hidden hover:shadow-lg transition-all"
                  aria-label="Total bookings"
                >
-                 <span
-                   className="flex grow pointer-events-none absolute inset-0 bg-transparent w-[650px] h-[500px] m-[-7.5rem] mb-[10px] transition-transform duration-1000 group-hover:ease-in-out group-hover:rotate-[360deg] group-hover:bg-[conic-gradient(#83C9FF,_#346D9A,_#83C9FF)]"
+              <span
+                className="flex grow pointer-events-none absolute inset-0 bg-transparent w-[650px] h-[500px] m-[-7.5rem] mb-[10px] transition-transform duration-1000 group-hover:ease-in-out group-hover:rotate-[360deg] group-hover:bg-[conic-gradient(#83C9FF,_#346D9A,_#83C9FF)]
+                  min-[320px]:
+                  min-[375px]:
+                  min-[425px]:
+                  sm:     
+                  md:     
+                  lg:     
+                  xl:
+                   "
                    style={{ zIndex: 0 }}
                  />
  
                  {/* inner card */}
                  <div
-                   className="relative flex grow items-center font-inter font-bold text-center bg-slate-300  w-[250px] h-[150px] p-[25px] rounded-[22px] text-[#007BDA] indent-1 border-[#a7bace]"
+                   className="relative flex grow items-center font-inter font-bold text-center bg-slate-300  w-[250px] h-[150px] p-[25px] rounded-[22px] text-[#007BDA] indent-1 border-[#a7bace]           "
                    style={{ zIndex: 10 }}
                  >
                    <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
                    <span className="ml-2">Complete Bookings:</span>
-                   <div className="text-4xl indent-4">{summary.completed}</div>
+                   <div className="text-4xl indent-4">{animatedCompleted}</div>
                  </div>
                </button>
             </div>

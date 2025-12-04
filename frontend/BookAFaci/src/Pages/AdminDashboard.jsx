@@ -1,5 +1,5 @@
 import React, { use } from 'react';
-import { useEffect, useState, useRef  } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, Navigate } from 'react-router';
 import { toast } from 'react-toastify';
 import Sidebar, { SidebarItem } from '../components/sidebar';
@@ -75,7 +75,7 @@ function AdminDashboard() {
 
   const animatedUsers = useCountAnimation(usersCount, { duration: 800, delay: 100 });
   const animatedFacilities = useCountAnimation(facilitiesCount, { duration: 800, delay: 100 });
-  const animatedBookings = useCountAnimation(bookingsCount, { duration: 800, delay: 200 });
+  const animatedBookings = useCountAnimation(bookingsCount, { duration: 800, delay: 100 });
 
   useEffect(() => {
     const user = localStorage.getItem('user');
@@ -91,104 +91,104 @@ function AdminDashboard() {
         if (!userId) return;
 
         try {
-           const res = await axios.get(`${base}/bookafaci/users`);
-           const payload = res?.data || {};
-           const list = Array.isArray(payload.users)
-             ? payload.users
-             : Array.isArray(payload)
-             ? payload
-             : (payload.users || []);
-           setUsersCount(list.length);
-         } catch (err) {
-           console.error('Failed to load users count', err?.response?.data || err);
-           setUsersCount(0);
-         }
+          const res = await axios.get(`${base}/bookafaci/users`);
+          const payload = res?.data || {};
+          const list = Array.isArray(payload.users)
+            ? payload.users
+            : Array.isArray(payload)
+              ? payload
+              : (payload.users || []);
+          setUsersCount(list.length);
+        } catch (err) {
+          console.error('Failed to load users count', err?.response?.data || err);
+          setUsersCount(0);
+        }
 
-            try {
-              const fRes = await axios.get(`${base}/bookafaci/facility`);
-              const fPayload = fRes?.data || {};
-              const flist = Array.isArray(fPayload.facilities)
-                ? fPayload.facilities
-                : Array.isArray(fPayload)
-                ? fPayload
-                : (fPayload.data || fPayload.facilities || []);
-              setFacilitiesCount(flist.length);
-            } catch (err) {
-              console.error('Failed to load facilities count', err?.response?.data || err);
-              setFacilitiesCount(0);
+        try {
+          const fRes = await axios.get(`${base}/bookafaci/facility`);
+          const fPayload = fRes?.data || {};
+          const flist = Array.isArray(fPayload.facilities)
+            ? fPayload.facilities
+            : Array.isArray(fPayload)
+              ? fPayload
+              : (fPayload.data || fPayload.facilities || []);
+          setFacilitiesCount(flist.length);
+        } catch (err) {
+          console.error('Failed to load facilities count', err?.response?.data || err);
+          setFacilitiesCount(0);
+        }
+
+        try {
+          // fetch all bookings and count those that are NOT cancelled
+          const token = localStorage.getItem('token') || '';
+          const headers = token ? { Authorization: `Bearer ${token}` } : {};
+          const bRes = await axios.get(`${base}/bookafaci/book`, { headers });
+          const bPayload = bRes?.data || {};
+          const blist = Array.isArray(bPayload.bookings)
+            ? bPayload.bookings
+            : Array.isArray(bPayload)
+              ? bPayload
+              : (bPayload.data || bPayload.bookings || []);
+
+          const isCancelled = (s) => {
+            if (s == null) return false;
+            const str = String(s).toLowerCase();
+            return str === 'cancelled' || str === 'canceled';
+          };
+
+          const nonCancelled = blist.filter(b => !isCancelled(b?.status));
+          setBookingsCount(nonCancelled.length);
+
+          // Compute latest pending and latest approved from the same bookings list
+          try {
+            setLatestPendingLoading(true);
+            setLatestApprovedLoading(true);
+
+            // normalize pending: status === 0 || '0' OR status string 'pending'
+            const pending = (blist || []).filter(b => {
+              if (b.status === 0 || b.status === '0') return true;
+              return String(b.status || '').toLowerCase() === 'pending';
+            });
+
+            if (pending.length) {
+              pending.sort((a, b) => {
+                const ta = new Date(a.createdAt || a.startDate || 0).getTime();
+                const tb = new Date(b.createdAt || b.startDate || 0).getTime();
+                return tb - ta;
+              });
+              setLatestPending(pending[0]);
+            } else {
+              setLatestPending(null);
             }
 
-            try {
-              // fetch all bookings and count those that are NOT cancelled
-              const token = localStorage.getItem('token') || '';
-              const headers = token ? { Authorization: `Bearer ${token}` } : {};
-              const bRes = await axios.get(`${base}/bookafaci/book`, { headers });
-              const bPayload = bRes?.data || {};
-              const blist = Array.isArray(bPayload.bookings)
-                ? bPayload.bookings
-                : Array.isArray(bPayload)
-                ? bPayload
-                : (bPayload.data || bPayload.bookings || []);
+            // approved: status string 'approved' (exclude status 0)
+            const approved = (blist || []).filter(b => {
+              if (b.status === 0 || b.status === '0') return false;
+              return String(b.status || '').toLowerCase() === 'approved';
+            });
 
-              const isCancelled = (s) => {
-                if (s == null) return false;
-                const str = String(s).toLowerCase();
-                return str === 'cancelled' || str === 'canceled';
-              };
-
-              const nonCancelled = blist.filter(b => !isCancelled(b?.status));
-              setBookingsCount(nonCancelled.length);
-
-              // Compute latest pending and latest approved from the same bookings list
-              try {
-                setLatestPendingLoading(true);
-                setLatestApprovedLoading(true);
-
-                // normalize pending: status === 0 || '0' OR status string 'pending'
-                const pending = (blist || []).filter(b => {
-                  if (b.status === 0 || b.status === '0') return true;
-                  return String(b.status || '').toLowerCase() === 'pending';
-                });
-
-                if (pending.length) {
-                  pending.sort((a, b) => {
-                    const ta = new Date(a.createdAt || a.startDate || 0).getTime();
-                    const tb = new Date(b.createdAt || b.startDate || 0).getTime();
-                    return tb - ta;
-                  });
-                  setLatestPending(pending[0]);
-                } else {
-                  setLatestPending(null);
-                }
-
-                // approved: status string 'approved' (exclude status 0)
-                const approved = (blist || []).filter(b => {
-                  if (b.status === 0 || b.status === '0') return false;
-                  return String(b.status || '').toLowerCase() === 'approved';
-                });
-
-                if (approved.length) {
-                  approved.sort((a, b) => {
-                    const ta = new Date(a.createdAt || a.startDate || 0).getTime();
-                    const tb = new Date(b.createdAt || b.startDate || 0).getTime();
-                    return tb - ta;
-                  });
-                  setLatestApproved(approved[0]);
-                } else {
-                  setLatestApproved(null);
-                }
-              } catch (err) {
-                console.error('Failed to compute latest pending/approved', err);
-                setLatestPending(null);
-                setLatestApproved(null);
-              } finally {
-                setLatestPendingLoading(false);
-                setLatestApprovedLoading(false);
-              }
-            } catch (err) {
-              console.error('Failed to load bookings count', err?.response?.data || err);
-              setBookingsCount(0);
+            if (approved.length) {
+              approved.sort((a, b) => {
+                const ta = new Date(a.createdAt || a.startDate || 0).getTime();
+                const tb = new Date(b.createdAt || b.startDate || 0).getTime();
+                return tb - ta;
+              });
+              setLatestApproved(approved[0]);
+            } else {
+              setLatestApproved(null);
             }
+          } catch (err) {
+            console.error('Failed to compute latest pending/approved', err);
+            setLatestPending(null);
+            setLatestApproved(null);
+          } finally {
+            setLatestPendingLoading(false);
+            setLatestApprovedLoading(false);
+          }
+        } catch (err) {
+          console.error('Failed to load bookings count', err?.response?.data || err);
+          setBookingsCount(0);
+        }
 
         /*
         (async () => {
@@ -337,7 +337,7 @@ function AdminDashboard() {
               >
                 <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
                 <span className="ml-2">Complete Bookings:</span>
-                <div className="text-4xl indent-4">{}</div>
+                <div className="text-4xl indent-4">{ }</div>
               </div>
             </button>
           </div>
