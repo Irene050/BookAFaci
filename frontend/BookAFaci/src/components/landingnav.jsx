@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 function landingnav() {
     const [open, setOpen] = useState(false);
     return (
-        <nav className="bg-neutral-primary fixed w-full h-24 top-0 left-0 border-b border-[#3981b1b4] backdrop-blur-lg bg-[#3981b1b4]">
+        <nav className="bg-neutral-primary fixed w-full h-24 top-0 left-0 border-b border-[#3981b1b4] backdrop-blur-lg bg-[#3981b1b4] font-inter">
             <div className="max-w-[150rem] flex flex-wrap items-center justify-between mt-5 mx-auto p-4">
                 <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                     <span className="ml-[1rem] self-center text-xl text-heading font-semibold whitespace-nowrap text-white">BOOKAFACI</span>

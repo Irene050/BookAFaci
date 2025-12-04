@@ -104,6 +104,7 @@ export default function InternalSignUp({ onBack, initialValues }) {
       md:w-[450px] 
       lg:w-[450px] 
       transition-all
+      font-inter
     ">
 
       <ToastContainer

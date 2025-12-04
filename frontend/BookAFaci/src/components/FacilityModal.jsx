@@ -159,7 +159,7 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
   };
 
   const DateRangePicker = () => (
-    <div className="space-y-4 p-4 bg-gray-50 rounded-xl border">
+    <div className="space-y-4 p-4 bg-gray-50 rounded-xl border font-inter">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>

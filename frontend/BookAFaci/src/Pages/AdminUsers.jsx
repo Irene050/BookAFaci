@@ -61,7 +61,7 @@ function AdminUserview() {
     */}
 
   return (
-    <div className="flex h-screen">
+    <div className="flex min-h-screen transition-all font-inter">
           <title>Facilities</title>
     
           {/* SIDEBAR */}

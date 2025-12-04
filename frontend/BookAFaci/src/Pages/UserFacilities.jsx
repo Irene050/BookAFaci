@@ -76,7 +76,7 @@ function Facilities() {
   };
 
   return (
-    <div className="flex min-h-screen transition-all">
+    <div className="flex min-h-screen transition-all font-inter">
       <title>Facilities</title>
 
       <EquipmentModal

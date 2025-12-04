@@ -227,7 +227,7 @@ function AdminDashboard() {
 
 
   return (
-    <div className="flex min-h-screen transition-all">
+    <div className="flex min-h-screen transition-all font-inter">
       <title>Dashboard</title>
       <Sidebar>
         <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active={true} />

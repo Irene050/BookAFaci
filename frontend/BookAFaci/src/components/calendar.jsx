@@ -7,7 +7,7 @@ import '../css/main.css';
 
 export default function Calendar() {
   return (
-    <div className="w-full h-full p-7">
+    <div className="w-full h-full p-7 font-inter">
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"

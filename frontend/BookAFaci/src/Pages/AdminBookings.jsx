@@ -14,7 +14,7 @@ import {
   ClipboardClock,
   SquareX, SquareCheck,
     Edit,
-    Trash,
+    CircleSlash,
   Clipboard, Users
 } from "lucide-react"
 
@@ -61,7 +61,7 @@ function AdminBookings() {
   }, [navigate]);
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen font-inter">
       <title>Bookings</title>
 
       {/* SIDEBAR */}
@@ -257,7 +257,7 @@ function AdminBookings() {
                                   }
                                 }}
                                 className="p-2 rounded-md bg-orange-50 hover:bg-orange-100 text-orange-700">
-                                <Trash size={18} />
+                                <CircleSlash size={18} />
                               </button>
 
                               <button

@@ -73,7 +73,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="">
+    <div className="font-inter">
       <div className="form-container bg-white rounded-[25px] p-10 w-[450px] h-[fit-content] 
         min-[320px]:w-[350px]  
         max-[640px]:w-[450px]

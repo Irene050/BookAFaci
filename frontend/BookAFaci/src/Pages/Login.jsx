@@ -5,7 +5,7 @@ import loginbg from '../assets/Gradient blur.png'
 
 const Login = () => {
   return (
-    <div className="min-h-screen relative transition-all">
+    <div className="min-h-screen relative transition-all font-inter">
       <div className="absolute inset-0 flex">
         <div className="flex items-center justify-center h-screen bg-[url('/src/assets/left.jpeg')] bg-cover bg-center
         min-[320px]:w-[0%]
