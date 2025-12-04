@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { X, Upload, Image, Calendar, CheckCircle, XCircle, Edit3 } from "lucide-react";
 const base = import.meta.env.VITE_API_URL || "";
 
@@ -15,6 +15,8 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [tempDateRange, setTempDateRange] = useState({ startDate: null, endDate: null });
   const [loading, setLoading] = useState(false);
+  const initialSerializedRef = useRef(null);
+  const [isUnchanged, setIsUnchanged] = useState(true);
 
   useEffect(() => {
     if (isOpen) {
@@ -28,6 +30,22 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
           image: null,
           imagePreview: facility.image ? (facility.image.startsWith('http') ? facility.image : `${base}${facility.image}`) : null
         });
+        // store serialized initial values for change detection
+        const initial = {
+          name: facility.name || '',
+          description: facility.description || '',
+          capacity: facility.capacity ? String(facility.capacity) : '',
+          status: facility.status || 'available',
+          availableDates: (facility.availableDates || []).map(r => {
+            const start = r?.startDate ? new Date(r.startDate) : r?.startDate instanceof Date ? r.startDate : null;
+            const end = r?.endDate ? new Date(r.endDate) : r?.endDate instanceof Date ? r.endDate : null;
+            return {
+              start: start ? start.toISOString().split('T')[0] : null,
+              end: end ? end.toISOString().split('T')[0] : null
+            };
+          })
+        };
+        initialSerializedRef.current = JSON.stringify(initial);
       } else {
         setFormData({
           name: '',
@@ -38,11 +56,48 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
           image: null,
           imagePreview: null
         });
+        // new form initial state
+        const initial = {
+          name: '',
+          description: '',
+          capacity: '',
+          status: 'available',
+          availableDates: []
+        };
+        initialSerializedRef.current = JSON.stringify(initial);
       }
       setTempDateRange({ startDate: null, endDate: null });
       setShowDatePicker(false);
     }
   }, [isOpen, isEdit, facility]);
+
+  // serialize current form values for change detection
+  const serializeForm = (vals) => {
+    return JSON.stringify({
+      name: vals.name || '',
+      description: vals.description || '',
+      capacity: vals.capacity ? String(vals.capacity) : '',
+      status: vals.status || 'available',
+      availableDates: (vals.availableDates || []).map(r => {
+        const start = r?.startDate ? new Date(r.startDate) : r?.start instanceof Date ? r.start : null;
+        const end = r?.endDate ? new Date(r.endDate) : r?.end instanceof Date ? r.end : null;
+        return {
+          start: start ? start.toISOString().split('T')[0] : null,
+          end: end ? end.toISOString().split('T')[0] : null
+        };
+      })
+    });
+  };
+
+  useEffect(() => {
+    // when formData changes, compare to initial serialized
+    if (initialSerializedRef.current == null) {
+      setIsUnchanged(true);
+      return;
+    }
+    const current = serializeForm(formData);
+    setIsUnchanged(current === initialSerializedRef.current);
+  }, [formData]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -268,8 +323,8 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
                 className="flex-1 px-6 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl font-medium transition-all border border-gray-200">
                 Cancel
               </button>
-              <button type="submit" disabled={loading}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] text-white rounded-xl font-medium hover:from-[#83C9FF] hover:to-[#346D9A] transition-all shadow-lg hover:shadow-xl disabled:opacity-50">
+              <button type="submit" disabled={loading || (isEdit ? (isUnchanged || !formData.name || !formData.capacity) : (!formData.name || !formData.capacity))}
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] text-white rounded-xl font-medium hover:from-[#83C9FF] hover:to-[#346D9A] transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
                 {loading ? 'Saving...' : (isEdit ? 'Update Facility' : 'Add Facility')}
               </button>
             </div>
