@@ -34,8 +34,8 @@ const Login = () => {
         min-[425px]:w-[100%]
         sm:w-[100%]
         md:w-[100%]
-        lg:w-[40%]
-        xl:w-[40%]
+        lg:w-[60%]
+        xl:w-[full]
         ">
             <div className="w-full flex items-center justify-center h-screen">
               <div className='flex items-center justify-center'>

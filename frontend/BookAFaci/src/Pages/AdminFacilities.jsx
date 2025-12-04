@@ -17,6 +17,27 @@ function AdminFacilities() {
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
 
+useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    const originalPaddingRight = document.body.style.paddingRight;
+
+    if (isModalOpen) {
+      const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+      if (scrollBarWidth > 0) {
+        document.body.style.paddingRight = `${scrollBarWidth}px`;
+      }
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = originalOverflow || '';
+      document.body.style.paddingRight = originalPaddingRight || '';
+    }
+
+    return () => {
+      document.body.style.overflow = originalOverflow || '';
+      document.body.style.paddingRight = originalPaddingRight || '';
+    };
+  }, [isModalOpen]);
+
   useEffect(() => {
     (async () => {
       try {

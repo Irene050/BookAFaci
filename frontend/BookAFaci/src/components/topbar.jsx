@@ -105,7 +105,7 @@ function Topbar() {
   };
 
   return (
-    <nav className="w-full bg-[#dbdbdb8f] h-[73px] rounded-b-[10px] sticky top-0 z-10 flex items-center justify-between px-6 shadow-md backdrop-blur-sm">
+    <nav className="w-full bg-[#dbdbdb8f] h-[73px] rounded-b-[10px] sticky top-0 z-50 flex items-center justify-between px-6 shadow-md backdrop-blur-sm">
       <div className="flex items-center bg-white px-4 py-2 rounded-full shadow-sm w-[350px]">
         <Search size={18} className="text-gray-500" />
         <input
