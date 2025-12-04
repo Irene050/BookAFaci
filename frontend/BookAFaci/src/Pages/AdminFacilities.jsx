@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import Sidebar, { SidebarItem } from "../components/sidebar";
 import Topbar from "../components/topbar";
 import FacilityModal from "../components/FacilityModal";
-import EquipmentModal from "../components/equipment"; // Note lowercase filename for EquipmentModal
+import EquipmentModal from "../components/equipment"; // Note lowercase filename for Equipment Modal (different from EquipmentModal.jsx)
 import loginbg from "../assets/Gradient blur.png";
 import { LayoutDashboard, Building2, Clipboard, Users, Edit3, Trash2, Wrench } from "lucide-react";
 
