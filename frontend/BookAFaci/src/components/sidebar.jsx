@@ -65,7 +65,7 @@ export default function Sidebar({ children }) {
 
   return (
     <>
-    <aside className="fixed left-0 top-0 h-full z-40">
+    <aside className="fixed left-0 top-0 h-full z-[70]">
       <nav className={`h-full flex flex-col bg-gradient-to-b from-[#FFFEFF] to-[#D2EDFF] border-r shadow-sm transition-all ${expanded ? "w-64" : "w-16"}`}>
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
