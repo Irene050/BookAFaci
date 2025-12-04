@@ -347,8 +347,8 @@ function AdminDashboard() {
             <div
               role="button"
               tabIndex={0}
-              onClick={() => navigate('#')}
-              onKeyDown={(e) => { if (e.key === 'Enter') navigate('#'); }}
+              onClick={() => navigate('/adminbks?status=pending')}
+              onKeyDown={(e) => { if (e.key === 'Enter') navigate('/adminbks?status=pending'); }}
               className='cursor-pointer flex flex-col justify-between ] bg-white col-span-2 h-[fit] rounded-[10px] drop-shadow-lg transition-all hover:transform hover:scale-[1.01] p-6'
             > <b className='text-[#007BDA]'>Pending:</b>
               <hr className='mt-3 mb-3'></hr>
@@ -388,7 +388,7 @@ function AdminDashboard() {
             <div
               role="button"
               tabIndex={0}
-              onClick={() => navigate('#')}
+              onClick={() => navigate('/adminbks?status=approved')}
               onKeyDown={(e) => { if (e.key === 'Enter') navigate('#'); }}
               className='cursor-pointer flex flex-col justify-between ] bg-white col-span-2 h-[fit] rounded-[10px] drop-shadow-lg transition-all hover:transform hover:scale-[1.01] p-6'
             > <b className='text-[#007BDA]'>Approved:</b>
