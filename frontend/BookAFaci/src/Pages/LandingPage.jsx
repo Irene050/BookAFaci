@@ -19,11 +19,11 @@ function LandingPage() {
                 
                 <div className='flex h-screen v-screen items-center text-white font-bold text-5xl gap-5
                     min-[320px]:flex-col 
-                    min-[320px]:mt-36
+                    min-[320px]:mt-[15rem]
                     min-[320px]:ml-[0rem]
 
                     max-[640px]:flex-col 
-                    max-[640px]:mt-36
+                    max-[640px]:mt-[15rem]
                     max-[640px]:ml-[0rem]
 
                     md:flex-row
