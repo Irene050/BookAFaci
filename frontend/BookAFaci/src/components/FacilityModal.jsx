@@ -7,8 +7,8 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
     name: '',
     description: '',
     capacity: '',
-    status: 'available',
-    availableDates: [],
+    status: 'active',
+    availability: [],
     image: null,
     imagePreview: null
   });
@@ -25,20 +25,23 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
           name: facility.name || '',
           description: facility.description || '',
           capacity: facility.capacity || '',
-          status: facility.status || 'available',
-          availableDates: facility.availableDates || [],
+          status: facility.status || 'active',
+          availability: (facility.availability || []).map(r => ({
+            startDate: r?.startDate ? new Date(r.startDate) : null,
+            endDate: r?.endDate ? new Date(r.endDate) : null
+          })),
           image: null,
           imagePreview: facility.image ? (facility.image.startsWith('http') ? facility.image : `${base}${facility.image}`) : null
         });
-        // store serialized initial values for change detection
+        
         const initial = {
           name: facility.name || '',
           description: facility.description || '',
           capacity: facility.capacity ? String(facility.capacity) : '',
-          status: facility.status || 'available',
-          availableDates: (facility.availableDates || []).map(r => {
-            const start = r?.startDate ? new Date(r.startDate) : r?.startDate instanceof Date ? r.startDate : null;
-            const end = r?.endDate ? new Date(r.endDate) : r?.endDate instanceof Date ? r.endDate : null;
+          status: facility.status || 'active',
+          availability: (facility.availability || []).map(r => {
+            const start = r?.startDate ? new Date(r.startDate) : null;
+            const end = r?.endDate ? new Date(r.endDate) : null;
             return {
               start: start ? start.toISOString().split('T')[0] : null,
               end: end ? end.toISOString().split('T')[0] : null
@@ -51,18 +54,18 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
           name: '',
           description: '',
           capacity: '',
-          status: 'available',
-          availableDates: [],
+          status: 'active',
+          availability: [],
           image: null,
           imagePreview: null
         });
-        // new form initial state
+
         const initial = {
           name: '',
           description: '',
           capacity: '',
-          status: 'available',
-          availableDates: []
+          status: 'active',
+          availability: []
         };
         initialSerializedRef.current = JSON.stringify(initial);
       }
@@ -71,16 +74,15 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
     }
   }, [isOpen, isEdit, facility]);
 
-  // serialize current form values for change detection
   const serializeForm = (vals) => {
     return JSON.stringify({
       name: vals.name || '',
       description: vals.description || '',
       capacity: vals.capacity ? String(vals.capacity) : '',
-      status: vals.status || 'available',
-      availableDates: (vals.availableDates || []).map(r => {
-        const start = r?.startDate ? new Date(r.startDate) : r?.start instanceof Date ? r.start : null;
-        const end = r?.endDate ? new Date(r.endDate) : r?.end instanceof Date ? r.end : null;
+      status: vals.status || 'active',
+      availability: (vals.availability || []).map(r => {
+        const start = r?.startDate ? new Date(r.startDate) : null;
+        const end = r?.endDate ? new Date(r.endDate) : null;
         return {
           start: start ? start.toISOString().split('T')[0] : null,
           end: end ? end.toISOString().split('T')[0] : null
@@ -90,7 +92,6 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
   };
 
   useEffect(() => {
-    // when formData changes, compare to initial serialized
     if (initialSerializedRef.current == null) {
       setIsUnchanged(true);
       return;
@@ -117,23 +118,25 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
   };
 
   const addDateRange = () => {
-    if (tempDateRange.startDate && tempDateRange.endDate) {
+    if (tempDateRange.startDate && tempDateRange.endDate && tempDateRange.endDate >= tempDateRange.startDate) {
       setFormData(prev => ({
         ...prev,
-        availableDates: [...prev.availableDates, { 
+        availability: [...prev.availability, { 
           startDate: tempDateRange.startDate, 
           endDate: tempDateRange.endDate 
         }]
       }));
       setTempDateRange({ startDate: null, endDate: null });
       setShowDatePicker(false);
+    } else {
+      alert('End date must be on or after start date.');
     }
   };
 
   const removeDateRange = (index) => {
     setFormData(prev => ({
       ...prev,
-      availableDates: prev.availableDates.filter((_, i) => i !== index)
+      availability: prev.availability.filter((_, i) => i !== index)
     }));
   };
 
@@ -142,12 +145,17 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
     setLoading(true);
     
     try {
+      const availability = formData.availability.map(range => ({
+        startDate: range.startDate ? range.startDate.toISOString().split('T')[0] : null,
+        endDate: range.endDate ? range.endDate.toISOString().split('T')[0] : null
+      }));
+
       const payload = {
         name: formData.name,
         description: formData.description,
         capacity: parseInt(formData.capacity),
         status: formData.status,
-        availableDates: formData.availableDates
+        availability: availability 
       };
 
       onSubmit(payload, formData.image, isEdit ? facility._id : null);
@@ -159,7 +167,7 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
   };
 
   const DateRangePicker = () => (
-    <div className="space-y-4 p-4 bg-gray-50 rounded-xl border">
+    <div className="space-y-4 p-4 bg-gray-50 rounded-xl border font-inter">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
@@ -253,10 +261,9 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
               <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="status">Status *</label>
               <select id="status" name="status" value={formData.status} onChange={handleInputChange} required
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white">
-                <option value="available">Available</option>
-                <option value="maintenance">Maintenance</option>
-                <option value="reserved">Reserved</option>
-                <option value="unavailable">Unavailable</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="under maintenance">Under Maintenance</option>
               </select>
             </div>
 
@@ -272,16 +279,16 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
                   <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-xl">
                     <span className="text-sm font-medium text-blue-800 flex items-center gap-2">
                       <Calendar size={18} />
-                      {formData.availableDates.length === 0 ? "No availability dates set" : `${formData.availableDates.length} date range(s) added`}
+                      {formData.availability.length === 0 ? "No availability dates set" : `${formData.availability.length} date range(s) added`}
                     </span>
                     <button type="button" onClick={() => setShowDatePicker(true)}
                       className="px-4 py-2 bg-white border border-blue-500 text-blue-600 rounded-xl hover:bg-blue-50 font-medium transition-all flex items-center gap-2 text-sm">
                       <Calendar size={16} /> Add Dates
                     </button>
                   </div>
-                  {formData.availableDates.length > 0 && (
+                  {formData.availability.length > 0 && (
                     <div className="max-h-32 overflow-y-auto space-y-2">
-                      {formData.availableDates.map((range, index) => (
+                      {formData.availability.map((range, index) => (
                         <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
                           <span className="text-sm text-gray-900">
                             {range.startDate.toLocaleDateString()} - {range.endDate.toLocaleDateString()}

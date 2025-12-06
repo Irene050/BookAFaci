@@ -5,9 +5,9 @@ import { toast } from "react-toastify";
 import Sidebar, { SidebarItem } from "../components/sidebar";
 import Topbar from "../components/topbar";
 import FacilityModal from "../components/FacilityModal";
-import EquipmentModal from "../components/equipment"; // Note lowercase filename for Equipment Modal (different from EquipmentModal.jsx)
+import EquipmentModal from "../components/equipment";
 import loginbg from "../assets/Gradient blur.png";
-import { LayoutDashboard, Building2, Clipboard, Users, Edit3, Trash2, Wrench } from "lucide-react";
+import { LayoutDashboard, Building2, Clipboard, Users, Edit3, Trash2, Wrench, ChevronDown } from "lucide-react";
 
 const base = import.meta.env.VITE_API_URL || "";
 
@@ -21,13 +21,52 @@ function AdminFacilities() {
   const [selectedEquipment, setSelectedEquipment] = useState(null);
   const [isFacilityEditMode, setIsFacilityEditMode] = useState(false);
   const [isEquipmentEditMode, setIsEquipmentEditMode] = useState(false);
+  const [showAllFacilities, setShowAllFacilities] = useState(false);
+  const [showAllEquipments, setShowAllEquipments] = useState(false);
+  const ITEMS_TO_SHOW = 3;
+
+  const getToken = () => {
+    const adminToken = localStorage.getItem('adminToken');
+    if (adminToken) return adminToken;
+    
+    const token = localStorage.getItem('token');
+    if (token) return token;
+    
+    const user = localStorage.getItem('user');
+    if (user) {
+      try {
+        const userData = JSON.parse(user);
+        return userData.token || userData.accessToken || null;
+      } catch (e) {
+        console.error('Failed to parse user from localStorage');
+      }
+    }
+    
+    return null;
+  };
+
+  const checkAuth = () => {
+    const token = getToken();
+    if (!token) {
+      toast.error("Please log in to access this page");
+      navigate('/admindash', { replace: true });
+      return false;
+    }
+    return true;
+  };
 
   useEffect(() => {
+    if (!checkAuth()) return;
+
     (async () => {
       try {
+        const tokenConfig = {
+          headers: { 'Authorization': `Bearer ${getToken()}` }
+        };
+
         const [facilityRes, equipmentRes] = await Promise.all([
-          axios.get(`${base}/bookafaci/facility`),
-          axios.get(`${base}/bookafaci/equipment`)
+          axios.get(`${base}/bookafaci/facility`, tokenConfig),
+          axios.get(`${base}/bookafaci/equipment`, tokenConfig)
         ]);
 
         const facilityList = Array.isArray(facilityRes.data)
@@ -49,100 +88,170 @@ function AdminFacilities() {
         setEquipments(equipmentList);
       } catch (err) {
         console.error("Failed to load data", err);
-        toast.error("Failed to load facilities and equipment");
+        if (err.response?.status === 401) {
+          toast.error("Session expired. Please log in again.");
+          localStorage.removeItem('adminToken');
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          navigate('/admindash', { replace: true });
+        } else {
+          toast.error("Failed to load facilities and equipment");
+        }
       }
     })();
   }, []);
 
   const fetchFacilities = async () => {
+    if (!checkAuth()) return;
+    
     try {
-      const res = await axios.get(`${base}/bookafaci/facility`);
+      const res = await axios.get(`${base}/bookafaci/facility`, {
+        headers: { 'Authorization': `Bearer ${getToken()}` }
+      });
       const list = Array.isArray(res.data)
         ? res.data
         : Array.isArray(res.data?.facilities)
-          ? res.data.facilities
-          : Array.isArray(res.data?.data)
-            ? res.data.data
-            : [];
+        ? res.data.facilities
+        : Array.isArray(res.data?.data)
+          ? res.data.data
+          : [];
       setFacilities(list);
     } catch (err) {
       console.error("Refresh facilities error:", err);
+      if (err.response?.status === 401) {
+        toast.error("Session expired. Please log in again.");
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/admindash', { replace: true });
+      }
     }
   };
 
   const fetchEquipments = async () => {
+    if (!checkAuth()) return;
+    
     try {
-      const res = await axios.get(`${base}/bookafaci/equipment`);
+      const res = await axios.get(`${base}/bookafaci/equipment`, {
+        headers: { 'Authorization': `Bearer ${getToken()}` }
+      });
       const list = Array.isArray(res.data)
         ? res.data
         : Array.isArray(res.data?.equipments)
-          ? res.data.equipments
-          : Array.isArray(res.data?.data)
-            ? res.data.data
-            : [];
+        ? res.data.equipments
+        : Array.isArray(res.data?.data)
+          ? res.data.data
+          : [];
       setEquipments(list);
     } catch (err) {
       console.error("Refresh equipment error:", err);
+      if (err.response?.status === 401) {
+        toast.error("Session expired. Please log in again.");
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/admindash', { replace: true });
+      }
     }
   };
 
   const handleAddFacility = async (payload, imageFile, facilityId) => {
+    if (!checkAuth()) return;
+    
     try {
       const formData = new FormData();
       formData.append('name', payload.name);
       formData.append('description', payload.description);
       formData.append('capacity', payload.capacity);
       formData.append('status', payload.status);
-      formData.append('availableDates', JSON.stringify(payload.availableDates));
+      formData.append('availability', JSON.stringify(payload.availability));
       if (imageFile) formData.append('image', imageFile);
 
       await axios.post(`${base}/bookafaci/facility`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 
+          'Authorization': `Bearer ${getToken()}`,
+          'Content-Type': 'multipart/form-data'
+        }
       });
       toast.success("Facility added successfully");
       setIsFacilityModalOpen(false);
       fetchFacilities();
     } catch (err) {
       console.error("Add facility error:", err?.response?.data || err);
-      toast.error(err?.response?.data?.message || "Could not add facility");
+      if (err.response?.status === 401) {
+        toast.error("Session expired. Please log in again.");
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/admindash', { replace: true });
+      } else {
+        toast.error(err?.response?.data?.message || "Could not add facility");
+      }
     }
   };
 
   const handleEditFacility = async (payload, imageFile, facilityId) => {
+    if (!checkAuth()) return;
+    
     try {
       const formData = new FormData();
       formData.append('name', payload.name);
       formData.append('description', payload.description);
       formData.append('capacity', payload.capacity);
       formData.append('status', payload.status);
-      formData.append('availableDates', JSON.stringify(payload.availableDates));
+      formData.append('availability', JSON.stringify(payload.availability));
       if (imageFile) formData.append('image', imageFile);
 
       await axios.put(`${base}/bookafaci/facility/${facilityId}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 
+          'Authorization': `Bearer ${getToken()}`,
+          'Content-Type': 'multipart/form-data'
+        }
       });
       toast.success("Facility updated successfully");
       setIsFacilityModalOpen(false);
       fetchFacilities();
     } catch (err) {
       console.error("Edit facility error:", err?.response?.data || err);
-      toast.error(err?.response?.data?.message || "Could not update facility");
+      if (err.response?.status === 401) {
+        toast.error("Session expired. Please log in again.");
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/admindash', { replace: true });
+      } else {
+        toast.error(err?.response?.data?.message || "Could not update facility");
+      }
     }
   };
 
   const handleDeleteFacility = async (id) => {
+    if (!checkAuth()) return;
+    
     if (!confirm('Are you sure you want to delete this facility?')) return;
     try {
-      await axios.delete(`${base}/bookafaci/facility/${id}`);
+      await axios.delete(`${base}/bookafaci/facility/${id}`, {
+        headers: { 'Authorization': `Bearer ${getToken()}` }
+      });
       toast.success("Facility deleted successfully");
       fetchFacilities();
     } catch (err) {
       console.error("Delete facility error:", err);
-      toast.error("Could not delete facility");
+      if (err.response?.status === 401) {
+        toast.error("Session expired. Please log in again.");
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/admindash', { replace: true });
+      } else {
+        toast.error("Could not delete facility");
+      }
     }
   };
 
   const handleAddEquipment = async (payload, imageFile, equipmentId) => {
+    if (!checkAuth()) return;
+    
     try {
       const formData = new FormData();
       formData.append('name', payload.name);
@@ -151,18 +260,31 @@ function AdminFacilities() {
       if (imageFile) formData.append('image', imageFile);
 
       await axios.post(`${base}/bookafaci/equipment`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 
+          'Authorization': `Bearer ${getToken()}`,
+          'Content-Type': 'multipart/form-data'
+        }
       });
       toast.success("Equipment added successfully");
       setIsEquipmentModalOpen(false);
       fetchEquipments();
     } catch (err) {
       console.error("Add equipment error:", err?.response?.data || err);
-      toast.error(err?.response?.data?.message || "Could not add equipment");
+      if (err.response?.status === 401) {
+        toast.error("Session expired. Please log in again.");
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/admindash', { replace: true });
+      } else {
+        toast.error(err?.response?.data?.message || "Could not add equipment");
+      }
     }
   };
 
   const handleEditEquipment = async (payload, imageFile, equipmentId) => {
+    if (!checkAuth()) return;
+    
     try {
       const formData = new FormData();
       formData.append('name', payload.name);
@@ -171,26 +293,49 @@ function AdminFacilities() {
       if (imageFile) formData.append('image', imageFile);
 
       await axios.put(`${base}/bookafaci/equipment/${equipmentId}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 
+          'Authorization': `Bearer ${getToken()}`,
+          'Content-Type': 'multipart/form-data'
+        }
       });
       toast.success("Equipment updated successfully");
       setIsEquipmentModalOpen(false);
       fetchEquipments();
     } catch (err) {
       console.error("Edit equipment error:", err?.response?.data || err);
-      toast.error(err?.response?.data?.message || "Could not update equipment");
+      if (err.response?.status === 401) {
+        toast.error("Session expired. Please log in again.");
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/admindash', { replace: true });
+      } else {
+        toast.error(err?.response?.data?.message || "Could not update equipment");
+      }
     }
   };
 
   const handleDeleteEquipment = async (id) => {
+    if (!checkAuth()) return;
+    
     if (!confirm('Are you sure you want to delete this equipment?')) return;
     try {
-      await axios.delete(`${base}/bookafaci/equipment/${id}`);
+      await axios.delete(`${base}/bookafaci/equipment/${id}`, {
+        headers: { 'Authorization': `Bearer ${getToken()}` }
+      });
       toast.success("Equipment deleted successfully");
       fetchEquipments();
     } catch (err) {
       console.error("Delete equipment error:", err);
-      toast.error("Could not delete equipment");
+      if (err.response?.status === 401) {
+        toast.error("Session expired. Please log in again.");
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/admindash', { replace: true });
+      } else {
+        toast.error("Could not delete equipment");
+      }
     }
   };
 
@@ -216,6 +361,16 @@ function AdminFacilities() {
     setSelectedEquipment(null);
     setIsEquipmentEditMode(false);
     setIsEquipmentModalOpen(true);
+  };
+
+  const getVisibleFacilities = () => {
+    const visibleCount = showAllFacilities ? facilities.length : ITEMS_TO_SHOW;
+    return (Array.isArray(facilities) ? facilities : []).slice(0, visibleCount);
+  };
+
+  const getVisibleEquipments = () => {
+    const visibleCount = showAllEquipments ? equipments.length : ITEMS_TO_SHOW;
+    return (Array.isArray(equipments) ? equipments : []).slice(0, visibleCount);
   };
 
   return (
@@ -281,13 +436,18 @@ function AdminFacilities() {
                   <span className="relative font-medium">+ Add Facility</span>
                 </button>
               </div>
+              
               <div 
                 id="facility-container"
-                className="flex gap-6 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-[#007BDA]/80 scrollbar-track-gray-100 scrollbar-thumb-rounded scrollbar-track-rounded snap-x snap-mandatory"
-                style={{ scrollbarWidth: 'thin', scrollbarColor: '#007BDA40 #F3F4F6' }}
+                className="grid grid-cols-2 gap-6 overflow-y-auto pb-6 scrollbar-thin scrollbar-thumb-[#007BDA]/80 scrollbar-track-gray-100 scrollbar-thumb-rounded scrollbar-track-rounded max-h-[750px] md:grid-cols-2 lg:grid-cols-2"
+                style={{ 
+                  scrollbarWidth: 'thin', 
+                  scrollbarColor: '#007BDA40 #F3F4F6',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))'
+                }}
               >
-                {(Array.isArray(facilities) ? facilities : []).map((facility) => (
-                  <div key={facility._id} className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col min-w-[320px] flex-shrink-0 snap-center group cursor-pointer hover:shadow-lg transition-all" onClick={() => openFacilityEditModal(facility)}>
+                {getVisibleFacilities().map((facility) => (
+                  <div key={facility._id} className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col w-full group cursor-pointer hover:shadow-lg transition-all max-w-sm" onClick={() => openFacilityEditModal(facility)}>
                     <img
                       src={
                         facility.image
@@ -336,7 +496,31 @@ function AdminFacilities() {
                   </div>
                 ))}
               </div>
-              {(Array.isArray(facilities) && facilities.length === 0) && (
+
+              {/* See More/Less Button for Facilities */}
+              {facilities.length > ITEMS_TO_SHOW && (
+                <div className="text-center mt-6">
+                  <button
+                    onClick={() => setShowAllFacilities(!showAllFacilities)}
+                    className="relative overflow-hidden text-white px-8 py-3 rounded-full shadow-lg group hover:shadow-xl transition-all duration-300 flex items-center gap-2 mx-auto"
+                  >
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 group-hover:scale-105" />
+                    <span className="relative z-10 font-medium">
+                      {showAllFacilities ? "See Less" : "See More"}
+                    </span>
+                    <ChevronDown 
+                      size={18} 
+                      className={`relative z-10 transition-transform duration-300 ${showAllFacilities ? 'rotate-180' : ''}`} 
+                    />
+                  </button>
+                  {showAllFacilities && (
+                    <p className="text-sm text-gray-500 mt-2">Showing all {facilities.length} facilities</p>
+                  )}
+                </div>
+              )}
+
+              {/* Empty State */}
+              {(!Array.isArray(facilities) || facilities.length === 0) && (
                 <div className="text-center py-12">
                   <Building2 className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-gray-500 mb-2">No facilities found</h3>
@@ -344,7 +528,7 @@ function AdminFacilities() {
                     className="px-6 py-2 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all"
                     onClick={openFacilityAddModal}
                   >
-                    + Create Facility
+                    + Add Facility
                   </button>
                 </div>
               )}
@@ -365,13 +549,18 @@ function AdminFacilities() {
                   <span className="relative font-medium">+ Add Equipment</span>
                 </button>
               </div>
+              
               <div 
                 id="equipment-container"
-                className="flex gap-6 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-[#007BDA]/80 scrollbar-track-gray-100 scrollbar-thumb-rounded scrollbar-track-rounded snap-x snap-mandatory"
-                style={{ scrollbarWidth: 'thin', scrollbarColor: '#007BDA40 #F3F4F6' }}
+                className="grid grid-cols-2 gap-6 overflow-y-auto pb-6 scrollbar-thin scrollbar-thumb-[#007BDA]/80 scrollbar-track-gray-100 scrollbar-thumb-rounded scrollbar-track-rounded max-h-[750px] md:grid-cols-2 lg:grid-cols-2"
+                style={{ 
+                  scrollbarWidth: 'thin', 
+                  scrollbarColor: '#007BDA40 #F3F4F6',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))'
+                }}
               >
-                {(Array.isArray(equipments) ? equipments : []).map((equipment) => (
-                  <div key={equipment._id} className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col min-w-[320px] flex-shrink-0 snap-center group cursor-pointer hover:shadow-lg transition-all" onClick={() => openEquipmentEditModal(equipment)}>
+                {getVisibleEquipments().map((equipment) => (
+                  <div key={equipment._id} className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col w-full group cursor-pointer hover:shadow-lg transition-all max-w-sm" onClick={() => openEquipmentEditModal(equipment)}>
                     <img
                       src={
                         equipment.image
@@ -419,7 +608,31 @@ function AdminFacilities() {
                   </div>
                 ))}
               </div>
-              {(Array.isArray(equipments) && equipments.length === 0) && (
+
+              {/* See More/Less Button for Equipment */}
+              {equipments.length > ITEMS_TO_SHOW && (
+                <div className="text-center mt-6">
+                  <button
+                    onClick={() => setShowAllEquipments(!showAllEquipments)}
+                    className="relative overflow-hidden text-white px-8 py-3 rounded-full shadow-lg group hover:shadow-xl transition-all duration-300 flex items-center gap-2 mx-auto"
+                  >
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 group-hover:scale-105" />
+                    <span className="relative z-10 font-medium">
+                      {showAllEquipments ? "See Less" : "See More"}
+                    </span>
+                    <ChevronDown 
+                      size={18} 
+                      className={`relative z-10 transition-transform duration-300 ${showAllEquipments ? 'rotate-180' : ''}`} 
+                    />
+                  </button>
+                  {showAllEquipments && (
+                    <p className="text-sm text-gray-500 mt-2">Showing all {equipments.length} equipment items</p>
+                  )}
+                </div>
+              )}
+
+              {/* Empty State */}
+              {(!Array.isArray(equipments) || equipments.length === 0) && (
                 <div className="text-center py-12">
                   <Wrench className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-gray-500 mb-2">No equipment found</h3>
@@ -427,7 +640,7 @@ function AdminFacilities() {
                     className="px-6 py-2 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all"
                     onClick={openEquipmentAddModal}
                   >
-                    + Create Equipment
+                    + Add Equipment
                   </button>
                 </div>
               )}
