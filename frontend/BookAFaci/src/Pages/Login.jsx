@@ -17,7 +17,7 @@ const Login = () => {
         xl:w-[70%]
         " style={{
         }}>
-          <a href="/" className='text-center text-[10rem] font-bold text-white
+          <a href="/" className='text-center text-[10rem] font-bold text-white hover:box-shadow transition-all
         min-[320px]:text-[0rem]
         min-[375px]:text-[0rem]
         min-[425px]:text-[0rem]

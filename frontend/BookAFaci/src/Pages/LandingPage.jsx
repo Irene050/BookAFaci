@@ -16,7 +16,7 @@ function LandingPage() {
                     backgroundRepeat: 'no-repeat',
                 }}>
 
-                <div className='flex h-screen items-center text-white font-bold text-5xl gap-5 backdrop-blur-md p-4 overflow-hidden
+                <div className='flex h-screen items-center text-white font-bold text-5xl gap-5 backdrop-blur-md p-4 overflow-hidden bg-gradient-to-b from-transparent via-transparent via-85% to-[#346D9A]
                     min-[320px]:flex-col
                     min-[640px]:flex-col 
                     min-[640px]:mt-[10rem]
@@ -61,15 +61,29 @@ function LandingPage() {
                         xl:w-[40%]'/>
                     </div>
                 </div>
-                <Landingnav />
-            </main>
 
-            <footer className="w-full border-t bg-[#63bbff] border-white/30 text-white text-sm">
-                <div className="max-w-6xl mx-auto px-6 py-4 flex flex-wrap items-center justify-between gap-3">
-                    <span className="opacity-80">
+            </main>
+            <div className='flex flex-col min-h-screen bg-gradient-to-b from-[#346D9A] to-[#83C9FF]'>
+
+            </div>
+            <div className='flex flex-col min-h-screen '
+                style={{
+                    backgroundImage: `url(${landingbg})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'bottom',
+                    backgroundRepeat: 'no-repeat',
+                }}>
+                <div className="backdrop-blur-lg min-h-screen backdrop-brightness-50 
+                bg-gradient-to-b from-[#83C9FF] from-10% via-70% via-transparent to-90% to-transparent "></div>
+
+            </div>
+            <Landingnav />
+            <footer className="w-full border-t bg-[#000000] border-white/30 text-white text-sm">
+                <div className="px-6 py-4 flex flex-wrap items-center justify-between gap-3">
+                    <span className="opacity-80 mx-[10rem]">
                         © {new Date().getFullYear()} BookAFaci. All rights reserved.
                     </span>
-                    <div className="flex gap-4 opacity-80">
+                    <div className="flex gap-4 opacity-80 mx-[10rem]">
                         <a href="/user-select" className="hover:opacity-100 underline-offset-4 hover:underline">
                             Get Started
                         </a>

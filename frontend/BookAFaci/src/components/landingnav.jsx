@@ -41,7 +41,7 @@ function landingnav() {
                             <a href="#" onClick={() => setOpen(false)} className="block py-2 px-3 text-white rounded hover:text-[#b4dfff] md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">Services</a>
                         </li>
                         <li>
-                            <a href="#" onClick={() => setOpen(false)} className="block py-2 px-3 text-white rounded hover:text-[#b4dfff] md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">Docs</a>
+                            <a href="https://github.com/Irene050/BookAFaci" onClick={() => setOpen(false)} className="block py-2 px-3 text-white rounded hover:text-[#b4dfff] md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">Docs</a>
                         </li>
                         <li>
                             <a href="#" onClick={() => setOpen(false)} className="block py-2 px-3 text-white rounded hover:text-[#b4dfff] md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">Contact</a>
