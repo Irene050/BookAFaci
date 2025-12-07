@@ -2,7 +2,6 @@ import React, { useContext, createContext, useState, useEffect } from "react"
 import { LogOutIcon, ChevronLast, ChevronFirst } from "lucide-react"
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
-import logo from '../assets/logoipsum-406.svg';
 
 const SidebarContext = createContext()
 const raw = localStorage.getItem('user');
@@ -69,12 +68,15 @@ export default function Sidebar({ children }) {
       <nav className={`h-full flex flex-col bg-gradient-to-b from-[#FFFEFF] to-[#D2EDFF] border-r shadow-sm transition-all ${expanded ? "w-64" : "w-16"}`}>
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
-            src={logo}
+            src="/Bookafaci.svg"
             className={`overflow-hidden transition-all ${
-              expanded ? "w-32" : "w-0"
+              expanded ? "w-[10%]" : "hidden"
             }`}
-            alt=""
+            alt="BookAFaci Logo"
           />
+          <span className={`italic font-bold text-[1.3rem] mr-4 text-[#356d9a] whitespace-nowrap ${expanded ? 'inline-block' : 'hidden'}`}>
+            BOOKAFACI
+          </span>
           <button
             onClick={() => setExpanded((curr) => !curr)}
             className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"

@@ -108,22 +108,46 @@ function Topbar({ searchValue = '', onSearchChange, onFilterClick }) {
   };
 
   return (
-    <nav className="w-full bg-[#dbdbdb8f] h-[73px] rounded-b-[10px] sticky top-0 z-[20] flex items-center justify-between px-6 shadow-md backdrop-blur-sm font-inter">
-      <div className="flex-1">
+    <nav className="w-full bg-[#dbdbdb8f] h-[73px] rounded-b-[10px] sticky top-0 z-[20] flex items-center justify-between px-6 shadow-md backdrop-blur-sm font-inter
+      min-[320px]:h-[60px] min-[320px]:px-2
+      min-[375px]:h-[65px] min-[375px]:px-3
+      min-[425px]:px-4
+      sm:h-[68px] sm:px-5
+      md:h-[73px] md:px-6">
+      <div className="flex-1 min-w-0">
         {showSearch && (
-          <div className="flex items-center bg-white px-4 py-2 rounded-full shadow-sm w-[350px] gap-2">
-            <Search size={18} className="text-gray-500" />
+          <div className="flex items-center bg-white px-4 py-2 rounded-full shadow-sm max-w-[350px] gap-2
+            min-[320px]:max-w-[140px] min-[320px]:px-1.5 min-[320px]:py-1 min-[320px]:gap-1
+            min-[375px]:max-w-[170px] min-[375px]:px-2 min-[375px]:gap-1.5
+            min-[425px]:max-w-[220px] min-[425px]:px-3 min-[425px]:gap-2
+            sm:max-w-[260px] sm:px-3
+            md:max-w-[300px] md:px-4
+            lg:max-w-[350px]">
+            <Search size={18} className="text-gray-500 flex-shrink-0
+              min-[320px]:w-3.5 min-[320px]:h-3.5
+              min-[375px]:w-4 min-[375px]:h-4
+              sm:w-[18px] sm:h-[18px]" />
             <input
               type="text"
               placeholder="Search"
               value={searchValue}
               onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
-              className="ml-2 flex-1 bg-transparent outline-none text-gray-700"
+              className="ml-2 flex-1 min-w-0 bg-transparent outline-none text-gray-700
+                min-[320px]:text-[10px] min-[320px]:ml-0.5 min-[320px]:placeholder:text-[10px]
+                min-[375px]:text-xs min-[375px]:ml-1
+                min-[425px]:text-sm min-[425px]:ml-1.5
+                sm:text-sm sm:ml-2
+                md:text-base
+                lg:placeholder:text-[0.9rem]"
             />
             <button
               type="button"
               onClick={() => onFilterClick && onFilterClick()}
-              className="relative overflow-hidden text-white px-3 py-1 rounded-full shadow group text-sm"
+              className="relative overflow-hidden text-white px-3 py-1 rounded-full shadow group text-sm flex-shrink-0
+                min-[320px]:px-1.5 min-[320px]:py-0.5 min-[320px]:text-[10px]
+                min-[375px]:px-2 min-[375px]:py-0.5 min-[375px]:text-[10px]
+                min-[425px]:px-2 min-[425px]:py-1 min-[425px]:text-xs
+                sm:px-3 sm:py-1 sm:text-sm"
               aria-label="Open filters"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
@@ -134,19 +158,32 @@ function Topbar({ searchValue = '', onSearchChange, onFilterClick }) {
         )}
       </div>
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1
+        min-[320px]:gap-0.5
+        min-[375px]:gap-1
+        sm:gap-1">
         <div className="relative" ref={containerRef}>
           <button
             onClick={() => setNotifOpen((s) => !s)}
-            className="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center hover:bg-gray-100 transition"
+            className="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center hover:bg-gray-100 transition
+              min-[320px]:w-8 min-[320px]:h-8
+              min-[375px]:w-9 min-[375px]:h-9
+              sm:w-10 sm:h-10"
             aria-expanded={notifOpen}
             aria-haspopup="true"
           >
-            <Bell size={20} className="text-gray-600" />
+            <Bell size={20} className="text-gray-600
+              min-[320px]:w-4 min-[320px]:h-4
+              min-[375px]:w-[18px] min-[375px]:h-[18px]
+              sm:w-5 sm:h-5" />
           </button>
 
           {notifOpen && (
-            <div className="absolute right-0 mt-2 w-80 bg-white shadow-lg rounded-lg overflow-hidden z-50">
+            <div className="absolute right-0 mt-2 w-80 bg-white shadow-lg rounded-lg overflow-hidden z-50
+              min-[320px]:w-[280px] min-[320px]:right-[-40px]
+              min-[375px]:w-[300px] min-[375px]:right-[-20px]
+              sm:w-[320px] sm:right-0
+              md:w-80">
               <div className="flex items-center justify-between px-3 py-2 border-b">
                 <div className="font-semibold">Notifications</div>
                 <div className="flex items-center gap-2">
@@ -175,15 +212,31 @@ function Topbar({ searchValue = '', onSearchChange, onFilterClick }) {
           )}
         </div>
 
-        <div className="flex p-3 gap-3">
+        <div className="flex p-3 gap-3
+          min-[320px]:p-1 min-[320px]:gap-1.5
+          min-[375px]:p-2 min-[375px]:gap-2
+          sm:p-2.5 sm:gap-2.5
+          md:p-3 md:gap-3">
           <img
             src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || '')}&background=c7d2fe&color=3730a3&bold=true`}
             alt=""
-            className="w-10 h-10 rounded-[2rem]"
+            className="w-10 h-10 rounded-[2rem]
+              min-[320px]:w-7 min-[320px]:h-7
+              min-[375px]:w-8 min-[375px]:h-8
+              sm:w-9 sm:h-9
+              md:w-10 md:h-10"
           />
-          <div className="leading-4">
-            <h4 className="font-semibold">{user?.name}</h4>
-            <span className="text-xs text-gray-600">{user?.email}</span>
+          <div className="leading-4
+            min-[320px]:hidden
+            min-[425px]:block min-[425px]:leading-3
+            sm:leading-4">
+            <h4 className="font-semibold
+              min-[425px]:text-xs
+              sm:text-sm
+              md:text-base">{user?.name}</h4>
+            <span className="text-xs text-gray-600
+              min-[425px]:text-[10px]
+              sm:text-xs">{user?.email}</span>
           </div>
         </div>
       </div>

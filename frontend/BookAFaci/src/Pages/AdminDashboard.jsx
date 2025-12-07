@@ -251,7 +251,7 @@ function AdminDashboard() {
         <div className="bg-gradient-to-b from-[#E0E0E0] via-[#DDF2FF] to-[#E0E0E0] h-fit rounded-[10px] p-[1px] mt-[20px]">
           <h1 className='pl-[35px] pt-[35px] mb-5 font-inter font-bold text-[2rem] text-[#007BDA]'>Dashboard</h1>
           <div className='flex flex-wrap items-center gap-[10rem] mb-1 pl-[45px] pr-[45px] pb-[45px] 
-                      min-[320px]:flex-wrap min-[320px]:gap-[2rem] max-[640px]:flex-wrap md:flex-wrap lg:flex-wrap'>
+              min-[320px]:flex-wrap min-[320px]:gap-[2rem] max-[640px]:flex-wrap md:flex-wrap lg:flex-wrap'>
 
             {/* Total -> navigate to all in bks */}
             <button
@@ -342,7 +342,22 @@ function AdminDashboard() {
             </button>
           </div>
 
-          <div className='grid grid-flow-col gap-[45px] pl-[45px] pr-[45px] pb-[45px]'>
+          <div className='grid grid-flow-col gap-[45px] pl-[45px] pr-[45px] pb-[45px]
+            min-[320px]:flex
+            min-[320px]:flex-col
+            min-[375px]:flex
+            min-[375px]:flex-col
+            min-[425px]:flex
+            min-[425px]:flex-col
+            sm:flex 
+            sm:flex-col
+            md:flex
+            md:flex-col
+            lg:grid
+            lg:grid-flow-col
+            xl:grid
+            xl:grid-flow-col
+            '>
             {/* Most recent pending booking card */}
             <div
               role="button"
@@ -425,7 +440,15 @@ function AdminDashboard() {
                 <div className='text-gray-500'>No approved bookings</div>
               )}
             </div>
-            <div className='h-[30rem] font-inter flex items-center justify-center text-center bg-white col-span-2 row-span-2 rounded-[10px] drop-shadow-lg transition-all hover:transform hover:scale-[1.01]'><Calendar /></div>
+            <div className='font-inter flex items-center justify-center text-center bg-white col-span-2 row-span-2 rounded-[10px] drop-shadow-lg transition-all hover:transform hover:scale-[1.01]
+              min-[320px]:h-[35rem] min-[320px]:w-[full]
+              min-[375px]:h-[35rem] min-[375px]:w-[full]
+              min-[425px]:h-[35rem] min-[425px]:w-[full]
+              sm:h-[35rem] sm:w-[full]
+              md:h-[35rem] md:w-[full]
+              lg:h-[30rem] lg:w-[full]
+              xl:h-[30rem] xl:w-[full]
+              '><Calendar /></div>
           </div>
 
         </div>

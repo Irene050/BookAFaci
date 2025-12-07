@@ -87,7 +87,7 @@ function LoginForm() {
         </div>
 
         <h1 className="text-center font-Inter font-bold text-[23px]">Welcome Back!</h1>
-        <h3 className="text-center font-Inter text-[15px] font-medium mb-[45px] text-[#717171]/80">Please enter your details</h3>
+        <h3 className="text-center font-Inter text-[15px] font-medium mb-[1rem] text-[#717171]/80">Please enter your details</h3>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="mb-4">
             <label className="block text-sm font-Inter font-bold text-black">Email</label>

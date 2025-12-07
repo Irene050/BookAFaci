@@ -1,9 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 function landingnav() {
     const [open, setOpen] = useState(false);
+    const [prevScrollPos, setPrevScrollPos] = useState(0);
+    const [visible, setVisible] = useState(true);
+    
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollPos = window.scrollY;
+            
+            // Show navbar when scrolling up or at the top
+            setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
+            
+            setPrevScrollPos(currentScrollPos);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [prevScrollPos]);
+    
+    const handleSmoothScroll = (e, targetId) => {
+        e.preventDefault();
+        setOpen(false);
+        setTimeout(() => {
+            const element = document.getElementById(targetId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 100);
+    };
+    
     return (
-        <nav className="bg-neutral-primary fixed w-full h-24 top-0 left-0 border-b border-[#3981b1b4] backdrop-blur-lg bg-[#3981b1b4] font-inter">
+        <nav className={`bg-neutral-primary fixed w-full h-24 left-0 border-b border-[#3981b1b4] backdrop-blur-lg bg-[#3981b1b4] font-inter transition-all duration-300 z-50 ${visible ? 'top-0' : '-top-24'}`}>
             <div className="max-w-[150rem] flex flex-wrap items-center justify-between mt-5 mx-auto p-4">
                 <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                     <span className="ml-[1rem] self-center text-xl text-heading font-semibold whitespace-nowrap text-white">BOOKAFACI</span>
@@ -32,19 +60,16 @@ function landingnav() {
                     xl:bg-transparent
                     ">
                         <li>
-                            <a href="#" onClick={() => setOpen(false)} className="block py-2 px-3 text-white bg-brand rounded md:bg-transparent md:text-fg-brand md:p-0 hover:text-[#b4dfff]" aria-current="page">Home</a>
+                            <a href="#Home" onClick={() => setOpen(false)} className="block py-2 px-3 text-white bg-brand rounded md:bg-transparent md:text-fg-brand md:p-0 hover:text-[#b4dfff]" aria-current="page">Home</a>
                         </li>
                         <li>
-                            <a href="#" onClick={() => setOpen(false)} className="block py-2 px-3 text-white rounded hover:text-[#b4dfff] md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">About</a>
-                        </li>
-                        <li>
-                            <a href="#" onClick={() => setOpen(false)} className="block py-2 px-3 text-white rounded hover:text-[#b4dfff] md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">Services</a>
+                            <a href="#About" onClick={() => setOpen(false)} className="block py-2 px-3 text-white rounded hover:text-[#b4dfff] md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">About</a>
                         </li>
                         <li>
                             <a href="https://github.com/Irene050/BookAFaci" onClick={() => setOpen(false)} className="block py-2 px-3 text-white rounded hover:text-[#b4dfff] md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">Docs</a>
                         </li>
                         <li>
-                            <a href="#" onClick={() => setOpen(false)} className="block py-2 px-3 text-white rounded hover:text-[#b4dfff] md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">Contact</a>
+                            <a href="#Devs" onClick={(e) => handleSmoothScroll(e, 'Devs')} className="block py-2 px-3 text-white rounded hover:text-[#b4dfff] md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">Devs</a>
                         </li>
                         {/* Mobile-only login link */}
                         <li className="md:hidden">

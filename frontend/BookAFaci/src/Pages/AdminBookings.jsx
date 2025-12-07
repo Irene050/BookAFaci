@@ -76,7 +76,9 @@ function AdminBookings() {
         <SidebarItem icon={<Users size={20} />} text="Users" active={false} onClick={() => navigate("/adminusers")} />
       </Sidebar>
 
-      <main className="flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5"
+      <main className="flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5
+        min-[320px]:w-[350px] max-[640px]:w-[450px] md:w-[450px] lg:w-[450px]
+        min-[320px]:px-2 min-[375px]:px-3 min-[425px]:px-4 sm:px-4 md:px-6"
         style={{
           paddingLeft: '5.5rem',
           backgroundImage: `linear-gradient(rgba(194, 217, 249, 0.9), rgba(194, 217, 249, 0.9)), url(${loginbg})`,
@@ -137,14 +139,19 @@ function AdminBookings() {
         )}
 
         <div className="bg-gradient-to-b from-[#E0E0E0] via-[#DDF2FF] to-[#E0E0E0] rounded-[10px] p-[1px] mt-[20px]">
-          <div className="rounded-[10px] p-10 mt-[20px]">
-            <div className="flex items-center justify-between w-full mb-8">
-              <h1 className="font-inter font-bold text-[2rem] text-[#007BDA]">Booking Management</h1>
+          <div className="rounded-[10px] p-10 mt-[20px]
+            min-[320px]:p-4 min-[375px]:p-5 min-[425px]:p-6 sm:p-6 md:p-8 lg:p-10">
+            <div className="flex items-center justify-between w-full mb-8
+              min-[320px]:mb-4 min-[375px]:mb-5 sm:mb-6 md:mb-8">
+              <h1 className="font-inter font-bold text-[2rem] text-[#007BDA]
+                min-[320px]:text-[1.5rem] min-[375px]:text-[1.75rem] sm:text-[1.75rem] md:text-[2rem]">Booking Management</h1>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6
+              min-[320px]:gap-3 min-[375px]:gap-4 min-[425px]:gap-4 sm:gap-5 md:gap-6">
               {/* status tabs (same styles as UserBookings.jsx) */}
-              <div className="col-span-1 lg:col-span-3 flex gap-3 mb-6 flex-wrap w-full">
+              <div className="col-span-1 lg:col-span-3 flex gap-3 mb-6 flex-wrap w-full
+                min-[320px]:gap-2 min-[375px]:gap-2 sm:gap-2 md:gap-3">
                 {(() => {
                   const statuses = ['all', 'upcoming', 'pending', 'approved', 'rejected', 'completed', 'cancelled'];
                   const now = new Date();
@@ -169,7 +176,11 @@ function AdminBookings() {
                         setSelectedStatus(status);
                         navigate(`/adminbks?status=${status}`);
                       }}
-                      className={`px-4 py-2 rounded-lg ${selectedStatus === status ? 'bg-gradient-to-r from-[#63bbff] to-[#346D9A] text-[#ffffff]' : 'bg-transparent text-gray-700 hover:bg-white'}`}
+                      className={`px-4 py-2 rounded-lg ${selectedStatus === status ? 'bg-gradient-to-r from-[#63bbff] to-[#346D9A] text-[#ffffff]' : 'bg-transparent text-gray-700 hover:bg-white'}
+                        min-[320px]:px-2 min-[320px]:py-1 min-[320px]:text-sm
+                        min-[375px]:px-3 min-[375px]:py-1.5
+                        sm:px-3 sm:py-1.5
+                        md:px-4 md:py-2`}
                       aria-pressed={selectedStatus === status}
                     >
                       <span className="capitalize">{status}</span>
@@ -262,7 +273,8 @@ function AdminBookings() {
                               {(b.status === 0 || b.status === '0') ? 'upcoming' : (b.status || 'unknown')}
                             </span>
 
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2
+                              min-[320px]:gap-1 min-[375px]:gap-1.5 sm:gap-2">
                               <button
                                 title="Approve"
                                 onClick={async () => {
@@ -360,8 +372,11 @@ function AdminBookings() {
 
             {/* Edit modal */}
             {editingBooking && (
-              <div className="backdrop-blur-sm fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-                <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+              <div className="backdrop-blur-sm fixed inset-0 z-50 flex items-center justify-center bg-black/40
+                min-[320px]:px-4 min-[375px]:px-5 sm:px-6">
+                <div className="bg-white rounded-lg p-6 w-full max-w-2xl
+                  min-[320px]:p-4 min-[375px]:p-5 sm:p-6
+                  min-[320px]:max-w-[95%] min-[375px]:max-w-[90%] sm:max-w-xl md:max-w-2xl">
                   <h2 className="text-lg font-bold mb-4">Edit Booking</h2>
                   <form onSubmit={async (e) => {
                     e.preventDefault();
@@ -396,7 +411,9 @@ function AdminBookings() {
                       setEditLoading(false);
                     }
                   }}>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4
+                      min-[320px]:grid-cols-1 min-[375px]:grid-cols-1 sm:grid-cols-1 md:grid-cols-2
+                      min-[320px]:gap-3 min-[375px]:gap-3 sm:gap-3 md:gap-4">
                       <label className="flex flex-col">
                         <span className="text-sm mb-1">Booking Type</span>
                         <input name="bookingType" defaultValue={editingBooking.bookingType || ''} className="border p-2 rounded" />
@@ -422,8 +439,24 @@ function AdminBookings() {
                     </div>
 
                     <div className="mt-4 flex justify-end gap-2">
-                      <button type="button" onClick={() => setEditingBooking(null)} className="px-4 py-2 rounded bg-gray-100">Cancel</button>
-                      <button type="submit" disabled={editLoading} className="px-4 py-2 rounded bg-gradient-to-r from-[#63bbff] to-[#346D9A] text-white">{editLoading ? 'Saving...' : 'Save'}</button>
+                      <button 
+                        type="button" 
+                        onClick={() => setEditingBooking(null)} 
+                        className="relative overflow-hidden text-white px-4 py-2 rounded-full shadow group"
+                      >
+                        <span className="absolute inset-0 bg-gradient-to-r from-[#9a3434] to-[#ff8383] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                        <span className="absolute inset-0 bg-gradient-to-r from-[#ff8383] to-[#9a3434] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+                        <span className="relative z-10 font-medium">Cancel</span>
+                      </button>
+                      <button 
+                        type="submit" 
+                        disabled={editLoading} 
+                        className="relative overflow-hidden text-white px-4 py-2 rounded-full shadow group"
+                      >
+                        <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                        <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+                        <span className="relative z-10 font-medium">{editLoading ? 'Saving...' : 'Save'}</span>
+                      </button>
                     </div>
                   </form>
                 </div>

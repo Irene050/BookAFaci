@@ -434,19 +434,30 @@ useEffect(() => {
       </Sidebar>
 
       <main
-        className="flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5 overflow-hidden"
+        className="flex-1 bg-center bg-cover min-h-screen pb-5
+          min-[320px]:w-[350px] max-[640px]:w-[450px] md:w-[450px] lg:w-[450px]"
         style={{
           paddingLeft: '5.5rem',
           backgroundImage: `linear-gradient(rgba(194, 217, 249, 0.85), rgba(194, 217, 249, 0.85)), url(${loginbg})`,
         }}
       >
         <Topbar />
-
+        
+        <div className="px-6 min-[320px]:px-2 min-[375px]:px-3 min-[425px]:px-4 sm:px-4 md:px-6">
         <div className="bg-gradient-to-b from-[#E0E0E0] via-[#DDF2FF] to-[#E0E0E0] h-fit rounded-[10px] p-[1px] mt-[20px]">
-          <div className="flex items-center justify-between pl-[35px] pr-[45px] pt-[35px]">
-            <h1 className="font-inter font-bold text-[2rem] text-[#007BDA]">Facilities</h1>
+          <div className="flex items-center justify-between pl-[35px] pr-[45px] pt-[35px]
+            min-[320px]:flex-col min-[320px]:items-start min-[320px]:gap-3 min-[320px]:px-4 min-[320px]:pt-6
+            min-[375px]:flex-col min-[375px]:items-start min-[375px]:gap-3 min-[375px]:px-5
+            sm:flex-col sm:items-start sm:gap-3 sm:px-6
+            md:flex-row md:items-center md:gap-0
+            lg:flex-row">
+            <h1 className="font-inter font-bold text-[2rem] text-[#007BDA]
+              min-[320px]:text-[1.5rem] min-[375px]:text-[1.75rem] sm:text-[1.75rem] md:text-[2rem]">Facilities</h1>
             <button 
-              className="relative overflow-hidden text-white px-6 py-2 rounded-full shadow group"
+              className="relative overflow-hidden text-white px-6 py-2 rounded-full shadow group
+                min-[320px]:px-4 min-[320px]:py-1.5 min-[320px]:text-sm
+                min-[375px]:px-5 min-[375px]:py-2
+                sm:px-6 sm:py-2"
               onClick={openFacilityAddModal}
             >
               <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
@@ -455,7 +466,8 @@ useEffect(() => {
             </button>
           </div>
 
-          <div className="px-[45px] pb-[45px] pt-5">
+          <div className="px-[45px] pb-[45px] pt-5
+            min-[320px]:px-4 min-[375px]:px-5 sm:px-6 md:px-8 lg:px-[45px]">
             {/* --------------------------------------------------
                      FACILITIES SECTION
             -------------------------------------------------- */}
@@ -529,7 +541,8 @@ useEffect(() => {
                 )}
               </>
             ) : (
-              <div className="mt-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+              <div className="mt-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5
+                min-[320px]:gap-3 min-[375px]:gap-4 sm:gap-4 md:gap-5">
                 {facilities.map((f) => (
                   <div key={f._id} className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col">
                     <img
@@ -609,10 +622,19 @@ useEffect(() => {
           {/* --------------------------------------------------
                      EQUIPMENT SECTION
           -------------------------------------------------- */}
-          <div className="flex items-center justify-between pl-[35px] pr-[45px] pt-[10px]">
-            <h1 className="font-inter font-bold text-[2rem] text-[#007BDA]">Equipment</h1>
+          <div className="flex items-center justify-between pl-[35px] pr-[45px] pt-[10px]
+            min-[320px]:flex-col min-[320px]:items-start min-[320px]:gap-3 min-[320px]:px-4 min-[320px]:pt-4
+            min-[375px]:flex-col min-[375px]:items-start min-[375px]:gap-3 min-[375px]:px-5
+            sm:flex-col sm:items-start sm:gap-3 sm:px-6
+            md:flex-row md:items-center md:gap-0
+            lg:flex-row">
+            <h1 className="font-inter font-bold text-[2rem] text-[#007BDA]
+              min-[320px]:text-[1.5rem] min-[375px]:text-[1.75rem] sm:text-[1.75rem] md:text-[2rem]">Equipment</h1>
             <button 
-              className="relative overflow-hidden text-white px-6 py-2 rounded-full shadow group"
+              className="relative overflow-hidden text-white px-6 py-2 rounded-full shadow group
+                min-[320px]:px-4 min-[320px]:py-1.5 min-[320px]:text-sm
+                min-[375px]:px-5 min-[375px]:py-2
+                sm:px-6 sm:py-2"
               onClick={openEquipmentAddModal}
             >
               <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
@@ -621,7 +643,8 @@ useEffect(() => {
             </button>
           </div>
 
-          <div className="px-[45px] pb-[45px] pt-5">
+          <div className="px-[45px] pb-[45px] pt-5
+            min-[320px]:px-4 min-[375px]:px-5 sm:px-6 md:px-8 lg:px-[45px]">
             {!showAllEquipments ? (
               <>
                 <div className="flex gap-5 overflow-x-auto overflow-y-hidden pb-4 scrollbar-thin scrollbar-thumb-[#007BDA]/80 scrollbar-track-gray-100"
@@ -696,7 +719,8 @@ useEffect(() => {
                 )}
               </>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5
+                min-[320px]:gap-3 min-[375px]:gap-4 sm:gap-4 md:gap-5">
                 {equipments.map((eq) => (
                   <div
                     key={eq._id}
@@ -785,6 +809,7 @@ useEffect(() => {
             )}
           </div>
 
+        </div>
         </div>
       </main>
     </div>
