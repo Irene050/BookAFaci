@@ -119,7 +119,7 @@ function AdminDashboard() {
         }
 
         try {
-          // fetch all bookings and count those that are NOT cancelled
+          // fetch all bookings
           const token = localStorage.getItem('token') || '';
           const headers = token ? { Authorization: `Bearer ${token}` } : {};
           const bRes = await axios.get(`${base}/bookafaci/book`, { headers });
@@ -130,50 +130,56 @@ function AdminDashboard() {
               ? bPayload
               : (bPayload.data || bPayload.bookings || []);
 
+          // Helper functions to check status
+          const isPending = (s) => {
+            if (s === 0 || s === '0') return true;
+            if (s == null) return false;
+            const str = String(s).toLowerCase();
+            return str === 'pending';
+          };
+
+          const isApproved = (s) => {
+            if (s == null) return false;
+            const str = String(s).toLowerCase();
+            return str === 'approved';
+          };
+
           const isCancelled = (s) => {
             if (s == null) return false;
             const str = String(s).toLowerCase();
             return str === 'cancelled' || str === 'canceled';
           };
 
-          const nonCancelled = blist.filter(b => !isCancelled(b?.status));
-          setBookingsCount(nonCancelled.length);
+          // Count only pending bookings for "Review Bookings" card
+          const pendingBookings = blist.filter(b => isPending(b?.status));
+          setBookingsCount(pendingBookings.length);
 
-          // Compute latest pending and latest approved from the same bookings list
+          // Compute latest pending and latest approved
           try {
             setLatestPendingLoading(true);
             setLatestApprovedLoading(true);
 
-            // normalize pending: status === 0 || '0' OR status string 'pending'
-            const pending = (blist || []).filter(b => {
-              if (b.status === 0 || b.status === '0') return true;
-              return String(b.status || '').toLowerCase() === 'pending';
-            });
-
-            if (pending.length) {
-              pending.sort((a, b) => {
+            // Get most recent pending booking
+            if (pendingBookings.length) {
+              const sortedPending = [...pendingBookings].sort((a, b) => {
                 const ta = new Date(a.createdAt || a.startDate || 0).getTime();
                 const tb = new Date(b.createdAt || b.startDate || 0).getTime();
-                return tb - ta;
+                return tb - ta; // most recent first
               });
-              setLatestPending(pending[0]);
+              setLatestPending(sortedPending[0]);
             } else {
               setLatestPending(null);
             }
 
-            // approved: status string 'approved' (exclude status 0)
-            const approved = (blist || []).filter(b => {
-              if (b.status === 0 || b.status === '0') return false;
-              return String(b.status || '').toLowerCase() === 'approved';
-            });
-
-            if (approved.length) {
-              approved.sort((a, b) => {
+            // Get most recent approved booking
+            const approvedBookings = blist.filter(b => isApproved(b?.status));
+            if (approvedBookings.length) {
+              const sortedApproved = [...approvedBookings].sort((a, b) => {
                 const ta = new Date(a.createdAt || a.startDate || 0).getTime();
                 const tb = new Date(b.createdAt || b.startDate || 0).getTime();
-                return tb - ta;
+                return tb - ta; // most recent first
               });
-              setLatestApproved(approved[0]);
+              setLatestApproved(sortedApproved[0]);
             } else {
               setLatestApproved(null);
             }
@@ -372,7 +378,7 @@ function AdminDashboard() {
               ) : latestPending ? (
                 <div className='flex flex-col h-full'>
                   <div>
-                    <p className='font-bold text-xl text-[#1A1A1A] ml-10'>{latestPending.facility?.name ?? latestPending.facility ?? 'Facility'}</p>
+                    <p className='font-bold text-xl text-[#1A1A1A] ml-10'>{latestPending.facility?.name || 'Equipment Only'}</p>
                     <p className='ml-10 text-sm text-gray-600'>{latestPending.bookingType ?? ''}</p>
                   </div>
 
@@ -381,12 +387,15 @@ function AdminDashboard() {
                     <div><strong>To:</strong> {latestPending.endDate ? new Date(latestPending.endDate).toLocaleString() : '-'}</div>
 
                     <div className='mt-3'>
-                      <strong>Resources:</strong>
-                      {Array.isArray(latestPending.resource) && latestPending.resource.length ? (
-                        <ul className='list-disc list-inside text-sm'>
-                          {latestPending.resource.map(r => <li key={r._id || r}>{typeof r === 'object' ? (r.name || r._id) : r}</li>)}
-                        </ul>
-                      ) : <span className='ml-2 text-gray-500'> none</span>}
+                      <strong>Equipment:</strong>
+                      {(() => {
+                        const equipmentList = latestPending.equipment || latestPending.resource || [];
+                        return Array.isArray(equipmentList) && equipmentList.length ? (
+                          <ul className='list-disc list-inside text-sm'>
+                            {equipmentList.map(r => <li key={r._id || r}>{ typeof r === 'object' ? (r.name || r._id) : r }</li>)}
+                          </ul>
+                        ) : <span className='ml-2 text-gray-500'> none</span>;
+                      })()}
                     </div>
                   </div>
 
@@ -413,7 +422,7 @@ function AdminDashboard() {
               ) : latestApproved ? (
                 <div className='flex flex-col h-full'>
                   <div>
-                    <p className='font-bold text-xl text-[#1A1A1A] ml-10'>{latestApproved.facility?.name ?? latestApproved.facility ?? 'Facility'}</p>
+                    <p className='font-bold text-xl text-[#1A1A1A] ml-10'>{latestApproved.facility?.name || 'Equipment Only'}</p>
                     <p className='ml-10 text-sm text-gray-600'>{latestApproved.bookingType ?? ''}</p>
                   </div>
 
@@ -422,17 +431,20 @@ function AdminDashboard() {
                     <div><strong>To:</strong> {latestApproved.endDate ? new Date(latestApproved.endDate).toLocaleString() : '-'}</div>
 
                     <div className='mt-3'>
-                      <strong>Resources:</strong>
-                      {Array.isArray(latestApproved.resource) && latestApproved.resource.length ? (
-                        <ul className='list-disc list-inside text-sm'>
-                          {latestApproved.resource.map(r => <li key={r._id || r}>{typeof r === 'object' ? (r.name || r._id) : r}</li>)}
-                        </ul>
-                      ) : <span className='ml-2 text-gray-500'> none</span>}
+                      <strong>Equipment:</strong>
+                      {(() => {
+                        const equipmentList = latestApproved.equipment || latestApproved.resource || [];
+                        return Array.isArray(equipmentList) && equipmentList.length ? (
+                          <ul className='list-disc list-inside text-sm'>
+                            {equipmentList.map(r => <li key={r._id || r}>{typeof r === 'object' ? (r.name || r._id) : r}</li>)}
+                          </ul>
+                        ) : <span className='ml-2 text-gray-500'> none</span>;
+                      })()}
                     </div>
                   </div>
 
                   <div className='mt-2 ml-10'>
-                    <span className='px-3 py-1 rounded-full text-sm bg-yellow-100 text-yellow-800'>approved</span>
+                    <span className='px-3 py-1 rounded-full text-sm bg-green-100 text-green-800'>approved</span>
                     <div className='text-xs text-gray-500 mt-2'>Click to view all approved bookings</div>
                   </div>
                 </div>
