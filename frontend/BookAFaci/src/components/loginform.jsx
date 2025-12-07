@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-const base = import.meta.env.VITE_API_URL
+const base = import.meta.env.VITE_API_URL;
 
 import {
   Eye, EyeOff, Mail, KeyIcon
-} from "lucide-react"
+} from "lucide-react";
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -30,49 +30,50 @@ function LoginForm() {
       const response = await axios.post(`${base}/bookafaci/users/login`, data, {
         withCredentials: true,
       });
-      console.log('Login successful:');
+      console.log('Login successful:', response.data);
       
       localStorage.setItem('user', JSON.stringify(response.data.user));
       
+      const token = response.data.token || response.data.user.token || `user_${Date.now()}`;
+      localStorage.setItem('token', token);
+      localStorage.setItem('adminToken', token);
+
       const { accountType, role } = response.data.user || {};
       let destination = '/dashboard';
+      
       if (accountType === 'External') destination = '/dashboard-ext';
       else if (accountType === 'Internal') destination = '/dashboard-int';
-      if (role === 'admin') destination = '/admin';
+      if (role === 'admin') destination = '/admindash';
 
       toast.success('Login successful! Redirecting...', {
         position: "top-right",
         autoClose: 2800,
-        pauseOnHover : false,
+        pauseOnHover: false,
       });
       
-      // REDIRECT TO DASH
       setTimeout(() => navigate(destination, { replace: true }), 1200);
       
     } catch (error) {
       console.error('Login failed:', error);
       
       if (error.response) {
-        // ERROR response toast and message from backend
         toast.error(`Login failed: ${error.response.data.message}`, {
           position: "top-right",
           autoClose: 5000,
         });
       } else if (error.request) {
-        // Request made but no response received
         toast.error('Cannot connect to server. Please try again.', {
           position: "top-right",
           autoClose: 5000,
         });
       } else {
-        // ELSE general error
         toast.error('Login failed. Please check your credentials.', {
           position: "top-right",
           autoClose: 2000,
         });
       }
     }
-  }
+  };
 
   return (
     <div className="">
@@ -88,34 +89,34 @@ function LoginForm() {
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="mb-4">
             <label className="block text-sm font-Inter font-bold text-black">Email</label>
-              <div className="relative">
-               <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-               <input
-                 type="email"
-                 className="placeholder:font-Inter placeholder:text-[#717171]/30 mt-1 block w-full border border-[#A9A9A9] rounded-[10px] shadow-sm p-2 pl-10"
-                 placeholder="Enter your email"
-                 {...register("email")}
-               />
-             </div>
+            <div className="relative">
+              <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="email"
+                className="placeholder:font-Inter placeholder:text-[#717171]/30 mt-1 block w-full border border-[#A9A9A9] rounded-[10px] shadow-sm p-2 pl-10"
+                placeholder="Enter your email"
+                {...register("email")}
+              />
+            </div>
             {errors.email && <p className="text-red-500 text-sm mt-0">{errors.email.message}</p>}
           </div>
           <div className="mb-4">
             <label className="block text-sm font-Inter font-bold text-black">Password</label>
             <div className="relative">
-               <KeyIcon size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-               <input
-                 type={showPassword ? 'text' : 'password'}
-                 className="placeholder:font-Inter placeholder:text-[#717171]/30 mt-1 block w-full border border-[#A9A9A9] rounded-[10px] shadow-sm p-2 pl-10 pr-12"
-                 placeholder="Enter your password"
-                 {...register("password")}/>
-               <button
-                 type="button"
-                 onClick={() => setShowPassword((s) => !s)}
-                 className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-600 hover:text-gray-800"
-                 aria-label={showPassword ? 'Hide password' : 'Show password'}>
-                 {showPassword ? <EyeOff size={20} strokeWidth={1.5} className="text-[#000000]" /> : <Eye size={20} strokeWidth={1.5} className="text-[#000000]" />}
-               </button>
-             </div>
+              <KeyIcon size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type={showPassword ? 'text' : 'password'}
+                className="placeholder:font-Inter placeholder:text-[#717171]/30 mt-1 block w-full border border-[#A9A9A9] rounded-[10px] shadow-sm p-2 pl-10 pr-12"
+                placeholder="Enter your password"
+                {...register("password")}/>
+              <button
+                type="button"
+                onClick={() => setShowPassword((s) => !s)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-600 hover:text-gray-800"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}>
+                {showPassword ? <EyeOff size={20} strokeWidth={1.5} className="text-[#000000]" /> : <Eye size={20} strokeWidth={1.5} className="text-[#000000]" />}
+              </button>
+            </div>
             {errors.password && <p className="text-red-500 text-sm mt-0">{errors.password.message}</p>}
             <h1 className=" text-right text-sm font-Inter text-[#2A6495] font-bold mt-[6px] mb-[20px]">Forgot Password?</h1>
           </div>
@@ -137,7 +138,7 @@ function LoginForm() {
         </form>
       </div>
     </div>
-  )
+  );
 }
 
-export default LoginForm
+export default LoginForm;

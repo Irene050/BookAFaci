@@ -10,8 +10,8 @@ const validateFacility = [
     .withMessage('Capacity must be a positive integer'),
   body('status')
     .optional()
-    .isIn(['active', 'inactive'])
-    .withMessage('Status must be active or inactive'),
+    .isIn(['active', 'inactive', 'under maintenance'])
+    .withMessage('Status must be active, inactive, or under maintenance'),
   body('availability')
     .optional()
     .customSanitizer((value) => {
@@ -20,19 +20,33 @@ const validateFacility = [
         try {
           arr = JSON.parse(value);
           if (!Array.isArray(arr)) {
-            throw new Error('Availability must be a valid JSON array of dates');
+            throw new Error('Availability must be a valid JSON array of date range objects');
           }
         } catch (e) {
-          throw new Error('Availability must be a valid JSON array of dates');
+          throw new Error('Availability must be a valid JSON array of date range objects');
         }
       } else if (Array.isArray(value)) {
         arr = value;
       } else {
-        throw new Error('Availability must be an array of dates');
+        throw new Error('Availability must be an array of date range objects');
       }
-      for (const date of arr) {
-        if (isNaN(new Date(date).getTime())) {
-          throw new Error('Each availability date must be a valid date');
+
+      for (const range of arr) {
+        if (typeof range !== 'object' || range === null) {
+          throw new Error('Each availability item must be an object with startDate and endDate');
+        }
+        const { startDate, endDate } = range;
+        if (!startDate || !endDate) {
+          throw new Error('Each availability range must have startDate and endDate');
+        }
+        if (isNaN(new Date(startDate).getTime())) {
+          throw new Error('startDate must be a valid date');
+        }
+        if (isNaN(new Date(endDate).getTime())) {
+          throw new Error('endDate must be a valid date');
+        }
+        if (new Date(endDate) < new Date(startDate)) {
+          throw new Error('endDate must not be before startDate');
         }
       }
       return arr;
@@ -50,4 +64,4 @@ const validateFacility = [
   },
 ];
 
-module.exports = { validateFacility }
+module.exports = { validateFacility };
