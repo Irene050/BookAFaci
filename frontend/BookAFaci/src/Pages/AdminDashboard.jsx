@@ -80,7 +80,7 @@ function AdminDashboard() {
   useEffect(() => {
     const user = localStorage.getItem('user');
     if (!user) {
-      navigate('/admindash');
+      navigate('/login');
       return;
     }
 

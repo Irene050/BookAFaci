@@ -98,7 +98,11 @@ const getDashboardSummary = async (req, res) => {
     const now = new Date();
 
     const total = await Booking.countDocuments({ user: userObjectId });
-    const upcoming = await Booking.countDocuments({ user: userObjectId, startDate: { $gte: now } });
+    const upcoming = await Booking.countDocuments({ 
+      user: userObjectId, 
+      startDate: { $gte: now },
+      status: { $ne: "cancelled" }
+    });
     const cancelled = await Booking.countDocuments({ user: userObjectId, status: "cancelled" });
 
     res.status(200).json({ totalBookings: total, upcoming, cancelled });

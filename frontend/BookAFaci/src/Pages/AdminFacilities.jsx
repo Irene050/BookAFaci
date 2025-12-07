@@ -7,7 +7,7 @@ import Topbar from "../components/topbar";
 import FacilityModal from "../components/FacilityModal";
 import EquipmentModal from "../components/equipment";
 import loginbg from "../assets/Gradient blur.png";
-import { LayoutDashboard, Building2, Clipboard, Users, Edit3, Trash2, Wrench, ChevronDown } from "lucide-react";
+import { LayoutDashboard, Building2, Clipboard, Users, Edit3, Trash2, Wrench } from "lucide-react";
 
 const base = import.meta.env.VITE_API_URL || "";
 
@@ -59,7 +59,7 @@ useEffect(() => {
     const originalOverflow = document.body.style.overflow;
     const originalPaddingRight = document.body.style.paddingRight;
 
-    if (isModalOpen) {
+    if (isFacilityModalOpen) {
       const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
       if (scrollBarWidth > 0) {
         document.body.style.paddingRight = `${scrollBarWidth}px`;
@@ -74,7 +74,7 @@ useEffect(() => {
       document.body.style.overflow = originalOverflow || '';
       document.body.style.paddingRight = originalPaddingRight || '';
     };
-  }, [isModalOpen]);
+  }, [isFacilityModalOpen]);
 
   useEffect(() => {
     if (!checkAuth()) return;
@@ -99,14 +99,17 @@ useEffect(() => {
               : [];
         setFacilities(facilityList);
 
-        const equipmentList = Array.isArray(equipmentRes.data)
-          ? equipmentRes.data
-          : Array.isArray(equipmentRes.data?.equipments)
-            ? equipmentRes.data.equipments
-            : Array.isArray(equipmentRes.data?.data)
-              ? equipmentRes.data.data
+        console.log('Equipment response:', equipmentRes.data);
+        const equipmentList = Array.isArray(equipmentRes.data?.data)
+          ? equipmentRes.data.data
+          : Array.isArray(equipmentRes.data)
+            ? equipmentRes.data
+            : Array.isArray(equipmentRes.data?.equipments)
+              ? equipmentRes.data.equipments
               : [];
+        console.log('Parsed equipment list:', equipmentList);
         setEquipments(equipmentList);
+        console.log('Loaded equipments:', equipmentList);
       } catch (err) {
         console.error("Failed to load data", err);
         if (err.response?.status === 401) {
@@ -156,16 +159,17 @@ useEffect(() => {
       const res = await axios.get(`${base}/bookafaci/equipment`, {
         headers: { 'Authorization': `Bearer ${getToken()}` }
       });
-      const list = Array.isArray(res.data)
-        ? res.data
-        : Array.isArray(res.data?.equipments)
-        ? res.data.equipments
-        : Array.isArray(res.data?.data)
-          ? res.data.data
-          : [];
+      const list = Array.isArray(res.data?.data)
+        ? res.data.data
+        : Array.isArray(res.data)
+          ? res.data
+          : Array.isArray(res.data?.equipments)
+            ? res.data.equipments
+            : [];
       setEquipments(list);
+      console.log('Refreshed equipments:', list);
     } catch (err) {
-      console.error("Refresh equipment error:", err);
+      console.error("Refresh equipments error:", err);
       if (err.response?.status === 401) {
         toast.error("Session expired. Please log in again.");
         localStorage.removeItem('adminToken');
@@ -429,85 +433,137 @@ useEffect(() => {
         <SidebarItem icon={<Users size={20} />} text="Users" active={false} onClick={() => navigate("/adminusers")} />
       </Sidebar>
 
-      <main className="flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5 
-        min-[320px]:w-[350px] max-[640px]:w-[450px] md:w-[450px] lg:w-[450px]" 
+      <main
+        className="flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5 overflow-hidden"
         style={{
           paddingLeft: '5.5rem',
           backgroundImage: `linear-gradient(rgba(194, 217, 249, 0.85), rgba(194, 217, 249, 0.85)), url(${loginbg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}>
+        }}
+      >
         <Topbar />
 
-        <div className="bg-gradient-to-b from-[#E0E0E0] via-[#DDF2FF] to-[#E0E0E0] rounded-[10px] p-[1px] mt-[20px]">
-          <div className="rounded-[10px] p-10 mt-[20px]">
-            <h1 className="font-inter font-bold text-[2rem] text-[#007BDA] mb-12">Facilities & Equipment Management</h1>
+        <div className="bg-gradient-to-b from-[#E0E0E0] via-[#DDF2FF] to-[#E0E0E0] h-fit rounded-[10px] p-[1px] mt-[20px]">
+          <div className="flex items-center justify-between pl-[35px] pr-[45px] pt-[35px]">
+            <h1 className="font-inter font-bold text-[2rem] text-[#007BDA]">Facilities</h1>
+            <button 
+              className="relative overflow-hidden text-white px-6 py-2 rounded-full shadow group"
+              onClick={openFacilityAddModal}
+            >
+              <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+              <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+              <span className="relative font-medium">+ Add Facility</span>
+            </button>
+          </div>
 
-            {/* Facilities Section */}
-            <div className="mb-12">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-bold text-xl text-[#007BDA]">Facilities</h2>
-                <button 
-                  className="relative overflow-hidden text-white px-6 py-2 rounded-full shadow group"
-                  onClick={openFacilityAddModal}
-                >
-                  <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-opacity duration-300 ease-in-out group-hover:opacity-0"></span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"></span>
-                  <span className="relative font-medium">+ Add Facility</span>
-                </button>
-              </div>
-              
-              <div 
-                id="facility-container"
-                className="grid grid-cols-2 gap-6 overflow-y-auto pb-6 scrollbar-thin scrollbar-thumb-[#007BDA]/80 scrollbar-track-gray-100 scrollbar-thumb-rounded scrollbar-track-rounded max-h-[750px] md:grid-cols-2 lg:grid-cols-2"
-                style={{ 
-                  scrollbarWidth: 'thin', 
-                  scrollbarColor: '#007BDA40 #F3F4F6',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))'
-                }}
-              >
-                {getVisibleFacilities().map((facility) => (
-                  <div key={facility._id} className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col w-full group cursor-pointer hover:shadow-lg transition-all max-w-sm" onClick={() => openFacilityEditModal(facility)}>
+          <div className="px-[45px] pb-[45px] pt-5">
+            {/* --------------------------------------------------
+                     FACILITIES SECTION
+            -------------------------------------------------- */}
+            {!showAllFacilities ? (
+              <>
+                <div className="flex gap-5 overflow-x-auto overflow-y-hidden pb-4 scrollbar-thin scrollbar-thumb-[#007BDA]/80 scrollbar-track-gray-100"
+                  style={{ scrollbarWidth: 'thin', scrollbarColor: '#007BDA80 #F3F4F6' }}>
+                  {facilities.map((f) => (
+                    <div
+                      key={f._id}
+                      className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex-shrink-0 flex flex-col"
+                      style={{ minWidth: "20%" }}
+                    >
+                      <img
+                        src={f.image ? (f.image.startsWith('http') ? f.image : `${base}${f.image}`) : '/placeholder.png'}
+                        className="w-full h-40 rounded-xl object-cover mb-4"
+                        alt={f.name}
+                        onError={(e) => { e.target.src = '/placeholder.png'; }}
+                      />
+                      <p className="font-bold text-lg">{f.name}</p>
+                      <p className="text-gray-500 text-sm mb-2">{f.description}</p>
+
+                      <div className="flex flex-grow items-center gap-3 mt-2">
+                        <span className="text-sm text-gray-600">Capacity: {f.capacity}</span>
+                        <span className={`text-sm px-2 py-0.5 rounded ${
+                          f.status === 'active' ? 'bg-green-100 text-green-700' :
+                          f.status === 'inactive' ? 'bg-gray-100 text-gray-700' :
+                          'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {f.status}
+                        </span>
+                      </div>
+
+                      <div className="flex gap-2 mt-4">
+                        <button
+                          onClick={() => openFacilityEditModal(f)}
+                          className="flex-1 relative overflow-hidden text-white px-4 py-2 rounded-full shadow text-sm font-medium hover:shadow-lg transition-all"
+                        >
+                          <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF]" />
+                          <span className="relative z-10 flex items-center gap-2 justify-center">
+                            <Edit3 size={16} /> Edit
+                          </span>
+                        </button>
+                        <button
+                          onClick={() => handleDeleteFacility(f._id)}
+                          className="p-2 bg-red-100 hover:bg-red-200 rounded-full transition-all shadow-sm hover:shadow-md"
+                          title="Delete facility"
+                        >
+                          <Trash2 size={18} className="text-red-600" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {facilities.length > ITEMS_TO_SHOW && (
+                  <div className="mt-3 text-right">
+                    <button
+                      onClick={() => {
+                        const prevY = window.scrollY;
+                        setShowAllFacilities(true);
+                        requestAnimationFrame(() => window.scrollTo({ top: prevY, left: 0, behavior: 'instant' }));
+                      }}
+                      className="relative overflow-hidden text-white px-3 py-1 rounded-full shadow group"
+                    >
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+                      <span className="relative z-10 font-medium">Expand</span>
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="mt-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                {facilities.map((f) => (
+                  <div key={f._id} className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col">
                     <img
-                      src={
-                        facility.image
-                          ? (facility.image.startsWith('http') ? facility.image : `${base}${facility.image}`)
-                          : '/placeholder.png'
-                      }
+                      src={f.image ? (f.image.startsWith('http') ? f.image : `${base}${f.image}`) : '/placeholder.png'}
                       className="w-full h-40 rounded-xl object-cover mb-4"
-                      alt={facility.name}
+                      alt={f.name}
                       onError={(e) => { e.target.src = '/placeholder.png'; }}
                     />
-                    <h3 className="font-bold text-lg text-[#1A1A1A]">{facility.name}</h3>
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="text-sm text-gray-600">Capacity: {facility.capacity}</span>
-                      <span className={`text-sm px-2 py-0.5 rounded-md font-normal ${
-                        facility.status === 'active' ? 'bg-green-100 text-green-700' :
-                        facility.status === 'inactive' ? 'bg-yellow-100 text-yellow-800' :
-                        facility.status === 'under maintenance' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700'
+                    <p className="font-bold text-lg">{f.name}</p>
+                    <p className="text-gray-500 text-sm mb-2">{f.description}</p>
+
+                    <div className="flex items-center gap-3 mt-2">
+                      <span className="text-sm text-gray-600">Capacity: {f.capacity}</span>
+                      <span className={`text-sm px-2 py-0.5 rounded ${
+                        f.status === 'active' ? 'bg-green-100 text-green-700' :
+                        f.status === 'inactive' ? 'bg-gray-100 text-gray-700' :
+                        'bg-yellow-100 text-yellow-800'
                       }`}>
-                        {facility.status}
+                        {f.status}
                       </span>
                     </div>
-                    <div className="flex gap-2">
+
+                    <div className="flex gap-2 mt-4">
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openFacilityEditModal(facility);
-                        }}
+                        onClick={() => openFacilityEditModal(f)}
                         className="flex-1 relative overflow-hidden text-white px-4 py-2 rounded-full shadow text-sm font-medium hover:shadow-lg transition-all"
                       >
-                        <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] hover:opacity-90 transition-opacity duration-300" />
-                        <span className="relative z-10 flex items-center gap-2">
+                        <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF]" />
+                        <span className="relative z-10 flex items-center gap-2 justify-center">
                           <Edit3 size={16} /> Edit
                         </span>
                       </button>
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteFacility(facility._id);
-                        }}
+                        onClick={() => handleDeleteFacility(f._id)}
                         className="p-2 bg-red-100 hover:bg-red-200 rounded-full transition-all shadow-sm hover:shadow-md"
                         title="Delete facility"
                       >
@@ -516,110 +572,178 @@ useEffect(() => {
                     </div>
                   </div>
                 ))}
-              </div>
 
-              {/* See More/Less Button for Facilities */}
-              {facilities.length > ITEMS_TO_SHOW && (
-                <div className="text-center mt-6">
+                <div className="col-span-full text-right mt-3">
                   <button
-                    onClick={() => setShowAllFacilities(!showAllFacilities)}
-                    className="relative overflow-hidden text-white px-8 py-3 rounded-full shadow-lg group hover:shadow-xl transition-all duration-300 flex items-center gap-2 mx-auto"
+                    onClick={() => {
+                      const prevY = window.scrollY;
+                      setShowAllFacilities(false);
+                      requestAnimationFrame(() => window.scrollTo({ top: prevY, left: 0, behavior: 'instant' }));
+                    }}
+                    className="relative overflow-hidden text-white px-3 py-1 rounded-full shadow group"
                   >
-                    <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 group-hover:scale-105" />
-                    <span className="relative z-10 font-medium">
-                      {showAllFacilities ? "See Less" : "See More"}
-                    </span>
-                    <ChevronDown 
-                      size={18} 
-                      className={`relative z-10 transition-transform duration-300 ${showAllFacilities ? 'rotate-180' : ''}`} 
-                    />
-                  </button>
-                  {showAllFacilities && (
-                    <p className="text-sm text-gray-500 mt-2">Showing all {facilities.length} facilities</p>
-                  )}
-                </div>
-              )}
-
-              {/* Empty State */}
-              {(!Array.isArray(facilities) || facilities.length === 0) && (
-                <div className="text-center py-12">
-                  <Building2 className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-500 mb-2">No facilities found</h3>
-                  <button 
-                    className="px-6 py-2 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all"
-                    onClick={openFacilityAddModal}
-                  >
-                    + Add Facility
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                          <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+                    <span className="relative z-10 font-medium">Collapse</span>
                   </button>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
 
-            {/* Equipment Section */}
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-bold text-xl text-[#007BDA] flex items-center gap-2">
-                  Equipment
-                </h2>
+            {/* Empty State */}
+            {(!Array.isArray(facilities) || facilities.length === 0) && (
+              <div className="text-center py-12">
+                <Building2 className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-500 mb-2">No facilities found</h3>
                 <button 
-                  className="relative overflow-hidden text-white px-6 py-2 rounded-full shadow group"
-                  onClick={openEquipmentAddModal}
+                  className="px-6 py-2 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all"
+                  onClick={openFacilityAddModal}
                 >
-                  <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-opacity duration-300 ease-in-out group-hover:opacity-0"></span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"></span>
-                  <span className="relative font-medium">+ Add Equipment</span>
+                  + Add Facility
                 </button>
               </div>
-              
-              <div 
-                id="equipment-container"
-                className="grid grid-cols-2 gap-6 overflow-y-auto pb-6 scrollbar-thin scrollbar-thumb-[#007BDA]/80 scrollbar-track-gray-100 scrollbar-thumb-rounded scrollbar-track-rounded max-h-[750px] md:grid-cols-2 lg:grid-cols-2"
-                style={{ 
-                  scrollbarWidth: 'thin', 
-                  scrollbarColor: '#007BDA40 #F3F4F6',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))'
-                }}
-              >
-                {getVisibleEquipments().map((equipment) => (
-                  <div key={equipment._id} className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col w-full group cursor-pointer hover:shadow-lg transition-all max-w-sm" onClick={() => openEquipmentEditModal(equipment)}>
+            )}
+          </div>
+          <hr className="my-2 mx-[45px] border-dashed border-[#346D9A]/50" />
+
+          {/* --------------------------------------------------
+                     EQUIPMENT SECTION
+          -------------------------------------------------- */}
+          <div className="flex items-center justify-between pl-[35px] pr-[45px] pt-[10px]">
+            <h1 className="font-inter font-bold text-[2rem] text-[#007BDA]">Equipment</h1>
+            <button 
+              className="relative overflow-hidden text-white px-6 py-2 rounded-full shadow group"
+              onClick={openEquipmentAddModal}
+            >
+              <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                          <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+              <span className="relative font-medium">+ Add Equipment</span>
+            </button>
+          </div>
+
+          <div className="px-[45px] pb-[45px] pt-5">
+            {!showAllEquipments ? (
+              <>
+                <div className="flex gap-5 overflow-x-auto overflow-y-hidden pb-4 scrollbar-thin scrollbar-thumb-[#007BDA]/80 scrollbar-track-gray-100"
+                  style={{ scrollbarWidth: 'thin', scrollbarColor: '#007BDA80 #F3F4F6' }}>
+                  {equipments.map((eq) => (
+                    <div
+                      key={eq._id}
+                      className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex-shrink-0 flex flex-col"
+                      style={{ minWidth: "20%" }}
+                    >
+                      <img
+                        src={eq.image ? (eq.image.startsWith("http") ? eq.image : `${base}${eq.image}`) : "/placeholder.png"}
+                        className="w-full h-40 rounded-xl object-cover mb-4"
+                        alt={eq.name}
+                        onError={(e) => { e.target.src = '/placeholder.png'; }}
+                        style={{ 
+                          objectFit: "cover", 
+                          objectPosition: "center"
+                        }}
+                      />
+                      <p className="font-bold text-lg">{eq.name}</p>
+                      <p className="text-gray-500 text-sm mb-2">{eq.description}</p>
+
+                      <div className="flex items-center gap-3 mt-2">
+                        <span className="text-sm text-gray-600">Qty: {eq.quantity}</span>
+                        <span className={`text-sm px-2 py-0.5 rounded ${
+                          eq.status === "available" || eq.status === "active" ? "bg-green-100 text-green-700" :
+                          eq.status === "unavailable" || eq.status === "inactive" ? "bg-red-100 text-red-700" :
+                          "bg-gray-100 text-gray-700"
+                        }`}>
+                          {eq.status}
+                        </span>
+                      </div>
+
+                      <div className="flex gap-2 mt-4">
+                        <button
+                          onClick={() => openEquipmentEditModal(eq)}
+                          className="flex-1 relative overflow-hidden text-white px-4 py-2 rounded-full shadow text-sm font-medium hover:shadow-lg transition-all"
+                        >
+                          <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF]" />
+                          <span className="relative z-10 flex items-center gap-2 justify-center">
+                            <Edit3 size={16} /> Edit
+                          </span>
+                        </button>
+                        <button
+                          onClick={() => handleDeleteEquipment(eq._id)}
+                          className="p-2 bg-red-100 hover:bg-red-200 rounded-full transition-all shadow-sm hover:shadow-md"
+                          title="Delete equipment"
+                        >
+                          <Trash2 size={18} className="text-red-600" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {equipments.length > ITEMS_TO_SHOW && (
+                  <div className="mt-3 text-right">
+                    <button
+                      onClick={() => {
+                        const prevY = window.scrollY;
+                        setShowAllEquipments(true);
+                        requestAnimationFrame(() => window.scrollTo({ top: prevY, left: 0, behavior: 'smooth' }));
+                      }}
+                      className="relative overflow-hidden text-white px-3 py-1 rounded-full shadow group"
+                    >
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+                      <span className="relative z-10 font-medium">Expand</span>
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                {equipments.map((eq) => (
+                  <div
+                    key={eq._id}
+                    className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col"
+                  >
                     <img
                       src={
-                        equipment.image
-                          ? (equipment.image.startsWith('http') ? equipment.image : `${base}${equipment.image}`)
-                          : '/placeholder.png'
+                        eq.image
+                          ? (eq.image.startsWith("http") ? eq.image : `${base}${eq.image}`)
+                          : "/placeholder.png"
                       }
                       className="w-full h-40 rounded-xl object-cover mb-4"
-                      alt={equipment.name}
+                      alt={eq.name}
                       onError={(e) => { e.target.src = '/placeholder.png'; }}
                     />
-                    <h3 className="font-bold text-lg text-[#1A1A1A]">{equipment.name}</h3>
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="text-sm text-gray-600">Quantity: {equipment.quantity}</span>
-                      <span className={`text-sm px-2 py-0.5 rounded-md font-normal ${
-                        equipment.status === 'active' ? 'bg-green-100 text-green-700' :
-                        equipment.status === 'inactive' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'
-                      }`}>
-                        {equipment.status}
+
+                    <p className="font-bold text-lg">{eq.name}</p>
+                    <p className="text-gray-500 text-sm mb-2">{eq.description}</p>
+
+                    <div className="flex items-center gap-3 mt-2">
+                      <span className="text-sm text-gray-600">Qty: {eq.quantity}</span>
+
+                      <span
+                        className={`text-sm px-2 py-0.5 rounded ${
+                          eq.status === "available" || eq.status === "active"
+                            ? "bg-green-100 text-green-700"
+                            : eq.status === "unavailable" || eq.status === "inactive"
+                            ? "bg-red-100 text-red-700"
+                            : "bg-gray-100 text-gray-700"
+                        }`}
+                      >
+                        {eq.status}
                       </span>
                     </div>
-                    <div className="flex gap-2">
+
+                    <div className="flex gap-2 mt-4">
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openEquipmentEditModal(equipment);
-                        }}
+                        onClick={() => openEquipmentEditModal(eq)}
                         className="flex-1 relative overflow-hidden text-white px-4 py-2 rounded-full shadow text-sm font-medium hover:shadow-lg transition-all"
                       >
-                        <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] hover:opacity-90 transition-opacity duration-300" />
-                        <span className="relative z-10 flex items-center gap-2">
+                        <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF]" />
+                        <span className="relative z-10 flex items-center gap-2 justify-center">
                           <Edit3 size={16} /> Edit
                         </span>
                       </button>
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteEquipment(equipment._id);
-                        }}
+                        onClick={() => handleDeleteEquipment(eq._id)}
                         className="p-2 bg-red-100 hover:bg-red-200 rounded-full transition-all shadow-sm hover:shadow-md"
                         title="Delete equipment"
                       >
@@ -628,45 +752,39 @@ useEffect(() => {
                     </div>
                   </div>
                 ))}
-              </div>
 
-              {/* See More/Less Button for Equipment */}
-              {equipments.length > ITEMS_TO_SHOW && (
-                <div className="text-center mt-6">
+                <div className="col-span-full text-right mt-3">
                   <button
-                    onClick={() => setShowAllEquipments(!showAllEquipments)}
-                    className="relative overflow-hidden text-white px-8 py-3 rounded-full shadow-lg group hover:shadow-xl transition-all duration-300 flex items-center gap-2 mx-auto"
+                    onClick={() => {
+                      const prevY = window.scrollY;
+                      setShowAllEquipments(false);
+                      requestAnimationFrame(() => window.scrollTo({ top: prevY, left: 0, behavior: 'instant' }));
+                    }}
+                    className="relative overflow-hidden text-white px-3 py-1 rounded-full shadow group"
                   >
-                    <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 group-hover:scale-105" />
-                    <span className="relative z-10 font-medium">
-                      {showAllEquipments ? "See Less" : "See More"}
-                    </span>
-                    <ChevronDown 
-                      size={18} 
-                      className={`relative z-10 transition-transform duration-300 ${showAllEquipments ? 'rotate-180' : ''}`} 
-                    />
-                  </button>
-                  {showAllEquipments && (
-                    <p className="text-sm text-gray-500 mt-2">Showing all {equipments.length} equipment items</p>
-                  )}
-                </div>
-              )}
-
-              {/* Empty State */}
-              {(!Array.isArray(equipments) || equipments.length === 0) && (
-                <div className="text-center py-12">
-                  <Wrench className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-500 mb-2">No equipment found</h3>
-                  <button 
-                    className="px-6 py-2 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all"
-                    onClick={openEquipmentAddModal}
-                  >
-                    + Add Equipment
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+                    <span className="relative z-10 font-medium">Collapse</span>
                   </button>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
+            
+            {/* Empty State */}
+            {(!Array.isArray(equipments) || equipments.length === 0) && (
+              <div className="text-center py-12">
+                <Wrench className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-500 mb-2">No equipment found</h3>
+                <button 
+                  className="px-6 py-2 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all"
+                  onClick={openEquipmentAddModal}
+                >
+                  + Add Equipment
+                </button>
+              </div>
+            )}
           </div>
+
         </div>
       </main>
     </div>

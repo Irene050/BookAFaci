@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 const base = import.meta.env.VITE_API_URL || "";
 
-export default function EquipmentModal({ open, onClose, onSubmit, facilityName, equipments = [] }) {
+export default function EquipmentModal({ open, onClose, onSubmit, facilityName, equipments = [], facilities = [], isEquipmentOnly = false }) {
   const [selection, setSelection] = useState({});
+  const [selectedFacilityId, setSelectedFacilityId] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [error, setError] = useState("");
@@ -10,12 +11,13 @@ export default function EquipmentModal({ open, onClose, onSubmit, facilityName, 
   useEffect(() => {
     if (!open) return;
     const initial = {};
-    (equipments || []).forEach((r) => { initial[r._id || r.id] = 0; });
+    (equipments || []).forEach((r) => { initial[r._id || r.id] = isEquipmentOnly ? 1 : 0; });
     setSelection(initial);
+    setSelectedFacilityId("");
     setStartDate("");
     setEndDate("");
     setError("");
-  }, [open, equipments]);
+  }, [open, equipments, isEquipmentOnly]);
 
   if (!open) return null;
 
@@ -42,26 +44,29 @@ export default function EquipmentModal({ open, onClose, onSubmit, facilityName, 
     const selectedIds = [];
     for (const r of equipments) {
       const qty = selection[r._id || r.id] || 0;
-      if (qty > 0) selectedIds.push(r._id || r.id);
+      for (let i = 0; i < qty; i++) {
+        selectedIds.push(r._id || r.id);
+      }
     }
 
     const payload = {
       startDate: new Date(startDate).toISOString(),
       endDate: new Date(endDate).toISOString(),
       equipment: selectedIds,
-      facilityName,
+      facilityName: facilityName,
+      facilityId: null,
     };
 
     onSubmit(payload);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4 font-inter">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4 font-inter backdrop-blur-sm">
       <div className="bg-white w-full max-w-[1100px] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         <div className="flex items-center justify-between px-6 py-4 border-b">
           <div>
-            <h3 className="text-2xl font-bold text-[#007BDA]">Add equipments – {facilityName}</h3>
-            <p className="text-sm text-gray-600">Choose available equipments</p>
+            <h3 className="text-2xl font-bold text-[#007BDA]">{isEquipmentOnly ? 'Book Equipment' : `Add equipments – ${facilityName}`}</h3>
+            <p className="text-sm text-gray-600">{isEquipmentOnly ? 'Select facility and schedule' : 'Choose available equipments'}</p>
           </div>
           <button onClick={onClose} className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300">Close</button>
         </div>

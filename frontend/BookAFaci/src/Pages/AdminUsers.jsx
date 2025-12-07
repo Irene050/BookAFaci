@@ -24,6 +24,9 @@ function AdminUserview() {
     const navigate = useNavigate();
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [search, setSearch] = useState('');
+    const [filtersOpen, setFiltersOpen] = useState(false);
+    const [filterRole, setFilterRole] = useState('');
 
     useEffect(() => {
       const raw = localStorage.getItem('user');
@@ -81,7 +84,44 @@ function AdminUserview() {
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
             }}>
-              <Topbar />
+              <Topbar searchValue={search} onSearchChange={setSearch} onFilterClick={() => setFiltersOpen(v => !v)} />
+
+              {filtersOpen && (
+                <div className="mx-6 mt-3 bg-white rounded-xl shadow p-4 border">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Role</label>
+                      <select
+                        value={filterRole}
+                        onChange={(e) => setFilterRole(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white"
+                      >
+                        <option value="">Any</option>
+                        <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                      </select>
+                    </div>
+                    <div className="flex items-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => { setFilterRole(''); }}
+                        className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-xl border text-gray-700"
+                      >
+                        Clear
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFiltersOpen(false)}
+                        className="relative overflow-hidden text-white px-4 py-2 rounded-xl shadow group"
+                      >
+                        <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                        <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+                        <span className="relative z-10 font-medium">Apply</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
     
             <div className="bg-gradient-to-b from-[#E0E0E0] via-[#DDF2FF] to-[#E0E0E0] rounded-[10px] p-[1px] mt-[20px]">
               <div className="rounded-[10px] p-10 mt-[20px]">
@@ -92,10 +132,24 @@ function AdminUserview() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   {loading ? (
                     <div className="col-span-1 lg:col-span-3 text-center text-gray-600">Loading users...</div>
-                  ) : users.length === 0 ? (
-                    <div className="col-span-1 lg:col-span-3 text-gray-500">No users found</div>
-                  ) : (
-                    users.map(u => (
+                  ) : (() => {
+                    const term = search.trim().toLowerCase();
+                    const roleTerm = filterRole.trim().toLowerCase();
+                    const filtered = users.filter(u => {
+                      const nameMatch = term ? (
+                        (u.name || '').toLowerCase().includes(term) ||
+                        (u.fullName || '').toLowerCase().includes(term) ||
+                        (u.firstName || '').toLowerCase().includes(term) ||
+                        (u.lastName || '').toLowerCase().includes(term) ||
+                        (u.email || '').toLowerCase().includes(term)
+                      ) : true;
+                      const roleMatch = roleTerm ? (u.role || '').toLowerCase() === roleTerm : true;
+                      return nameMatch && roleMatch;
+                    });
+                    if (filtered.length === 0) {
+                      return <div className="col-span-1 lg:col-span-3 text-gray-500">No users found</div>;
+                    }
+                    return filtered.map(u => (
                       <div key={u._id || u.id} className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col">
                         <div className="flex-1">
                           <p className="font-bold text-lg text-[#1A1A1A]">{(u.name ?? u.fullName ?? (`${(u.firstName || '')} ${(u.lastName || '')}`).trim()) || u.email}</p>
@@ -114,8 +168,8 @@ function AdminUserview() {
                           <span className={`px-3 py-1 rounded-full text-sm ${u.role === 'admin' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700'}`}>{u.role ?? 'user'}</span>
                         </div>
                       </div>
-                    ))
-                  )}
+                    ));
+                  })()}
                 </div>
     
               </div>

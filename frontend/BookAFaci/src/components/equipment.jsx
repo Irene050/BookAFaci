@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { X, Upload, Image, CheckCircle, XCircle, Edit3, Wrench } from "lucide-react";
 
 const base = import.meta.env.VITE_API_URL || "";
@@ -12,6 +12,8 @@ export default function EquipmentModal({ isOpen, onClose, onSubmit, equipment = 
     imagePreview: null
   });
   const [loading, setLoading] = useState(false);
+  const initialSerializedRef = useRef(null);
+  const [isUnchanged, setIsUnchanged] = useState(true);
 
   useEffect(() => {
     if (isOpen) {
@@ -23,6 +25,13 @@ export default function EquipmentModal({ isOpen, onClose, onSubmit, equipment = 
           image: null,
           imagePreview: equipment.image ? (equipment.image.startsWith('http') ? equipment.image : `${base}${equipment.image}`) : null
         });
+
+        const initial = {
+          name: equipment.name || '',
+          quantity: equipment.quantity ? String(equipment.quantity) : '',
+          status: equipment.status || 'active'
+        };
+        initialSerializedRef.current = JSON.stringify(initial);
       } else {
         setFormData({
           name: '',
@@ -31,9 +40,33 @@ export default function EquipmentModal({ isOpen, onClose, onSubmit, equipment = 
           image: null,
           imagePreview: null
         });
+
+        const initial = {
+          name: '',
+          quantity: '',
+          status: 'active'
+        };
+        initialSerializedRef.current = JSON.stringify(initial);
       }
     }
   }, [isOpen, isEdit, equipment]);
+
+  const serializeForm = (vals) => {
+    return JSON.stringify({
+      name: vals.name || '',
+      quantity: vals.quantity ? String(vals.quantity) : '',
+      status: vals.status || 'active'
+    });
+  };
+
+  useEffect(() => {
+    if (initialSerializedRef.current == null) {
+      setIsUnchanged(true);
+      return;
+    }
+    const current = serializeForm(formData);
+    setIsUnchanged(current === initialSerializedRef.current);
+  }, [formData]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -128,9 +161,8 @@ export default function EquipmentModal({ isOpen, onClose, onSubmit, equipment = 
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white"
               >
-                <option value="available">Available</option>
-                <option value="maintenance">Maintenance</option>
-                <option value="unavailable">Unavailable</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
               </select>
             </div>
 
@@ -164,10 +196,14 @@ export default function EquipmentModal({ isOpen, onClose, onSubmit, equipment = 
               </button>
               <button 
                 type="submit" 
-                disabled={loading}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] text-white rounded-xl font-medium hover:from-[#83C9FF] hover:to-[#346D9A] transition-all shadow-lg hover:shadow-xl disabled:opacity-50"
+                disabled={loading || (isEdit ? (isUnchanged || !formData.name || !formData.quantity) : (!formData.name || !formData.quantity))}
+                className="flex-1 px-6 py-3 relative overflow-hidden group text-white rounded-xl font-medium transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Saving...' : (isEdit ? 'Update Equipment' : 'Add Equipment')}
+                <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+                <span className="relative z-10 font-medium">
+                  {loading ? 'Saving...' : (isEdit ? 'Update Equipment' : 'Add Equipment')}
+                </span>
               </button>
             </div>
           </form>

@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from 'react-router';
 import { Search, Bell } from "lucide-react";
 import axios from "axios";
 
 const base = import.meta.env.VITE_API_URL || "";
 
-function Topbar() {
+function Topbar({ searchValue = '', onSearchChange, onFilterClick }) {
+  const location = useLocation();
+  const showSearch = ['/UserBookings', '/adminusers', '/adminbks'].includes(location?.pathname);
   const [user, setUser] = useState(() => {
     try {
       const raw = localStorage.getItem("user");
@@ -106,13 +109,29 @@ function Topbar() {
 
   return (
     <nav className="w-full bg-[#dbdbdb8f] h-[73px] rounded-b-[10px] sticky top-0 z-[20] flex items-center justify-between px-6 shadow-md backdrop-blur-sm font-inter">
-      <div className="flex items-center bg-white px-4 py-2 rounded-full shadow-sm w-[350px]">
-        <Search size={18} className="text-gray-500" />
-        <input
-          type="text"
-          placeholder="Search"
-          className="ml-2 w-full bg-transparent outline-none text-gray-700"
-        />
+      <div className="flex-1">
+        {showSearch && (
+          <div className="flex items-center bg-white px-4 py-2 rounded-full shadow-sm w-[350px] gap-2">
+            <Search size={18} className="text-gray-500" />
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchValue}
+              onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
+              className="ml-2 flex-1 bg-transparent outline-none text-gray-700"
+            />
+            <button
+              type="button"
+              onClick={() => onFilterClick && onFilterClick()}
+              className="relative overflow-hidden text-white px-3 py-1 rounded-full shadow group text-sm"
+              aria-label="Open filters"
+            >
+              <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+              <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+              <span className="relative z-10 font-medium">Filter</span>
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="flex items-center gap-1">

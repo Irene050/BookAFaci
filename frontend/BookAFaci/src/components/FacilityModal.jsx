@@ -288,17 +288,25 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
                   </div>
                   {formData.availability.length > 0 && (
                     <div className="max-h-32 overflow-y-auto space-y-2">
-                      {formData.availability.map((range, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
-                          <span className="text-sm text-gray-900">
-                            {range.startDate.toLocaleDateString()} - {range.endDate.toLocaleDateString()}
-                          </span>
-                          <button type="button" onClick={() => removeDateRange(index)}
-                            className="p-1 hover:bg-red-100 rounded-full transition-colors">
-                            <X size={16} className="text-red-500" />
-                          </button>
-                        </div>
-                      ))}
+                      {formData.availability.map((range, index) => {
+                        const startLabel = range?.startDate instanceof Date
+                          ? range.startDate.toLocaleDateString()
+                          : '-';
+                        const endLabel = range?.endDate instanceof Date
+                          ? range.endDate.toLocaleDateString()
+                          : '-';
+                        return (
+                          <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
+                            <span className="text-sm text-gray-900">
+                              {startLabel} - {endLabel}
+                            </span>
+                            <button type="button" onClick={() => removeDateRange(index)}
+                              className="p-1 hover:bg-red-100 rounded-full transition-colors">
+                              <X size={16} className="text-red-500" />
+                            </button>
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -331,8 +339,12 @@ export default function FacilityModal({ isOpen, onClose, onSubmit, facility = nu
                 Cancel
               </button>
               <button type="submit" disabled={loading || (isEdit ? (isUnchanged || !formData.name || !formData.capacity) : (!formData.name || !formData.capacity))}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] text-white rounded-xl font-medium hover:from-[#83C9FF] hover:to-[#346D9A] transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
-                {loading ? 'Saving...' : (isEdit ? 'Update Facility' : 'Add Facility')}
+                className="flex-1 px-6 py-3 relative overflow-hidden group text-white rounded-xl font-medium transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
+                <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+                <span className="relative z-10 font-medium">
+                  {loading ? 'Saving...' : (isEdit ? 'Update Facility' : 'Add Facility')}
+                </span>
               </button>
             </div>
           </form>

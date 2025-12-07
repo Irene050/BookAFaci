@@ -42,7 +42,7 @@ function LoginForm() {
       let destination = '/dashboard';
       if (accountType === 'External' || accountType === 'Internal') destination = '/UserDashboard';
       //else if (accountType === 'Internal') destination = '/dashboard-int';
-      if (role === 'admin') destination = '/admin';
+      if (role === 'admin') destination = '/admindash';
 
       setTimeout(() => navigate(destination, { replace: true }), 1500);
       toast.success('Login successful! Redirecting...', {

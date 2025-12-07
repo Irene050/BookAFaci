@@ -126,6 +126,31 @@ function UserDashboard() {
             setLatestPendingLoading(false);
           }
         })();
+
+        // fetch bookings and extract the most recent 'approved' booking
+        (async () => {
+          try {
+            setLatestApprovedLoading(true);
+            const bRes = await axios.get(`${base}/bookafaci/book/status/${userId}`);
+            const list = Array.isArray(bRes.data?.bookings) ? bRes.data.bookings : (bRes.data?.bookings || []);
+            const approved = list.filter(b => String(b.status || '').toLowerCase() === 'approved');
+            if (approved.length) {
+              // choose the most recent by createdAt or startDate
+              approved.sort((a, b) => {
+                const ta = new Date(a.createdAt || a.startDate || 0).getTime();
+                const tb = new Date(b.createdAt || b.startDate || 0).getTime();
+                return tb - ta;
+              });
+              setLatestApproved(approved[0]);
+            } else {
+              setLatestApproved(null);
+            }
+          } catch (err) {
+            console.error('Failed to load bookings for latest approved', err?.response?.data || err);
+          } finally {
+            setLatestApprovedLoading(false);
+          }
+        })();
       } catch (err) {
         console.error('Failed to load dashboard summary', err?.response?.data || err);
       }
@@ -286,7 +311,7 @@ function UserDashboard() {
                 ) : latestPending ? (
                   <div className='flex flex-col h-full'>
                     <div>
-                      <p className='font-bold text-xl text-[#1A1A1A] ml-10'>{latestPending.facility?.name ?? latestPending.facility ?? 'Facility'}</p>
+                      <p className='font-bold text-xl text-[#1A1A1A] ml-10'>{latestPending.facility?.name || 'Equipment Only'}</p>
                       <p className='ml-10 text-sm text-gray-600'>{latestPending.bookingType ?? ''}</p>
                     </div>
 
@@ -295,12 +320,15 @@ function UserDashboard() {
                       <div><strong>To:</strong> {latestPending.endDate ? new Date(latestPending.endDate).toLocaleString() : '-'}</div>
 
                       <div className='mt-3'>
-                        <strong>Resources:</strong>
-                        {Array.isArray(latestPending.resource) && latestPending.resource.length ? (
-                          <ul className='list-disc list-inside text-sm'>
-                            {latestPending.resource.map(r => <li key={r._id || r}>{ typeof r === 'object' ? (r.name || r._id) : r }</li>)}
-                          </ul>
-                        ) : <span className='ml-2 text-gray-500'> none</span>}
+                        <strong>Equipment:</strong>
+                        {(() => {
+                          const equipmentList = latestPending.equipment || latestPending.resource || [];
+                          return Array.isArray(equipmentList) && equipmentList.length ? (
+                            <ul className='list-disc list-inside text-sm'>
+                              {equipmentList.map(r => <li key={r._id || r}>{ typeof r === 'object' ? (r.name || r._id) : r }</li>)}
+                            </ul>
+                          ) : <span className='ml-2 text-gray-500'> none</span>;
+                        })()}
                       </div>
                     </div>
 
@@ -327,7 +355,7 @@ function UserDashboard() {
               ) : latestApproved ? (
                 <div className='flex flex-col h-full'>
                   <div>
-                    <p className='font-bold text-xl text-[#1A1A1A] ml-10'>{latestApproved.facility?.name ?? latestApproved.facility ?? 'Facility'}</p>
+                    <p className='font-bold text-xl text-[#1A1A1A] ml-10'>{latestApproved.facility?.name || 'Equipment Only'}</p>
                     <p className='ml-10 text-sm text-gray-600'>{latestApproved.bookingType ?? ''}</p>
                   </div>
 
@@ -336,17 +364,20 @@ function UserDashboard() {
                     <div><strong>To:</strong> {latestApproved.endDate ? new Date(latestApproved.endDate).toLocaleString() : '-'}</div>
 
                     <div className='mt-3'>
-                      <strong>Resources:</strong>
-                      {Array.isArray(latestApproved.resource) && latestApproved.resource.length ? (
-                        <ul className='list-disc list-inside text-sm'>
-                          {latestApproved.resource.map(r => <li key={r._id || r}>{typeof r === 'object' ? (r.name || r._id) : r}</li>)}
-                        </ul>
-                      ) : <span className='ml-2 text-gray-500'> none</span>}
+                      <strong>Equipment:</strong>
+                      {(() => {
+                        const equipmentList = latestApproved.equipment || latestApproved.resource || [];
+                        return Array.isArray(equipmentList) && equipmentList.length ? (
+                          <ul className='list-disc list-inside text-sm'>
+                            {equipmentList.map(r => <li key={r._id || r}>{typeof r === 'object' ? (r.name || r._id) : r}</li>)}
+                          </ul>
+                        ) : <span className='ml-2 text-gray-500'> none</span>;
+                      })()}
                     </div>
                   </div>
 
                   <div className='mt-2 ml-10'>
-                    <span className='px-3 py-1 rounded-full text-sm bg-yellow-100 text-yellow-800'>approved</span>
+                    <span className='px-3 py-1 rounded-full text-sm bg-green-100 text-green-800'>approved</span>
                     <div className='text-xs text-gray-500 mt-2'>Click to view all approved bookings</div>
                   </div>
                 </div>

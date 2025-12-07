@@ -30,6 +30,10 @@ function AdminBookings() {
   const [selectedStatus, setSelectedStatus] = useState(initialStatus);
   const [editingBooking, setEditingBooking] = useState(null);
   const [editLoading, setEditLoading] = useState(false);
+  const [search, setSearch] = useState('');
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [filterName, setFilterName] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
 
   useEffect(() => {
     const raw = localStorage.getItem('user');
@@ -80,7 +84,57 @@ function AdminBookings() {
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
         }}>
-        <Topbar />
+        <Topbar searchValue={search} onSearchChange={setSearch} onFilterClick={() => setFiltersOpen(v => !v)} />
+
+        {filtersOpen && (
+          <div className="mx-6 mt-3 bg-white rounded-xl shadow p-4 border">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Facility/User</label>
+                <input
+                  type="text"
+                  value={filterName}
+                  onChange={(e) => setFilterName(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  placeholder="e.g., Gym, John"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Status</label>
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white"
+                >
+                  <option value="">Any</option>
+                  <option value="pending">Pending</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </div>
+              <div className="flex items-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => { setFilterName(''); setFilterStatus(''); }}
+                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-xl border text-gray-700"
+                >
+                  Clear
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFiltersOpen(false)}
+                  className="relative overflow-hidden text-white px-4 py-2 rounded-xl shadow group"
+                >
+                  <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                  <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+                  <span className="relative z-10 font-medium">Apply</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="bg-gradient-to-b from-[#E0E0E0] via-[#DDF2FF] to-[#E0E0E0] rounded-[10px] p-[1px] mt-[20px]">
           <div className="rounded-[10px] p-10 mt-[20px]">
@@ -130,12 +184,40 @@ function AdminBookings() {
               ) : (() => {
                 // compute filtered list based on selectedStatus (same logic as UserBookings.jsx)
                 const now = new Date();
-                const filtered = (selectedStatus === 'all') ? bookings : (selectedStatus === 'upcoming')
+                let filtered = (selectedStatus === 'all') ? bookings : (selectedStatus === 'upcoming')
                   ? bookings.filter(b => (b.status === 0 || b.status === '0') || (b.startDate && new Date(b.startDate) >= now))
                   : bookings.filter(b => {
                     if (b.status === 0 || b.status === '0') return false;
                     return (b.status || '').toLowerCase() === selectedStatus;
                   });
+
+                // Apply search
+                const term = search.trim().toLowerCase();
+                if (term) {
+                  filtered = filtered.filter(b => {
+                    const facilityName = (b.facility?.name || b.facility || '').toString().toLowerCase();
+                    const userName = b.user && typeof b.user === 'object' ? (b.user.name || b.user.email || '').toLowerCase() : (b.user || '').toString().toLowerCase();
+                    const equipmentList = Array.isArray(b.equipment) ? b.equipment : (Array.isArray(b.resource) ? b.resource : []);
+                    const equipmentMatch = equipmentList.some(r => (r?.name || '').toString().toLowerCase().includes(term));
+                    const typeMatch = (b.bookingType || '').toString().toLowerCase().includes(term);
+                    const statusMatch = (b.status || '').toString().toLowerCase().includes(term);
+                    return facilityName.includes(term) || userName.includes(term) || equipmentMatch || typeMatch || statusMatch;
+                  });
+                }
+
+                // Apply explicit filters
+                const nameTerm = filterName.trim().toLowerCase();
+                const statusTerm = filterStatus.trim().toLowerCase();
+                if (nameTerm || statusTerm) {
+                  filtered = filtered.filter(b => {
+                    const facilityName = (b.facility?.name || b.facility || '').toString().toLowerCase();
+                    const userName = b.user && typeof b.user === 'object' ? (b.user.name || b.user.email || '').toLowerCase() : (b.user || '').toString().toLowerCase();
+                    const statusVal = (b.status || '').toString().toLowerCase();
+                    const nameOk = nameTerm ? (facilityName.includes(nameTerm) || userName.includes(nameTerm)) : true;
+                    const statusOk = statusTerm ? statusVal.includes(statusTerm) : true;
+                    return nameOk && statusOk;
+                  });
+                }
 
                 if (!filtered || filtered.length === 0) {
                   return <div className="col-span-1 lg:col-span-3 text-gray-500">No {selectedStatus} bookings</div>;
@@ -144,7 +226,7 @@ function AdminBookings() {
                 return filtered.map((b, idx) => (
                   <div key={`${b._id || b.id || 'booking'}-${idx}`} className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col">
                     <div className="flex-1">
-                      <p className="font-bold text-lg text-[#1A1A1A]">{b.facility?.name ?? b.facility ?? (b.bookingType || 'Booking')}</p>
+                      <p className="font-bold text-lg text-[#1A1A1A]">{b.facility?.name || 'Equipment Only'}</p>
                       <p className="text-gray-500 text-sm mb-2">{b.bookingType}</p>
                       <p className="text-sm text-gray-700 mb-1">Booked by: {b.user && typeof b.user === 'object' ? (b.user.name || b.user._id) : (b.user || 'Unknown')}{b.user && typeof b.user === 'object' && b.user.email ? ` (${b.user.email})` : ''}</p>
                       <div className="flex items-center gap-3 mt-2 text-sm text-gray-600">
@@ -153,17 +235,19 @@ function AdminBookings() {
                       </div>
 
                       <div className="mt-3 text-sm text-gray-700">
-                        {Array.isArray(b.resource) && b.resource.length ? (
-                          <ul className="list-disc list-inside">
-                            {b.resource.map((r, ri) => (
-                              <li key={r && r._id ? r._id : `${typeof r === 'object' ? (r.name || 'res') : r}-${ri}`}>
-                                {typeof r === 'object' ? (r.name || r._id) : r}
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <div className="text-sm text-gray-500">No resources</div>
-                        )}
+                        {(() => {
+                          const list = Array.isArray(b.equipment) ? b.equipment : (Array.isArray(b.resource) ? b.resource : []);
+                          if (list.length === 0) return <div className="text-sm text-gray-500">No equipment</div>;
+                          return (
+                            <ul className="list-disc list-inside">
+                              {list.map((r, ri) => (
+                                <li key={r && r._id ? r._id : `${typeof r === 'object' ? (r.name || 'equip') : r}-${ri}`}>
+                                  {typeof r === 'object' ? (r.name || r._id) : r}
+                                </li>
+                              ))}
+                            </ul>
+                          );
+                        })()}
                       </div>
                     </div>
 

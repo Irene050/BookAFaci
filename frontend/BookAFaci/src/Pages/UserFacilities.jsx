@@ -508,6 +508,7 @@ function Facilities() {
   const [equipments, setEquipments] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState(null);
+  const [selectedEquipment, setSelectedEquipment] = useState(null);
 
   const [showAll, setShowAll] = useState(false);
   const [showEquipmentAll, setShowEquipmentAll] = useState(false); // ⭐ NEW
@@ -545,14 +546,17 @@ function Facilities() {
       const userId = userObj?._id || userObj?.id || userObj?.user || null;
       const equipmentIds = Array.isArray(payload.equipment) ? payload.equipment : [];
 
-      const facilityValue = (selectedFacility && typeof selectedFacility === 'object')
-        ? (selectedFacility._id || selectedFacility.name || selectedFacility)
-        : selectedFacility;
+      // Use payload.facilityId for equipment-only bookings, otherwise selectedFacility
+      const facilityValue = payload.facilityId 
+        ? payload.facilityId
+        : (selectedFacility && typeof selectedFacility === 'object')
+          ? (selectedFacility._id || selectedFacility.name || selectedFacility)
+          : selectedFacility;
 
       const body = {
         user: userId,
         facility: facilityValue,
-        equipments: equipmentIds,
+        equipment: equipmentIds,
         startDate: payload.startDate,
         endDate: payload.endDate,
       };
@@ -560,6 +564,8 @@ function Facilities() {
       await axios.post(`${base}/bookafaci/book`, body, { headers: { Authorization: `Bearer ${localStorage.getItem('token') || ''}` } });
       toast.success("Booking submitted");
       setModalOpen(false);
+      setSelectedEquipment(null);
+      setSelectedFacility(null);
     } catch (err) {
       console.error("Booking error:", err?.response?.data || err);
       toast.error(err?.response?.data?.message || "Could not submit booking");
@@ -573,9 +579,11 @@ function Facilities() {
       <EquipmentModal
         open={modalOpen}
         facilityName={selectedFacility?.name || selectedFacility}
-        equipments={Array.isArray(equipments) ? equipments : []}
-        onClose={() => setModalOpen(false)}
+        equipments={selectedEquipment ? [selectedEquipment] : (Array.isArray(equipments) ? equipments : [])}
+        facilities={facilities}
+        onClose={() => { setModalOpen(false); setSelectedEquipment(null); }}
         onSubmit={handleBookingSubmit}
+        isEquipmentOnly={!!selectedEquipment}
       />
 
       <Sidebar>
@@ -602,12 +610,14 @@ function Facilities() {
             -------------------------------------------------- */}
             {!showAll ? (
               <>
-                <div className="flex gap-5 overflow-x-auto overflow-y-hidden pb-4">
+                <div className="flex gap-5 overflow-x-auto overflow-y-hidden pb-4"
+                style={{ scrollbarWidth: 'thin', scrollbarColor: '#007BDA80 #F3F4F6' }}>
+                  
                   {facilities.map((f) => (
                     <div
                       key={f._id}
                       className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex-shrink-0 flex flex-col"
-                      style={{ minWidth: "32%" }}
+                      style={{ minWidth: "20%" }}
                     >
                       <img
                         src={f.image ? (f.image.startsWith('http') ? f.image : `${base}${f.image}`) : '/placeholder.png'}
@@ -617,7 +627,7 @@ function Facilities() {
                       <p className="font-bold text-lg">{f.name}</p>
                       <p className="text-gray-500 text-sm mb-2">{f.description}</p>
 
-                      <div className="flex items-center gap-3 mt-2">
+                      <div className="flex flex-grow items-center gap-3 mt-2">
                         <span className="text-sm text-gray-600">Capacity: {f.capacity}</span>
                         <span className={`text-sm px-2 py-0.5 rounded ${
                           f.status === 'active' ? 'bg-green-100 text-green-700' :
@@ -632,7 +642,8 @@ function Facilities() {
                         onClick={() => { setSelectedFacility(f); setModalOpen(true); }}
                         className="relative overflow-hidden text-white px-3 py-1 rounded-full shadow group mt-4"
                       >
-                        <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF]" />
+                       <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
                         <span className="relative z-10 font-medium">Book</span>
                       </button>
                     </div>
@@ -645,8 +656,9 @@ function Facilities() {
                       onClick={() => setShowAll(true)}
                       className="relative overflow-hidden text-white px-3 py-1 rounded-full shadow group"
                     >
-                      <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF]" />
-                      <span className="relative z-10 font-medium">See More</span>
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+                      <span className="relative z-10 font-medium">Expand</span>
                     </button>
                   </div>
                 )}
@@ -678,7 +690,8 @@ function Facilities() {
                       onClick={() => { setSelectedFacility(f); setModalOpen(true); }}
                       className="relative overflow-hidden text-white px-3 py-1 rounded-full shadow group mt-4"
                     >
-                      <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF]" />
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
                       <span className="relative z-10 font-medium">Book</span>
                     </button>
                   </div>
@@ -689,13 +702,15 @@ function Facilities() {
                     onClick={() => setShowAll(false)}
                     className="relative overflow-hidden text-white px-3 py-1 rounded-full shadow group"
                   >
-                    <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A]" />
-                    <span className="relative z-10 font-medium">See Less</span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+                    <span className="relative z-10 font-medium">Collapse</span>
                   </button>
                 </div>
               </div>
             )}
           </div>
+          <hr className="my-2 mx-[45px] border-dashed border-[#346D9A]/50" />
 
           {/* --------------------------------------------------
                      EQUIPMENT SECTION
@@ -712,12 +727,16 @@ function Facilities() {
                     <div
                       key={eq._id}
                       className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex-shrink-0 flex flex-col"
-                      style={{ minWidth: "32%" }}
+                      style={{ minWidth: "20%" }}
                     >
                       <img
                         src={eq.image ? (eq.image.startsWith("http") ? eq.image : `${base}${eq.image}`) : "/placeholder.png"}
                         className="w-full h-40 rounded-xl object-cover mb-4"
                         alt={eq.name}
+                        style={{ 
+                          objectFit: "cover", 
+                          objectPosition: "center"
+                        }}
                       />
                       <p className="font-bold text-lg">{eq.name}</p>
                       <p className="text-gray-500 text-sm mb-2">{eq.description}</p>
@@ -735,10 +754,11 @@ function Facilities() {
 
                       {/* BOOK BUTTON FOR EQUIPMENT */}
                       <button
-                        onClick={() => { setSelectedFacility(eq.name); setModalOpen(true); }}
+                        onClick={() => { setSelectedEquipment(eq); setSelectedFacility(null); setModalOpen(true); }}
                         className="relative overflow-hidden text-white px-3 py-1 rounded-full shadow group mt-4"
                       >
-                        <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF]" />
+                        <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
                         <span className="relative z-10 font-medium">Book</span>
                       </button>
                     </div>
@@ -751,8 +771,9 @@ function Facilities() {
                       onClick={() => setShowEquipmentAll(true)}
                       className="relative overflow-hidden text-white px-3 py-1 rounded-full shadow group"
                     >
-                      <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF]" />
-                      <span className="relative z-10 font-medium">See More</span>
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+                      <span className="relative z-10 font-medium">Expand</span>
                     </button>
                   </div>
                 )}
@@ -795,10 +816,11 @@ function Facilities() {
 
                     {/* BOOK BUTTON */}
                     <button
-                      onClick={() => { setSelectedFacility(eq.name); setModalOpen(true); }}
+                      onClick={() => { setSelectedEquipment(eq); setSelectedFacility(null); setModalOpen(true); }}
                       className="relative overflow-hidden text-white px-3 py-1 rounded-full shadow group mt-4"
                     >
-                      <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF]" />
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
                       <span className="relative z-10 font-medium">Book</span>
                     </button>
                   </div>
@@ -809,8 +831,9 @@ function Facilities() {
                     onClick={() => setShowEquipmentAll(false)}
                     className="relative overflow-hidden text-white px-3 py-1 rounded-full shadow group"
                   >
-                    <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A]" />
-                    <span className="relative z-10 font-medium">See Less</span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#83C9FF] to-[#346D9A] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
+                    <span className="relative z-10 font-medium">Collapse</span>
                   </button>
                 </div>
               </div>
