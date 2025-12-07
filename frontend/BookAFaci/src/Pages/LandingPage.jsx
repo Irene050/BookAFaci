@@ -36,7 +36,7 @@ function LandingPage() {
                             min-[320px]:mt-[-10rem]
                             min-[320px]:text-[2rem]
                             min-[320px]:text-center
-                            min-[320px]:ml-[-1.5rem]
+                            min-[320px]:ml-[-2.2rem]
                             min-[425px]:mt-[-15rem]
                             sm:mt-[-5rem]
                             md:flex
@@ -58,7 +58,10 @@ function LandingPage() {
                                 <h1 className='text-[2rem] font-light font-inter'>"It's always easy with BookAFaci"</h1>
                             </article>
 
-                            <a className='text-white bg-transparent border p-2 rounded-full text-[1.5rem] hover:bg-white hover:text-black mix-blend-lighten transition-all' href="/user-select">Get Started</a>
+                            <a className='text-white bg-transparent border p-2 rounded-full text-[1.5rem] hover:bg-white hover:text-black mix-blend-lighten transition-all
+                            min-[320px]:ml-[-1rem]
+                            sm:ml-0
+                            ' href="/user-select">Get Started</a>
                         </div>
                     </div>
                     <div className='flex grow group relative justify-center bg-transparent drop-shadow-2xl hover:scale-105 transition-all
