@@ -36,7 +36,7 @@ function LandingPage() {
                             min-[320px]:mt-[-10rem]
                             min-[320px]:text-[2rem]
                             min-[320px]:text-center
-                            min-[320px]:ml-0
+                            min-[320px]:ml-[-1.5rem]
                             min-[425px]:mt-[-15rem]
                             sm:mt-[-5rem]
                             md:flex
@@ -91,8 +91,15 @@ function LandingPage() {
                     <h2 className='text-white text-4xl font-bold text-center mb-8'>About BookAFaci</h2>
                     
                     <div className='bg-white/10 backdrop-blur-md rounded-2xl p-8 mb-8 shadow-xl border border-white/20'>
-                        <p className='text-white text-lg leading-relaxed mb-4'>
-                            <span className='font-semibold'>BookAFaci</span> is designed to streamline booking facilities and equipment reservation 
+                        <p className='text-white text-lg leading-relaxed mb-4
+                            min-[320px]:text-justify
+                            sm:text-justify
+                            md:text-justify
+                            lg:text-center
+                            xl:text-center
+                            '>
+                            <span className='font-semibold
+                            '>BookAFaci</span> is designed to streamline booking facilities and equipment reservation 
                             in Ateneo De Naga University's Physical Plant Administration. Our system provides an efficient, 
                             user-friendly platform for managing all your reservation needs.
                         </p>
@@ -109,7 +116,13 @@ function LandingPage() {
                                 </svg>
                             </div>
                             <h4 className='text-white text-xl font-semibold mb-2'>Facility Management</h4>
-                            <p className='text-white/80 text-sm'>
+                            <p className='text-white/80 text-sm
+                            min-[320px]:text-justify
+                            sm:text-justify
+                            md:text-justify
+                            lg:text-left
+                            xl:text-left
+                            '>
                                 Browse and book university facilities with real-time availability. View detailed information including capacity, amenities, and location.
                             </p>
                         </div>
@@ -121,7 +134,13 @@ function LandingPage() {
                                 </svg>
                             </div>
                             <h4 className='text-white text-xl font-semibold mb-2'>Equipment Reservation</h4>
-                            <p className='text-white/80 text-sm'>
+                            <p className='text-white/80 text-sm
+                            min-[320px]:text-justify
+                            sm:text-justify
+                            md:text-justify
+                            lg:text-left
+                            xl:text-left
+                            '>
                                 Reserve equipment like projectors, sound systems, and other resources. Track availability and manage your reservations easily.
                             </p>
                         </div>
@@ -133,7 +152,13 @@ function LandingPage() {
                                 </svg>
                             </div>
                             <h4 className='text-white text-xl font-semibold mb-2'>Real-time Calendar</h4>
-                            <p className='text-white/80 text-sm'>
+                            <p className='text-white/80 text-sm
+                            min-[320px]:text-justify
+                            sm:text-justify
+                            md:text-justify
+                            lg:text-left
+                            xl:text-left
+                            '>
                                 Interactive calendar.
                             </p>
                         </div>
@@ -145,7 +170,13 @@ function LandingPage() {
                                 </svg>
                             </div>
                             <h4 className='text-white text-xl font-semibold mb-2'>Secure Authentication</h4>
-                            <p className='text-white/80 text-sm'>
+                            <p className='text-white/80 text-sm
+                            min-[320px]:text-justify
+                            sm:text-justify
+                            md:text-justify
+                            lg:text-left
+                            xl:text-left
+                            '>
                                 Role-based access for internal and external users. JWT authentication ensures secure access to your booking information.
                             </p>
                         </div>
@@ -157,7 +188,13 @@ function LandingPage() {
                                 </svg>
                             </div>
                             <h4 className='text-white text-xl font-semibold mb-2'>Admin Dashboard</h4>
-                            <p className='text-white/80 text-sm'>
+                            <p className='text-white/80 text-sm
+                            min-[320px]:text-justify
+                            sm:text-justify
+                            md:text-justify
+                            lg:text-left
+                            xl:text-left
+                            '>
                                 Comprehensive admin panel for managing bookings, users, facilities, and equipment. Track statistics and approve reservations efficiently.
                             </p>
                         </div>
@@ -169,7 +206,13 @@ function LandingPage() {
                                 </svg>
                             </div>
                             <h4 className='text-white text-xl font-semibold mb-2'>Mobile Responsive</h4>
-                            <p className='text-white/80 text-sm'>
+                            <p className='text-white/80 text-sm
+                            min-[320px]:text-justify
+                            sm:text-justify
+                            md:text-justify
+                            lg:text-left
+                            xl:text-left
+                            '>
                                 Fully responsive design optimized for all devices. Access your bookings on desktop, tablet, or mobile with seamless experience.
                             </p>
                         </div>
@@ -181,7 +224,13 @@ function LandingPage() {
                                 </svg>
                             </div>
                             <h4 className='text-white text-xl font-semibold mb-2'>Comprehensive Booking Management</h4>
-                            <p className='text-white/80 text-sm'>
+                            <p className='text-white/80 text-sm
+                            min-[320px]:text-justify
+                            sm:text-justify
+                            md:text-justify
+                            lg:text-left
+                            xl:text-left
+                            '>
                                 Create, edit, and cancel bookings with ease. Track booking status (pending, approved, completed, cancelled). 
                                 Receive notifications for booking confirmations and updates. Filter and search through your booking history. 
                                 Validation to prevent double-booking and scheduling conflicts.
