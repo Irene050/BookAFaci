@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "buildCommand": "cd frontend/BookAFaci && npm install && npm run build",
+  "outputDirectory": "frontend/BookAFaci/dist",
+  "installCommand": "echo 'Skipping root install'",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
