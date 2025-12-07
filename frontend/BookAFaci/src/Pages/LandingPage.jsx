@@ -251,8 +251,7 @@ function LandingPage() {
                     backgroundPosition: 'bottom',
                     backgroundRepeat: 'no-repeat',
                 }}>
-                <div className="backdrop-blur-lg min-h-screen backdrop-brightness-50 
-                bg-gradient-to-b from-[#83C9FF] from-10% via-70% via-transparent to-90% to-transparent">
+                <div className="backdrop-blur-lg min-h-screen backdrop-brightness-50 bg-gradient-to-b from-[#83C9FF] from-10% via-transparent via-25% to-transparent sm:via-transparent sm:via-25% lg:from-5% lg:via-transparent lg:via-55% lg:to-90% lg:to-transparent">
                     <div className="flex flex-col items-center justify-center min-h-screen py-12 px-4">
                         <h2 className="text-white text-4xl font-bold mb-12 text-center">Meet Our Developers</h2>
                         
