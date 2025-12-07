@@ -22,7 +22,14 @@ const facilitySchema = new mongoose.Schema({
     default: 'active',
   },
   availability: [{
-    type: Date,
+    startDate: {
+      type: Date,
+      required: true, 
+    },
+    endDate: {
+      type: Date,
+      required: true,  
+    },
   }],
   image: {
     type: String,
