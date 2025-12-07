@@ -19,7 +19,6 @@ function LandingPage() {
                 <div className='flex h-screen items-center text-white font-bold text-5xl gap-5 backdrop-blur-md p-4 overflow-hidden bg-gradient-to-b from-transparent via-transparent via-85% to-[#346D9A]
                     min-[320px]:flex-col
                     min-[640px]:flex-col 
-                    min-[640px]:mt-[10rem]
                     min-[640px]:ml-[0rem]
                     md:flex-row
                     md:ml-[0rem]
@@ -34,8 +33,21 @@ function LandingPage() {
                     
                     '>
                         <div className='text-wrap ml-[3rem]
-                            md:ml-[2rem]
+                            min-[320px]:mt-[-35rem]
+                            min-[320px]:text-center
+                            min-[320px]:ml-0
+                            sm:mt-[-15rem]
+                            md:flex
+                            md:flex-col
+                            md:justify-center
+                            md:items-start
+                            md:text-left
                             lg:ml-0
+                            lg:mt-0
+                            lg:text-left
+                            xl:ml-0
+                            xl:mt-0
+                            xl:text-left
                         '>
                             <article className='mb-3'>
                                 <h3 className='mb-4'>BOOKAFACI</h3>
@@ -51,9 +63,11 @@ function LandingPage() {
                         xl:w-[20%]
                         lg:mt-20
                         lg:w-[20%]
-                        md:mt-10
+                        md:mt-[-10rem]
                         md:w-[80%]
-                        sm:w-[90%]'>
+                        sm:w-[90%]
+                        sm:mt-[-25rem]
+                        min-[320px]:mt-[-55rem]'>
                         <img src="/Bookafaci.svg" alt="Mainlogo" className='w-[20rem] mt-10 p-10 hover:drop-shadow-2xl hover:shadow-blue-500/50 transition-all 
                         md:p-4
                         lg:p-1

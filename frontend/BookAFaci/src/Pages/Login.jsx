@@ -17,7 +17,8 @@ const Login = () => {
         xl:w-[70%]
         " style={{
         }}>
-          <a href="/" className='text-center text-[10rem] font-bold text-white hover:box-shadow transition-all
+          <div className='position-relative'>
+            <a href="/" className='text-center text-[10rem] font-bold text-white hover:drop-shadow-2xl hover:animate-pulse transition-all position-relative
         min-[320px]:text-[0rem]
         min-[375px]:text-[0rem]
         min-[425px]:text-[0rem]
@@ -26,6 +27,8 @@ const Login = () => {
         md:text-[0rem]
         lg:text-[6rem]
         xl:text-[7rem]'>BOOKAFACI</a>
+          </div>
+        
         </div>
 
         <div className="w-[40%] bg-[url('/src/assets/right.png')] bg-cover bg-center
