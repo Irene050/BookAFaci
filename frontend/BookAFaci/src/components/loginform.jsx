@@ -82,6 +82,10 @@ function LoginForm() {
         lg:w-[450px] 
         transition-all">
 
+        <div className="flex justify-center mb-6">
+          <img src="/Bookafaci.svg" alt="BookAFaci Logo" className="h-20 w-auto" />
+        </div>
+
         <h1 className="text-center font-Inter font-bold text-[23px]">Welcome Back!</h1>
         <h3 className="text-center font-Inter text-[15px] font-medium mb-[45px] text-[#717171]/80">Please enter your details</h3>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -120,6 +124,7 @@ function LoginForm() {
           </div>
           <button type="submit" disabled={isSubmitting} className="w-full h-[50px] bg-[#2A6495] text-white p-2 rounded-md hover:bg-[#0d5694] transition">Login</button>
 
+          {/*
           <button
             type="button"
             className="w-full border border-gray-300 py-2.5 rounded-md flex items-center justify-center gap-2 hover:bg-gray-50 transition mt-[30px]"
@@ -131,6 +136,7 @@ function LoginForm() {
             />
             <span className="text-gray-700 text-sm font-medium">Sign in with Google</span>
           </button>
+          */}
 
           <h1 className="text-center font-Inter font-bold text-[13px] mt-[30px]">Don't have an account? <Link to="/user-select" className="text-[#2A6495] hover:underline">Sign up</Link></h1>
         </form>

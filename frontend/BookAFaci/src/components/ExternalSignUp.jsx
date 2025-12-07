@@ -148,7 +148,7 @@ export default function ExternalSignUp({ onBack, initialValues }) {
         >
           Sign Up
         </button>
-
+        {/*
         <button
           type="button"
           className="w-full border border-gray-300 py-2.5 rounded-md flex items-center justify-center gap-2 hover:bg-gray-50 transition"
@@ -160,7 +160,7 @@ export default function ExternalSignUp({ onBack, initialValues }) {
           />
           <span className="text-gray-700 text-sm font-medium">Sign in with Google</span>
         </button>
-        
+        */}
         <p className="text-center font-Inter font-bold text-[13px] mt-[30px]">
           Already have an account?{" "}
           <a href="/" className="text-[#2A6495] hover:underline">
