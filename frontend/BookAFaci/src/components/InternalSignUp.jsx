@@ -82,17 +82,20 @@ export default function InternalSignUp({ onBack, initialValues }) {
       const response = await axios.post(`${base}/bookafaci/users/register`, submitData);
       console.log('Internal registration successful');
 
-      toast.success('Registration successful', { autoClose: 1500 });
+      // Store email for autofill on login page
+      sessionStorage.setItem('signupEmail', data.email);
 
+      toast.success('Registration successful! Redirecting...', {
+        autoClose: 2000,
+      });
 
-    //straight to login
-    setTimeout(() => {
-        navigate('/');
-      }, 3000);
+      setTimeout(() => {
+        navigate('/login', { replace: true });
+      }, 2000);
 
     } catch (error) {
       console.error('Registration failed:', error.response || error.message);
-      toast.error(error.response?.message || error.message || 'Registration failed', {
+      toast.error(error.response?.data?.message || error.message || 'Registration failed', {
             autoClose: 1500,
           });
     }

@@ -74,9 +74,15 @@ function AdminUserview() {
     
           <main className="flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5
             min-[320px]:w-[350px] max-[640px]:w-[450px] md:w-[450px] lg:w-[450px]
-            min-[320px]:px-2 min-[375px]:px-3 min-[425px]:px-4 sm:px-4 md:px-6" 
+            min-[320px]:px-2 min-[375px]:px-3 min-[425px]:px-4 sm:px-4 md:px-6
+            min-[320px]:pl-6
+            min-[375px]:pl-6
+            min-[425px]:pl-6
+            sm:pl-6
+            md:pl-[5.5rem]
+            lg:pl-[5.5rem]
+            xl:pl-[5.5rem]" 
               style={{
-              paddingLeft: '5.5rem', 
               backgroundImage: `linear-gradient(rgba(194, 217, 249, 0.9), rgba(194, 217, 249, 0.9)), url(${loginbg})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
@@ -155,7 +161,9 @@ function AdminUserview() {
                       <div key={u._id || u.id} className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col">
                         <div className="flex-1">
                           <p className="font-bold text-lg text-[#1A1A1A]">{(u.name ?? u.fullName ?? (`${(u.firstName || '')} ${(u.lastName || '')}`).trim()) || u.email}</p>
-                          <div className="flex items-center gap-3 mt-2 text-sm text-gray-600">
+                          <div className="flex items-center gap-3 mt-2 text-sm text-gray-600
+                          min-[320px]:flex-col min-[320px]:items-start min-[320px]:gap-1 xl:flex-row
+                          ">
                             <span>Email: {u.email ?? '—'}</span>
                             <span>Role: {u.role ?? '—'}</span>
                           </div>

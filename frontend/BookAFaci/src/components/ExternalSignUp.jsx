@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useNavigate } from 'react-router'
 import * as yup from 'yup'
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
@@ -13,6 +14,8 @@ const schema = yup.object({
 }).required();
 
 export default function ExternalSignUp({ onBack, initialValues }) {
+  const navigate = useNavigate();
+  
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
     resolver: yupResolver(schema),
     mode: 'onTouched',
@@ -38,19 +41,21 @@ export default function ExternalSignUp({ onBack, initialValues }) {
 
     const response = await axios.post(`${base}/bookafaci/users/register`, submitData);
     console.log('Registration successful');
-    
+
+    // Store email for autofill on login page
+    sessionStorage.setItem('signupEmail', data.email);
+
     toast.success('Registration successful! Redirecting...', {
         autoClose: 2000,
       });
       
-      // Go To Login
-      setTimeout(() => {
-        navigate('/');
-      }, 3000);
+    setTimeout(() => {
+      navigate('/login', { replace: true });
+    }, 2000);
 
   } catch (error) {
     console.error('Registration failed:', error.response || error.message);
-    toast.error(`${error.response.message}`, {
+    toast.error(`${error.response?.data?.message || 'Registration failed'}`, {
           autoClose: 1500,
         });
   }

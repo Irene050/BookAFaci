@@ -13,8 +13,8 @@ import {
   GalleryVerticalEnd,
   ClipboardClock,
   SquareX, SquareCheck,
-    Edit,
-    CircleSlash,
+  Edit,
+  CircleSlash,
   Clipboard, Users
 } from "lucide-react"
 
@@ -52,8 +52,8 @@ function AdminBookings() {
         const list = Array.isArray(payload.bookings)
           ? payload.bookings
           : Array.isArray(payload)
-          ? payload
-          : (payload.data || payload.bookings || []);
+            ? payload
+            : (payload.data || payload.bookings || []);
         setBookings(list);
       } catch (err) {
         console.error('Failed to load bookings', err?.response?.data || err);
@@ -78,9 +78,16 @@ function AdminBookings() {
 
       <main className="flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5
         min-[320px]:w-[350px] max-[640px]:w-[450px] md:w-[450px] lg:w-[450px]
-        min-[320px]:px-2 min-[375px]:px-3 min-[425px]:px-4 sm:px-4 md:px-6"
+        min-[320px]:px-2 min-[375px]:px-3 min-[425px]:px-4 sm:px-4 md:px-6
+        min-[320px]:pl-6
+        min-[375px]:pl-6
+        min-[425px]:pl-6
+        sm:pl-6
+        md:pl-[5.5rem]
+        lg:pl-[5.5rem]
+        xl:pl-[5.5rem]
+        "
         style={{
-          paddingLeft: '5.5rem',
           backgroundImage: `linear-gradient(rgba(194, 217, 249, 0.9), rgba(194, 217, 249, 0.9)), url(${loginbg})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -235,12 +242,17 @@ function AdminBookings() {
                 }
 
                 return filtered.map((b, idx) => (
-                  <div key={`${b._id || b.id || 'booking'}-${idx}`} className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col">
+                  <div key={`${b._id || b.id || 'booking'}-${idx}`} className="bg-[#F7FBFF] rounded-[15px] shadow-md p-5 flex flex-col
+                    ">
                     <div className="flex-1">
                       <p className="font-bold text-lg text-[#1A1A1A]">{b.facility?.name || 'Equipment Only'}</p>
                       <p className="text-gray-500 text-sm mb-2">{b.bookingType}</p>
-                      <p className="text-sm text-gray-700 mb-1">Booked by: {b.user && typeof b.user === 'object' ? (b.user.name || b.user._id) : (b.user || 'Unknown')}{b.user && typeof b.user === 'object' && b.user.email ? ` (${b.user.email})` : ''}</p>
-                      <div className="flex items-center gap-3 mt-2 text-sm text-gray-600">
+                      <p className="text-sm text-gray-700 mb-1
+                      min-[320px]:text-xs min-[375px]:text-sm
+                      ">Booked by: {b.user && typeof b.user === 'object' ? (b.user.name || b.user._id) : (b.user || 'Unknown')}{b.user && typeof b.user === 'object' && b.user.email ? ` (${b.user.email})` : ''}</p>
+                      <div className="flex items-center gap-3 mt-2 text-sm text-gray-600
+                      min-[320px]:text-xs min-[375px]:text-sm
+                      ">
                         <span>From: {b.startDate ? new Date(b.startDate).toLocaleString() : '-'}</span>
                         <span>To: {b.endDate ? new Date(b.endDate).toLocaleString() : '-'}</span>
                       </div>
@@ -263,111 +275,118 @@ function AdminBookings() {
                     </div>
 
                     <div className="mt-4">
-                          <div className="flex items-center justify-between">
-                            <span className={`px-3 py-1 rounded-full text-sm ${
-                              b.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                              b.status === 'approved' ? 'bg-green-100 text-green-800' :
+                      <div className="flex items-center justify-between
+                          min-[320px]:flex-col min-[320px]:gap-1
+                          min-[375px]:
+                          min-[425px]:
+                          sm:flex-row sm:items-center sm:gap-0
+                          md:flex-row md:items-center md:gap-0
+                          lg:flex-col lg:items-center lg:gap-2
+                          xl:flex-row xl:items-center xl:gap-0
+                          ">
+                        <span className={`px-3 py-1 rounded-full text-sm ${b.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                            b.status === 'approved' ? 'bg-green-100 text-green-800' :
                               b.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                              b.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-                              'bg-gray-100 text-gray-700'}`}>
-                              {(b.status === 0 || b.status === '0') ? 'upcoming' : (b.status || 'unknown')}
-                            </span>
+                                b.status === 'completed' ? 'bg-blue-100 text-blue-800' :
+                                  'bg-gray-100 text-gray-700'}`}>
+                          {(b.status === 0 || b.status === '0') ? 'upcoming' : (b.status || 'unknown')}
+                        </span>
 
-                            <div className="flex items-center gap-2
+                        <div className="flex items-center gap-2
                               min-[320px]:gap-1 min-[375px]:gap-1.5 sm:gap-2">
-                              <button
-                                title="Approve"
-                                onClick={async () => {
-                                  try {
-                                    const token = localStorage.getItem('token') || '';
-                                    const headers = token ? { Authorization: `Bearer ${token}` } : {};
-                                    const payload = {
-                                      user: b.user && typeof b.user === 'object' ? (b.user._id || b.user) : b.user,
-                                      bookingType: b.bookingType,
-                                      facility: b.facility && typeof b.facility === 'object' ? (b.facility._id || b.facility) : b.facility,
-                                      equipment: Array.isArray(b.equipment) ? b.equipment.map(e => (e && e._id) ? e._id : e) : (b.equipment || []),
-                                      startDate: b.startDate,
-                                      endDate: b.endDate,
-                                      status: 'approved'
-                                    };
-                                    const res = await axios.put(`${base}/bookafaci/book/${b._id}`, payload, { headers });
-                                    const updated = res.data?.booking || res.data;
-                                    setBookings(prev => prev.map(x => (x._id === updated._id ? updated : x)));
-                                    toast.success('Booking approved');
-                                  } catch (err) {
-                                    console.error('Approve failed', err?.response?.data || err);
-                                    toast.error('Failed to approve booking');
-                                  }
-                                }}
-                                className="p-2 rounded-md bg-green-50 hover:bg-green-100 text-green-700">
-                                <SquareCheck size={18} />
-                              </button>
+                          <button
+                            title="Approve"
+                            onClick={async () => {
+                              try {
+                                const token = localStorage.getItem('token') || '';
+                                const headers = token ? { Authorization: `Bearer ${token}` } : {};
+                                const payload = {
+                                  user: b.user && typeof b.user === 'object' ? (b.user._id || b.user) : b.user,
+                                  bookingType: b.bookingType,
+                                  facility: b.facility && typeof b.facility === 'object' ? (b.facility._id || b.facility) : b.facility,
+                                  equipment: Array.isArray(b.equipment) ? b.equipment.map(e => (e && e._id) ? e._id : e) : (b.equipment || []),
+                                  startDate: b.startDate,
+                                  endDate: b.endDate,
+                                  status: 'approved'
+                                };
+                                const res = await axios.put(`${base}/bookafaci/book/${b._id}`, payload, { headers });
+                                const updated = res.data?.booking || res.data;
+                                setBookings(prev => prev.map(x => (x._id === updated._id ? updated : x)));
+                                toast.success('Booking approved');
+                              } catch (err) {
+                                console.error('Approve failed', err?.response?.data || err);
+                                toast.error('Failed to approve booking');
+                              }
+                            }}
+                            className="p-2 rounded-md bg-green-50 hover:bg-green-100 text-green-700">
+                            <SquareCheck size={18} />
+                          </button>
 
-                              <button
-                                title="Reject"
-                                onClick={async () => {
-                                  try {
-                                    const token = localStorage.getItem('token') || '';
-                                    const headers = token ? { Authorization: `Bearer ${token}` } : {};
-                                    const payload = {
-                                      user: b.user && typeof b.user === 'object' ? (b.user._id || b.user) : b.user,
-                                      bookingType: b.bookingType,
-                                      facility: b.facility && typeof b.facility === 'object' ? (b.facility._id || b.facility) : b.facility,
-                                      equipment: Array.isArray(b.equipment) ? b.equipment.map(e => (e && e._id) ? e._id : e) : (b.equipment || []),
-                                      startDate: b.startDate,
-                                      endDate: b.endDate,
-                                      status: 'rejected'
-                                    };
-                                    const res = await axios.put(`${base}/bookafaci/book/${b._id}`, payload, { headers });
-                                    const updated = res.data?.booking || res.data;
-                                    setBookings(prev => prev.map(x => (x._id === updated._id ? updated : x)));
-                                    toast.success('Booking rejected');
-                                  } catch (err) {
-                                    console.error('Reject failed', err?.response?.data || err);
-                                    toast.error('Failed to reject booking');
-                                  }
-                                }}
-                                className="p-2 rounded-md bg-red-50 hover:bg-red-100 text-red-700">
-                                <SquareX size={18} />
-                              </button>
+                          <button
+                            title="Reject"
+                            onClick={async () => {
+                              try {
+                                const token = localStorage.getItem('token') || '';
+                                const headers = token ? { Authorization: `Bearer ${token}` } : {};
+                                const payload = {
+                                  user: b.user && typeof b.user === 'object' ? (b.user._id || b.user) : b.user,
+                                  bookingType: b.bookingType,
+                                  facility: b.facility && typeof b.facility === 'object' ? (b.facility._id || b.facility) : b.facility,
+                                  equipment: Array.isArray(b.equipment) ? b.equipment.map(e => (e && e._id) ? e._id : e) : (b.equipment || []),
+                                  startDate: b.startDate,
+                                  endDate: b.endDate,
+                                  status: 'rejected'
+                                };
+                                const res = await axios.put(`${base}/bookafaci/book/${b._id}`, payload, { headers });
+                                const updated = res.data?.booking || res.data;
+                                setBookings(prev => prev.map(x => (x._id === updated._id ? updated : x)));
+                                toast.success('Booking rejected');
+                              } catch (err) {
+                                console.error('Reject failed', err?.response?.data || err);
+                                toast.error('Failed to reject booking');
+                              }
+                            }}
+                            className="p-2 rounded-md bg-red-50 hover:bg-red-100 text-red-700">
+                            <SquareX size={18} />
+                          </button>
 
-                              <button
-                                title="Cancel"
-                                onClick={async () => {
-                                  try {
-                                    if (!window.confirm('Cancel this booking? This will mark it cancelled.')) return;
-                                    const token = localStorage.getItem('token') || '';
-                                    const headers = token ? { Authorization: `Bearer ${token}` } : {};
-                                    const res = await axios.delete(`${base}/bookafaci/book/${b._id}`, { headers });
-                                    const updated = res.data?.booking || res.data;
-                                    if (updated && updated._id) {
-                                      setBookings(prev => prev.map(x => (x._id === updated._id ? updated : x)));
-                                    } else {
-                                      // fallback: mark locally as cancelled
-                                      setBookings(prev => prev.map(x => x._id === b._id ? { ...x, status: 'cancelled' } : x));
-                                    }
-                                    toast.success('Booking cancelled');
-                                  } catch (err) {
-                                    console.error('Cancel failed', err?.response?.data || err);
-                                    toast.error('Failed to cancel booking');
-                                  }
-                                }}
-                                className="p-2 rounded-md bg-orange-50 hover:bg-orange-100 text-orange-700">
-                                <CircleSlash size={18} />
-                              </button>
+                          <button
+                            title="Cancel"
+                            onClick={async () => {
+                              try {
+                                if (!window.confirm('Cancel this booking? This will mark it cancelled.')) return;
+                                const token = localStorage.getItem('token') || '';
+                                const headers = token ? { Authorization: `Bearer ${token}` } : {};
+                                const res = await axios.delete(`${base}/bookafaci/book/${b._id}`, { headers });
+                                const updated = res.data?.booking || res.data;
+                                if (updated && updated._id) {
+                                  setBookings(prev => prev.map(x => (x._id === updated._id ? updated : x)));
+                                } else {
+                                  // fallback: mark locally as cancelled
+                                  setBookings(prev => prev.map(x => x._id === b._id ? { ...x, status: 'cancelled' } : x));
+                                }
+                                toast.success('Booking cancelled');
+                              } catch (err) {
+                                console.error('Cancel failed', err?.response?.data || err);
+                                toast.error('Failed to cancel booking');
+                              }
+                            }}
+                            className="p-2 rounded-md bg-orange-50 hover:bg-orange-100 text-orange-700">
+                            <CircleSlash size={18} />
+                          </button>
 
-                              <button
-                                title="Edit"
-                                onClick={() => setEditingBooking(b)}
-                                className="p-2 rounded-md bg-slate-50 hover:bg-slate-100 text-slate-700">
-                                <Edit size={18} />
-                              </button>
-                            </div>
-                          </div>
+                          <button
+                            title="Edit"
+                            onClick={() => setEditingBooking(b)}
+                            className="p-2 rounded-md bg-slate-50 hover:bg-slate-100 text-slate-700">
+                            <Edit size={18} />
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))
-              })() }
+              })()}
             </div>
 
             {/* Edit modal */}
@@ -430,27 +449,27 @@ function AdminBookings() {
                       </label>
                       <label className="flex flex-col">
                         <span className="text-sm mb-1">Start</span>
-                        <input name="startDate" type="datetime-local" defaultValue={editingBooking.startDate ? new Date(editingBooking.startDate).toISOString().slice(0,16) : ''} className="border p-2 rounded" />
+                        <input name="startDate" type="datetime-local" defaultValue={editingBooking.startDate ? new Date(editingBooking.startDate).toISOString().slice(0, 16) : ''} className="border p-2 rounded" />
                       </label>
                       <label className="flex flex-col">
                         <span className="text-sm mb-1">End</span>
-                        <input name="endDate" type="datetime-local" defaultValue={editingBooking.endDate ? new Date(editingBooking.endDate).toISOString().slice(0,16) : ''} className="border p-2 rounded" />
+                        <input name="endDate" type="datetime-local" defaultValue={editingBooking.endDate ? new Date(editingBooking.endDate).toISOString().slice(0, 16) : ''} className="border p-2 rounded" />
                       </label>
                     </div>
 
                     <div className="mt-4 flex justify-end gap-2">
-                      <button 
-                        type="button" 
-                        onClick={() => setEditingBooking(null)} 
+                      <button
+                        type="button"
+                        onClick={() => setEditingBooking(null)}
                         className="relative overflow-hidden text-white px-4 py-2 rounded-full shadow group"
                       >
                         <span className="absolute inset-0 bg-gradient-to-r from-[#9a3434] to-[#ff8383] transition-all duration-300 ease-in-out group-hover:opacity-0" />
                         <span className="absolute inset-0 bg-gradient-to-r from-[#ff8383] to-[#9a3434] opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100" />
                         <span className="relative z-10 font-medium">Cancel</span>
                       </button>
-                      <button 
-                        type="submit" 
-                        disabled={editLoading} 
+                      <button
+                        type="submit"
+                        disabled={editLoading}
                         className="relative overflow-hidden text-white px-4 py-2 rounded-full shadow group"
                       >
                         <span className="absolute inset-0 bg-gradient-to-r from-[#346D9A] to-[#83C9FF] transition-all duration-300 ease-in-out group-hover:opacity-0" />

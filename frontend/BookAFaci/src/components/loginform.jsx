@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -20,10 +20,24 @@ function LoginForm() {
     password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
   });
 
+  // Get email from signup if available
+  const signupEmail = sessionStorage.getItem('signupEmail');
+
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
     resolver: yupResolver(schema),
     mode: 'onTouched',
+    defaultValues: {
+      email: signupEmail || '',
+      password: ''
+    }
   });
+
+  // Clear the stored email after reading it
+  useEffect(() => {
+    if (signupEmail) {
+      sessionStorage.removeItem('signupEmail');
+    }
+  }, [signupEmail]);
 
   const onSubmit = async (data) => {
     try {

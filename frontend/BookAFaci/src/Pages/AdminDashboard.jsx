@@ -12,8 +12,7 @@ import {
   Building2,
   LayoutDashboard,
   GalleryVerticalEnd,
-  ClipboardClock,
-  SquareX, SquareCheck,
+  SquareCheck,
   Clipboard, Users
 } from "lucide-react"
 
@@ -72,11 +71,12 @@ function AdminDashboard() {
   const [usersCount, setUsersCount] = useState(0);
   const [facilitiesCount, setFacilitiesCount] = useState(0);
   const [bookingsCount, setBookingsCount] = useState(0);
-
+  const [completedCount, setCompletedCount] = useState(0);
+  
   const animatedUsers = useCountAnimation(usersCount, { duration: 800, delay: 100 });
   const animatedFacilities = useCountAnimation(facilitiesCount, { duration: 800, delay: 100 });
   const animatedBookings = useCountAnimation(bookingsCount, { duration: 800, delay: 100 });
-
+  const animatedCompleted = useCountAnimation(completedCount, { duration: 800, delay: 100 });
   useEffect(() => {
     const user = localStorage.getItem('user');
     if (!user) {
@@ -195,6 +195,7 @@ function AdminDashboard() {
           console.error('Failed to load bookings count', err?.response?.data || err);
           setBookingsCount(0);
         }
+        
 
         /*
         (async () => {
@@ -243,9 +244,16 @@ function AdminDashboard() {
       </Sidebar>
 
       <main className="flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5 
-          min-[320px]:w-[350px] max-[640px]:w-[450px] md:w-[450px] lg:w-[450px]"
+          min-[320px]:w-[350px] max-[640px]:w-[450px] md:w-[450px] lg:w-[450px]
+          min-[320px]:pl-6
+          min-[375px]:pl-6
+          min-[425px]:pl-6
+          sm:pl-6
+          md:pl-[5.5rem]
+          lg:pl-[5.5rem]
+          xl:pl-[5.5rem]
+          "
         style={{
-          paddingLeft: '5.5rem',
           backgroundImage: `linear-gradient(rgba(194, 217, 249, 0.9), rgba(194, 217, 249, 0.9)), url(${loginbg})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -266,18 +274,47 @@ function AdminDashboard() {
               aria-label="Total bookings"
             >
               <span
-                className="flex grow pointer-events-none absolute inset-0 bg-transparent w-[650px] h-[500px] m-[-7.5rem] mb-[10px] transition-transform duration-1000 group-hover:ease-in-out group-hover:rotate-[360deg] group-hover:bg-[conic-gradient(#83C9FF,_#346D9A,_#83C9FF)]"
+                className="flex grow pointer-events-none absolute inset-0 bg-transparent w-[650px] h-[500px] m-[-7.5rem] mb-[10px] transition-transform duration-1000 group-hover:ease-in-out group-hover:rotate-[360deg] group-hover:bg-[conic-gradient(#83C9FF,_#346D9A,_#83C9FF)]
+                lg:w-[1500px] lg:h-[1500px] lg:m-[-15rem] lg:mb-[-30px]"
                 style={{ zIndex: 0 }}
               />
 
               {/* inner card */}
               <div
-                className="relative flex grow items-center font-inter font-bold text-center bg-slate-300  w-[250px] h-[150px] p-[25px] rounded-[22px] text-[#007BDA] indent-1 border-[#a7bace]"
+                className="relative flex grow items-center font-inter font-bold text-center bg-slate-300  w-[250px] h-[150px] p-[25px] rounded-[22px] text-[#007BDA] indent-1 border-[#a7bace]
+                min-[320px]:w-[100px] min-[320px]:text-[10px] min-[320px]:flex-col
+                min-[320px]:h-[120px]
+                min-[320px]:p-[15px]
+                sm:
+                md:
+                lg:w-[250px] lg:h-[150px] lg:p-[25px]
+                xl:w-[250px] xl:h-[150px] xl:p-[25px] xl:flex-row
+                "
                 style={{ zIndex: 10 }}
               >
-                <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
-                <span className="ml-2">Active Facilities:</span>
-                <div className="text-4xl indent-4">{animatedFacilities}</div>
+                <GalleryVerticalEnd size={40} className="text-[#007BDA]
+                min-[320px]:size-0
+                sm:hidden-0
+                md:hidden-0
+                lg:size-[40px]
+                xl:size-[40px]
+                " />
+                <span className="ml-2
+                min-[320px]:text-[1rem]
+                min-[320px]:ml-0
+                sm:ml-2
+                md:ml-2
+                lg:ml-2
+                xl:ml-2
+                ">Active Facilities:</span>
+                <div className="text-4xl indent-4
+                min-[320px]:text-[2rem]
+                min-[320px]:indent-0
+                sm:text-4xl sm:indent-4
+                md:text-4xl md:indent-0
+                lg:text-4xl lg:indent-0
+                xl:text-4xl xl:indent-4
+                ">{animatedFacilities}</div>
               </div>
             </button>
 
@@ -288,18 +325,47 @@ function AdminDashboard() {
               aria-label="Total bookings"
             >
               <span
-                className="flex grow pointer-events-none absolute inset-0 bg-transparent w-[650px] h-[500px] m-[-7.5rem] mb-[10px] transition-transform duration-1000 group-hover:ease-in-out group-hover:rotate-[360deg] group-hover:bg-[conic-gradient(#83C9FF,_#346D9A,_#83C9FF)]"
+                className="flex grow pointer-events-none absolute inset-0 bg-transparent w-[650px] h-[500px] m-[-7.5rem] mb-[10px] transition-transform duration-1000 group-hover:ease-in-out group-hover:rotate-[360deg] group-hover:bg-[conic-gradient(#83C9FF,_#346D9A,_#83C9FF)]
+                lg:w-[1500px] lg:h-[1500px] lg:m-[-15rem] lg:mb-[-30px]"
                 style={{ zIndex: 0 }}
               />
 
               {/* inner card */}
               <div
-                className="relative flex grow items-center font-inter font-bold text-center bg-slate-300  w-[250px] h-[150px] p-[25px] rounded-[22px] text-[#007BDA] indent-1 border-[#a7bace]"
+                className="relative flex grow items-center font-inter font-bold text-center bg-slate-300  w-[250px] h-[150px] p-[25px] rounded-[22px] text-[#007BDA] indent-1 border-[#a7bace]
+                min-[320px]:w-[100px] min-[320px]:text-[10px] min-[320px]:flex-col
+                min-[320px]:h-[120px]
+                min-[320px]:p-[15px]
+                sm:
+                md:
+                lg:w-[250px] lg:h-[150px] lg:p-[25px]
+                xl:w-[250px] xl:h-[150px] xl:p-[25px] xl:flex-row
+                "
                 style={{ zIndex: 10 }}
               >
-                <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
-                <span className="ml-2">Review Bookings:</span>
-                <div className="text-4xl indent-4">{animatedBookings}</div>
+                <Clipboard size={40} className="text-[#007BDA]
+                min-[320px]:size-0
+                sm:hidden-0
+                md:hidden-0
+                lg:size-[40px]
+                xl:size-[40px]
+                " />
+                <span className="ml-2
+                min-[320px]:text-[1rem]
+                min-[320px]:ml-0
+                sm:ml-2
+                md:ml-2
+                lg:ml-2
+                xl:ml-2
+                ">Review Bookings:</span>
+                <div className="text-4xl indent-4
+                min-[320px]:text-[2rem]
+                min-[320px]:indent-0
+                sm:text-4xl sm:indent-4
+                md:text-4xl md:indent-0
+                lg:text-4xl lg:indent-0
+                xl:text-4xl xl:indent-4
+                ">{animatedBookings}</div>
               </div>
             </button>
 
@@ -310,18 +376,46 @@ function AdminDashboard() {
               aria-label="Total bookings"
             >
               <span
-                className="flex grow pointer-events-none absolute inset-0 bg-transparent w-[650px] h-[500px] m-[-7.5rem] mb-[10px] transition-transform duration-1000 group-hover:ease-in-out group-hover:rotate-[360deg] group-hover:bg-[conic-gradient(#83C9FF,_#346D9A,_#83C9FF)]"
+                className="flex grow pointer-events-none absolute inset-0 bg-transparent w-[650px] h-[500px] m-[-7.5rem] mb-[10px] transition-transform duration-1000 group-hover:ease-in-out group-hover:rotate-[360deg] group-hover:bg-[conic-gradient(#83C9FF,_#346D9A,_#83C9FF)]
+                lg:w-[1500px] lg:h-[1500px] lg:m-[-15rem] lg:mb-[-30px]"
                 style={{ zIndex: 0 }}
               />
 
               {/* inner card */}
               <div
-                className="relative flex grow items-center font-inter font-bold text-center bg-slate-300  w-[250px] h-[150px] p-[25px] rounded-[22px] text-[#007BDA] indent-1 border-[#a7bace]"
+                className="relative flex grow items-center font-inter font-bold text-center bg-slate-300  w-[250px] h-[150px] p-[25px] rounded-[22px] text-[#007BDA] indent-1 border-[#a7bace]
+                min-[320px]:w-[100px] min-[320px]:text-[10px] min-[320px]:flex-col
+                min-[320px]:h-[120px]
+                min-[320px]:p-[15px]
+                sm:
+                md:
+                lg:w-[250px] lg:h-[150px] lg:p-[25px]
+                xl:w-[250px] xl:h-[150px] xl:p-[25px] xl:flex-row"
                 style={{ zIndex: 10 }}
               >
-                <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
-                <span className="ml-2">All Users:</span>
-                <div className="text-4xl indent-4">{animatedUsers}</div>
+                <Users size={40} className="text-[#007BDA]
+                min-[320px]:size-0
+                sm:hidden-0
+                md:hidden-0
+                lg:size-[40px]
+                xl:size-[40px]
+                " />
+                <span className="ml-2
+                min-[320px]:text-[1rem]
+                min-[320px]:ml-0
+                sm:ml-2
+                md:ml-2
+                lg:ml-2
+                xl:ml-2
+                ">All Users:</span>
+                <div className="text-4xl indent-4
+                min-[320px]:text-[2rem]
+                min-[320px]:indent-0
+                sm:text-4xl sm:indent-4
+                md:text-4xl md:indent-0
+                lg:text-4xl lg:indent-0
+                xl:text-4xl xl:indent-4
+                ">{animatedUsers}</div>
               </div>
             </button>
 
@@ -332,18 +426,47 @@ function AdminDashboard() {
               aria-label="Total bookings"
             >
               <span
-                className="flex grow pointer-events-none absolute inset-0 bg-transparent w-[650px] h-[500px] m-[-7.5rem] mb-[10px] transition-transform duration-1000 group-hover:ease-in-out group-hover:rotate-[360deg] group-hover:bg-[conic-gradient(#83C9FF,_#346D9A,_#83C9FF)]"
+                className="flex grow pointer-events-none absolute inset-0 bg-transparent w-[650px] h-[500px] m-[-7.5rem] mb-[10px] transition-transform duration-1000 group-hover:ease-in-out group-hover:rotate-[360deg] group-hover:bg-[conic-gradient(#83C9FF,_#346D9A,_#83C9FF)]
+                lg:w-[1500px] lg:h-[1500px] lg:m-[-15rem] lg:mb-[-30px]
+                "
                 style={{ zIndex: 0 }}
               />
 
               {/* inner card */}
               <div
-                className="relative flex grow items-center font-inter font-bold text-center bg-slate-300  w-[250px] h-[150px] p-[25px] rounded-[22px] text-[#007BDA] indent-1 border-[#a7bace]"
+                className="relative flex grow items-center font-inter font-bold text-center bg-slate-300  w-[250px] h-[150px] p-[25px] rounded-[22px] text-[#007BDA] indent-1 border-[#a7bace]
+                min-[320px]:w-[100px] min-[320px]:text-[10px] min-[320px]:flex-col
+                min-[320px]:h-[120px]
+                min-[320px]:p-[15px]
+                sm:
+                md:
+                lg:w-[250px] lg:h-[150px] lg:p-[25px]
+                xl:w-[250px] xl:h-[150px] xl:p-[25px] xl:flex-row"
                 style={{ zIndex: 10 }}
               >
-                <GalleryVerticalEnd size={40} className="text-[#007BDA]" />
-                <span className="ml-2">Complete Bookings:</span>
-                <div className="text-4xl indent-4">{ }</div>
+                <SquareCheck size={40} className="text-[#007BDA]
+                min-[320px]:size-0
+                sm:hidden-0
+                md:hidden-0
+                lg:size-[40px]
+                xl:size-[40px]
+                " />
+                <span className="ml-2
+                min-[320px]:text-[1rem]
+                min-[320px]:ml-0
+                sm:ml-2
+                md:ml-2
+                lg:ml-2
+                xl:ml-2
+                ">Complete Bookings:</span>
+                <div className="text-4xl indent-4
+                min-[320px]:text-[2rem]
+                min-[320px]:indent-0
+                sm:text-4xl sm:indent-4
+                md:text-4xl md:indent-0
+                lg:text-4xl lg:indent-0
+                xl:text-4xl xl:indent-4
+                ">{animatedCompleted}</div>
               </div>
             </button>
           </div>
@@ -370,7 +493,9 @@ function AdminDashboard() {
               tabIndex={0}
               onClick={() => navigate('/adminbks?status=pending')}
               onKeyDown={(e) => { if (e.key === 'Enter') navigate('/adminbks?status=pending'); }}
-              className='cursor-pointer flex flex-col justify-between ] bg-white col-span-2 h-[fit] rounded-[10px] drop-shadow-lg transition-all hover:transform hover:scale-[1.01] p-6'
+              className='cursor-pointer flex flex-col justify-between ] bg-white col-span-2 h-[fit] rounded-[10px] drop-shadow-lg transition-all hover:transform hover:scale-[1.01] p-6
+              
+              '
             > <b className='text-[#007BDA]'>Pending:</b>
               <hr className='mt-3 mb-3'></hr>
               {latestPendingLoading ? (
@@ -378,11 +503,27 @@ function AdminDashboard() {
               ) : latestPending ? (
                 <div className='flex flex-col h-full'>
                   <div>
-                    <p className='font-bold text-xl text-[#1A1A1A] ml-10'>{latestPending.facility?.name || 'Equipment Only'}</p>
+                    <p className='font-bold text-xl text-[#1A1A1A] ml-1
+                    min-[320px]:ml-2
+                    min-[375px]:ml-2
+                    min-[425px]:ml-2
+                    sm:ml-10
+                    md:ml-10
+                    lg:ml-10
+                    xl:ml-10
+                    '>{latestPending.facility?.name || 'Equipment Only'}</p>
                     <p className='ml-10 text-sm text-gray-600'>{latestPending.bookingType ?? ''}</p>
                   </div>
 
-                  <div className='mt-4 text-sm text-gray-700 flex-1 ml-10'>
+                  <div className='mt-4 text-sm text-gray-700 flex-1 ml-10
+                    min-[320px]:ml-2
+                    min-[375px]:ml-2
+                    min-[425px]:ml-2
+                    sm:ml-10
+                    md:ml-10
+                    lg:ml-10
+                    xl:ml-10
+                  '>
                     <div><strong>From:</strong> {latestPending.startDate ? new Date(latestPending.startDate).toLocaleString() : '-'}</div>
                     <div><strong>To:</strong> {latestPending.endDate ? new Date(latestPending.endDate).toLocaleString() : '-'}</div>
 
@@ -399,7 +540,15 @@ function AdminDashboard() {
                     </div>
                   </div>
 
-                  <div className='mt-2 ml-10'>
+                  <div className='mt-2 ml-10
+                    min-[320px]:ml-2
+                    min-[375px]:ml-2
+                    min-[425px]:ml-2
+                    sm:ml-10
+                    md:ml-10
+                    lg:ml-10
+                    xl:ml-10
+                  '>
                     <span className='px-3 py-1 rounded-full text-sm bg-yellow-100 text-yellow-800'>pending</span>
                     <div className='text-xs text-gray-500 mt-2'>Click to view all pending bookings</div>
                   </div>
@@ -422,11 +571,27 @@ function AdminDashboard() {
               ) : latestApproved ? (
                 <div className='flex flex-col h-full'>
                   <div>
-                    <p className='font-bold text-xl text-[#1A1A1A] ml-10'>{latestApproved.facility?.name || 'Equipment Only'}</p>
+                    <p className='font-bold text-xl text-[#1A1A1A] ml-1
+                    min-[320px]:ml-2
+                    min-[375px]:ml-2
+                    min-[425px]:ml-2
+                    sm:ml-10
+                    md:ml-10
+                    lg:ml-10
+                    xl:ml-10
+                    '>{latestApproved.facility?.name || 'Equipment Only'}</p>
                     <p className='ml-10 text-sm text-gray-600'>{latestApproved.bookingType ?? ''}</p>
                   </div>
 
-                  <div className='mt-1 text-sm text-gray-700 flex-1 ml-10'>
+                  <div className='mt-1 text-sm text-gray-700 flex-1 ml-10
+                    min-[320px]:ml-2
+                    min-[375px]:ml-2
+                    min-[425px]:ml-2
+                    sm:ml-10
+                    md:ml-10
+                    lg:ml-10
+                    xl:ml-10
+                  '>
                     <div><strong>From:</strong> {latestApproved.startDate ? new Date(latestApproved.startDate).toLocaleString() : '-'}</div>
                     <div><strong>To:</strong> {latestApproved.endDate ? new Date(latestApproved.endDate).toLocaleString() : '-'}</div>
 
@@ -443,7 +608,15 @@ function AdminDashboard() {
                     </div>
                   </div>
 
-                  <div className='mt-2 ml-10'>
+                  <div className='mt-2 ml-10
+                    min-[320px]:ml-2
+                    min-[375px]:ml-2
+                    min-[425px]:ml-2
+                    sm:ml-10
+                    md:ml-10
+                    lg:ml-10
+                    xl:ml-10
+                  '>
                     <span className='px-3 py-1 rounded-full text-sm bg-green-100 text-green-800'>approved</span>
                     <div className='text-xs text-gray-500 mt-2'>Click to view all approved bookings</div>
                   </div>

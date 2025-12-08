@@ -4,17 +4,12 @@ import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 
 const SidebarContext = createContext()
-const raw = localStorage.getItem('user');
-let user = {};
-try {
-  user = raw ? JSON.parse(raw) : {};
-} catch (e) {
-  user = {};
-}
 
 export default function Sidebar({ children }) {
   const [expanded, setExpanded] = useState(false)
   const navigate = useNavigate()
+  const [lastScrollY, setLastScrollY] = useState(0)
+  const [showBottomNav, setShowBottomNav] = useState(true)
 
     const [user, setUser] = useState(() => {
       try {
@@ -51,6 +46,26 @@ export default function Sidebar({ children }) {
      }
    }, [])
 
+   useEffect(() => {
+     const handleScroll = () => {
+       const currentScrollY = window.scrollY
+       
+       // Show nav when scrolling up, hide when scrolling down
+       if (currentScrollY < lastScrollY || currentScrollY < 10) {
+         setShowBottomNav(true)
+       } else if (currentScrollY > lastScrollY && currentScrollY > 80) {
+         setShowBottomNav(false)
+       }
+       
+       setLastScrollY(currentScrollY)
+     }
+
+     window.addEventListener('scroll', handleScroll, { passive: true })
+     
+     return () => {
+       window.removeEventListener('scroll', handleScroll)
+     }
+   }, [lastScrollY])
 
   const handleLogout = () => {
     localStorage.removeItem('user')
@@ -64,7 +79,8 @@ export default function Sidebar({ children }) {
 
   return (
     <>
-    <aside className="fixed left-0 top-0 h-full z-[40] font-inter">
+    {/* Desktop Sidebar - hidden on mobile */}
+    <aside className="fixed left-0 top-0 h-full z-[40] font-inter hidden md:block">
       <nav className={`h-full flex flex-col bg-gradient-to-b from-[#FFFEFF] to-[#D2EDFF] border-r shadow-sm transition-all ${expanded ? "w-64" : "w-16"}`}>
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
@@ -103,11 +119,33 @@ export default function Sidebar({ children }) {
       </nav>
     </aside>
 
+    {/* Mobile Bottom Navigation - shown only on mobile with auto-hide */}
+    <nav className={`md:hidden fixed bottom-0 left-0 right-0 z-[40] bg-gradient-to-r from-[#FFFEFF] to-[#D2EDFF] border-t shadow-lg font-inter transition-transform duration-300 ${
+      showBottomNav ? 'translate-y-0' : 'translate-y-full'
+    }`}>
+      <SidebarContext.Provider value={{ expanded: false }}>
+        <ul className="flex justify-around items-center py-2 px-2">
+          {children}
+        </ul>
+      </SidebarContext.Provider>
+    </nav>
+
+    {/* Mobile Logout Button - floating with auto-hide */}
+    <button
+      onClick={handleLogout}
+      aria-label="Logout"
+      className={`md:hidden fixed bottom-20 right-4 z-[41] flex items-center justify-center bg-red-500 text-white rounded-full p-3 shadow-lg hover:bg-red-600 transition-all duration-300 ${
+        showBottomNav ? 'translate-y-0 opacity-100' : 'translate-y-32 opacity-0'
+      }`}
+    >
+      <LogOutIcon size={20} />
+    </button>
+
       {expanded && (
         <div
           aria-hidden="true"
           onClick={() => setExpanded(false)}
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 hidden md:block"
         />
       )}
     </>

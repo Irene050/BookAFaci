@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';   
+import React, { useEffect, useState, useMemo, useRef } from 'react';   
 import { useNavigate, useLocation } from 'react-router';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -28,6 +28,7 @@ function UserBookings() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [filterName, setFilterName] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
+  const hasShownToast = useRef(false);
 
   useEffect(() => {
     const user = localStorage.getItem('user');
@@ -50,7 +51,15 @@ function UserBookings() {
         const rRes = await axios.get(`${base}/bookafaci/equipment`).catch(() => ({ data: [] }));
         setResources(Array.isArray(rRes.data) ? rRes.data : []);
       } catch (err) {
-        toast.error('Failed to load data');
+        if (!hasShownToast.current) {
+          toast.info('No Bookings found',{
+            pauseOnHover: false,
+            hideProgressBar: true,
+            position: "bottom-right",
+            autoClose: 1000
+          });
+          hasShownToast.current = true;
+        }
       }
     })();
   }, [navigate]);
@@ -315,9 +324,16 @@ function UserBookings() {
       </Sidebar>
 
       <main
-        className='flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5 overflow-hidden'
+        className='flex-1 pl-6 pr-6 bg-center bg-cover min-h-screen relative pb-5 overflow-hidden
+          min-[320px]:w-[350px] max-[640px]:w-[450px] md:w-[450px] lg:w-[450px]
+          min-[320px]:pl-6
+          min-[375px]:pl-6
+          min-[425px]:pl-6
+          sm:pl-6
+          md:pl-[5.5rem]
+          lg:pl-[5.5rem]
+          xl:pl-[5.5rem]'
         style={{
-          paddingLeft: '5.5rem',
           backgroundImage: `linear-gradient(rgba(194, 217, 249, 0.85), rgba(194, 217, 249, 0.85)), url(${loginbg})`,
         }}
       >
