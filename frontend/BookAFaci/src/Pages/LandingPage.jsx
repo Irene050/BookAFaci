@@ -39,7 +39,7 @@ function LandingPage() {
                             min-[320px]:text-center
                             min-[320px]:ml-[-2.2rem]
                             min-[425px]:mt-[-20rem]
-                            sm:mt-[-5rem]
+                            sm:mt-[-20rem]
                             md:flex
                             md:flex-col
                             md:justify-center
@@ -61,7 +61,7 @@ function LandingPage() {
 
                             <a className='text-white bg-transparent border p-2 rounded-full text-[1.5rem] hover:bg-white hover:text-black mix-blend-lighten transition-all
                             min-[320px]:ml-[-1rem]
-                            sm:ml-0
+                            sm:ml-0 relative z-10
                             ' href="/user-select">Get Started</a>
                         </div>
                     </div>
@@ -74,11 +74,11 @@ function LandingPage() {
                         md:mt-[2rem]
                         md:w-[80%]
                         sm:w-[35%]
-                        sm:mt-[1rem]
+                        sm:mt-[-20rem]
                         min-[320px]:
                         min-[320px]:mb-[-4rem]
                         min-[320px]:w-[70%]
-                        min-[425px]:mt-[-5rem]
+                        min-[425px]:mt-[-19rem]
                         min-[425px]:w-[50%]
                         
                         '>
