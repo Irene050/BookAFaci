@@ -46,11 +46,11 @@
 
 ## 👥 Development Team
 
-<table>
-  <tr>
-    <td align="center">
+<table style='border: none'>
+  <tr style='border: none'>
+    <td align="center" style='border: none'>
       <a href="https://github.com/ctrl-fmadera">
-        <img src="https://avatars.githubusercontent.com/u/189200794?v=4" width="100px;" alt="Frances Yvonne P. Madera"/>
+        <img style='border-radius: 100%; border:solid; border-color:#919191' src="https://avatars.githubusercontent.com/u/189200794?v=4" width="100px;" alt="Frances Yvonne P. Madera"/>
         <br />
         <sub><b>Frances Yvonne P. Madera</b></sub>
       </a>
@@ -59,7 +59,7 @@
     </td>
     <td align="center">
       <a href="https://github.com/Irene050">
-        <img src="https://avatars.githubusercontent.com/u/189200811?v=4" width="100px;" alt="Irene B. Artiaga"/>
+        <img style='border-radius: 100%; border:solid; border-color:#919191' src="https://avatars.githubusercontent.com/u/189200811?v=4" width="100px;" alt="Irene B. Artiaga"/>
         <br />
         <sub><b>Irene B. Artiaga</b></sub>
       </a>
@@ -68,7 +68,7 @@
     </td>
     <td align="center">
       <a href="https://github.com/J3sterlir">
-        <img src="https://avatars.githubusercontent.com/u/108736019?v=4" width="100px;" alt="Jeremiah Martin D. Lirag"/>
+        <img style='border-radius: 100%; border:solid; border-color:#919191' src="https://avatars.githubusercontent.com/u/108736019?v=4" width="100px;" alt="Jeremiah Martin D. Lirag"/>
         <br />
         <sub><b>Jeremiah Martin D. Lirag</b></sub>
       </a>
@@ -77,7 +77,7 @@
     </td>
     <td align="center">
       <a href="https://github.com/marijoe-cloud">
-        <img src="https://avatars.githubusercontent.com/u/226326465?v=4" width="100px;" alt="Marijoe R. San Juan"/>
+        <img style='border-radius: 100%; border:solid; border-color:#919191' src="https://avatars.githubusercontent.com/u/226326465?v=4" width="100px;" alt="Marijoe R. San Juan"/>
         <br />
         <sub><b>Marijoe R. San Juan</b></sub>
       </a>
