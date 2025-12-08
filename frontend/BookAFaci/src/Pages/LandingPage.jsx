@@ -5,10 +5,10 @@ import Landingnav from '../components/landingnav';
 
 function LandingPage() {
     return (
-        <div id='Home' className='flex flex-col min-h-screen transition-all font-inter'>
+        <div id='Home' className='flex flex-col min-h-screen transition-all font-inter bg-grey-50'>
             <title>BookAFaci</title>
 
-            <main className="flex-1 bg-center bg-cover relative w-full"
+            <main className="flex-1 relative w-full "
                 style={{
                     backgroundImage: `url(${landingbg})`,
                     backgroundSize: 'cover',
@@ -16,7 +16,7 @@ function LandingPage() {
                     backgroundRepeat: 'no-repeat',
                 }}>
 
-                <div className='flex h-screen items-center text-white font-bold text-5xl gap-5 backdrop-blur-md p-4 overflow-hidden bg-gradient-to-b from-transparent via-transparent via-85% to-[#346D9A]
+                <div className='flex h-screen items-center text-white font-bold text-5xl gap-5 backdrop-blur-md p-4 overflow-hidden bg-gradient-to-b from-transparent via-transparent via-80% to-[#346D9A]
                     min-[320px]:flex-col
                     min-[640px]:flex-col 
                     min-[640px]:ml-[0rem]
@@ -33,8 +33,8 @@ function LandingPage() {
                     md:mt-[3rem]
                     
                     '>
-                        <div className='text-wrap ml-[3rem]
-                            min-[320px]:mt-[-10rem]
+                        <div className='text-wrap ml-[3rem] mt-11
+                            min-[320px]:mt-[-18rem]
                             min-[320px]:text-[2rem]
                             min-[320px]:text-center
                             min-[320px]:ml-[-2.2rem]
@@ -65,7 +65,7 @@ function LandingPage() {
                             ' href="/user-select">Get Started</a>
                         </div>
                     </div>
-                    <div className='flex grow group relative justify-center bg-transparent drop-shadow-2xl hover:scale-105 transition-all
+                    <div className='flex grow group relative justify-center bg-transparent hover:scale-105 transition-all
                         w-[50%]
                         xl:mt-20
                         xl:w-[20%]
@@ -75,18 +75,27 @@ function LandingPage() {
                         md:w-[80%]
                         sm:w-[35%]
                         sm:mt-[-20rem]
-                        min-[320px]:
+                        min-[320px]:mt-[-10rem]
                         min-[320px]:mb-[-4rem]
-                        min-[320px]:w-[70%]
+                        min-[320px]:w-[60%]
                         min-[425px]:mt-[-19rem]
-                        min-[425px]:w-[50%]
+                        min-[425px]:w-[60%]
                         
                         '>
-                        <img src="/Bookafaci.svg" alt="Mainlogo" className='w-[20rem] mt-10 p-10 hover:drop-shadow-2xl hover:shadow-blue-500/50 transition-all 
+                        <img src="/Bookafaci.svg" alt="Mainlogo" className='w-[75%] mt-0 p-10 hover:drop-shadow-2xl hover:shadow-blue-500/50 transition-all 
                         md:p-4
                         lg:p-1
                         xl:p-1
-                        xl:w-[40%]'/>
+                        xl:w-[35%]
+                        min-[320px]:w-[100%]
+                        min-[375px]:w-[100%]
+                        min-[768px]:w-[55%]
+                        min-[640px]:w-[65%]
+                        min-[512px]:w-[75%]
+                        min-[1024px]:w-[65%]
+                        min-[1440px]:w-[35%]
+                        min-[2560px]:w-[15%]
+                        '/>
                     </div>
                 </div>
 
@@ -371,11 +380,32 @@ function LandingPage() {
             </div>
             <Landingnav />
             <footer id="Devs" className="w-full border-t bg-[#000000] border-white/30 text-white text-sm">
-                <div className="px-6 py-4 flex flex-wrap items-center justify-between gap-3">
-                    <span className="opacity-80 mx-[10rem]">
+                <div className="px-6 py-4 flex flex-wrap items-center justify-between gap-3
+                min-[320px]:flex-col min-[320px]:px-0 min-[320px]:flex-nowrap min-[320px]:gap-2
+                sm:flex-row sm:px-10
+                md:flex-row md:px-10
+                lg:flex-row
+                xl:flex-row
+                2xl:flex-row
+                ">
+                    <span className="opacity-80 mx-0
+                    min-[320px]:mx-0
+                    sm:mx-0
+                    md:mx-0
+                    lg:mx-10
+                    xl:mx-10
+                    2xl:mx-10
+                    ">
                         © {new Date().getFullYear()} BookAFaci. All rights reserved.
                     </span>
-                    <div className="flex gap-4 opacity-80 mx-[10rem]">
+                    <div className="flex gap-4 opacity-80 mx-0
+                    min-[320px]:mx-0
+                    sm:mx-0
+                    md:mx-0
+                    lg:mx-10
+                    xl:mx-10
+                    2xl:mx-10
+                    ">
                         <a href="/user-select" className="hover:opacity-100 underline-offset-4 hover:underline">
                             Get Started
                         </a>
