@@ -20,7 +20,7 @@
 
 - **🏢 Facility Management** - Browse and book university facilities with real-time availability, capacity information, and amenities
 - **🎛️ Equipment Reservation** - Reserve equipment like projectors, sound systems, and other resources with availability tracking
-- **📅 Real-time Calendar** - Interactive calendar for viewing bookings and scheduling
+- **📅 Real-time Calendar** - Interactive calendar
 - **🔒 Secure Authentication** - Role-based access control for internal and external users with JWT authentication
 - **📊 Admin Dashboard** - Comprehensive admin panel for managing bookings, users, facilities, and equipment with statistics tracking
 - **📱 Mobile Responsive** - Fully responsive design optimized for desktop, tablet, and mobile devices
