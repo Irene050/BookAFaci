@@ -209,7 +209,7 @@ function AdminUserview() {
                           
                           const token = localStorage.getItem('token') || '';
                           const headers = token ? { Authorization: `Bearer ${token}` } : {};
-                          const res = await axios.put(`${base}/bookafaci/users/${editingUser._id}`, payload, { headers });
+                          const res = await axios.patch(`${base}/bookafaci/users/${editingUser._id}`, payload, { headers });
                           const updated = res.data?.user || res.data;
                           setUsers(prev => prev.map(x => (x._id === updated._id ? updated : x)));
                           toast.success('User updated successfully');

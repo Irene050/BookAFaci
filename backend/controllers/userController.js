@@ -155,7 +155,40 @@ const userController = {
         message: error.message
       });
     }
-  }
+  },
+
+  updateUser: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      // Do not allow password updates here
+      const { password, ...updates } = req.body;
+
+      // Ensure email uniqueness if changing email
+      if (updates.email) {
+        const exists = await User.findOne({ email: updates.email, _id: { $ne: id } });
+        if (exists) {
+          return res.status(400).json({ success: false, message: 'Email already in use' });
+        }
+      }
+
+      const updated = await User.findByIdAndUpdate(
+        id,
+        { $set: updates },
+        { new: true, runValidators: true, context: 'query' }
+      ).select('-password');
+
+      if (!updated) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+
+      return res.json({ success: true, user: updated });
+    } catch (error) {
+      console.error('Update user error:', error);
+      return res.status(400).json({ success: false, message: error.message });
+    }
+  },
+
 };
 
 module.exports = userController;
