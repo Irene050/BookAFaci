@@ -25,6 +25,7 @@ function LandingPage() {
                     lg:flex-row
                     lg:ml-[0rem]'
                 >
+                    <br />
                     <div className='flex items-center text-[3rem] grow group relative justify-center 
                     min-[320px]:mt-[15rem]
                     min-[320px]:ml-10
@@ -37,7 +38,7 @@ function LandingPage() {
                             min-[320px]:text-[2rem]
                             min-[320px]:text-center
                             min-[320px]:ml-[-2.2rem]
-                            min-[425px]:mt-[-15rem]
+                            min-[425px]:mt-[-20rem]
                             sm:mt-[-5rem]
                             md:flex
                             md:flex-col
@@ -74,10 +75,12 @@ function LandingPage() {
                         md:w-[80%]
                         sm:w-[35%]
                         sm:mt-[1rem]
-                        min-[320px]:mt-[-4rem]
+                        min-[320px]:
+                        min-[320px]:mb-[-4rem]
                         min-[320px]:w-[70%]
-                        min-[425px]:mt-[-15rem]
+                        min-[425px]:mt-[-5rem]
                         min-[425px]:w-[50%]
+                        
                         '>
                         <img src="/Bookafaci.svg" alt="Mainlogo" className='w-[20rem] mt-10 p-10 hover:drop-shadow-2xl hover:shadow-blue-500/50 transition-all 
                         md:p-4
